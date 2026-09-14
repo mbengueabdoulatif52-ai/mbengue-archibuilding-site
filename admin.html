@@ -115,6 +115,7 @@
   <div class="auth-card">
     <h1>Accès refusé</h1>
     <p>Ce compte n'est pas autorisé à administrer ce site.</p>
+    <p id="deniedEmail" style="font-family:var(--font-mono);font-size:12px;background:var(--paper);border-radius:6px;padding:6px 10px;margin-bottom:16px;"></p>
     <button class="signout-link" id="signOutDenied">Se déconnecter</button>
   </div>
 </div>
@@ -272,7 +273,11 @@
   onAuthStateChanged(auth, user => {
     [loginView, deniedView, appView].forEach(v => v.classList.add('hidden'));
     if (!user) { loginView.classList.remove('hidden'); return; }
-    if (user.email !== ALLOWED_EMAIL) { deniedView.classList.remove('hidden'); return; }
+    if (user.email !== ALLOWED_EMAIL) {
+      document.getElementById('deniedEmail').textContent = 'Connecté avec : ' + user.email;
+      deniedView.classList.remove('hidden');
+      return;
+    }
     appView.classList.remove('hidden');
     document.getElementById('userLabel').textContent = user.email;
     document.getElementById('avatarInit').textContent = (user.email || '?')[0].toUpperCase();
