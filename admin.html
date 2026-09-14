@@ -84,6 +84,17 @@
 
   .placeholder-note{border:1px dashed #D8D2C2;border-radius:10px;padding:24px;font-size:13px;color:var(--muted);text-align:center;}
 
+  .demande-item{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px;position:relative;}
+  .demande-item.traite{opacity:.55;}
+  .demande-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px;}
+  .demande-contact{font-size:13px;color:var(--navy);font-weight:500;}
+  .demande-date{font-size:11px;color:var(--muted);white-space:nowrap;}
+  .demande-message{font-size:13px;color:var(--navy-dark);line-height:1.6;margin-bottom:12px;white-space:pre-wrap;}
+  .demande-actions{display:flex;gap:8px;}
+  .btn-small{font-size:12px;padding:6px 12px;border-radius:6px;border:1px solid var(--line);background:#fff;}
+  .btn-small.done{border-color:#2a7d46;color:#2a7d46;}
+  .btn-small.del{border-color:#e0b3ae;color:#c94b3f;}
+
   /* modal */
   .modal-overlay{position:fixed;inset:0;background:rgba(15,36,54,.5);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100;}
   .modal{background:#fff;border-radius:12px;padding:20px 22px;width:100%;max-width:380px;max-height:90vh;overflow:auto;}
@@ -148,9 +159,9 @@
       <button class="add-btn" id="addBtn" aria-label="Ajouter">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
       </button>
-      <button class="tab" data-tab="services">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 3L3 21M14 3h7v7M3 14v7h7"/></svg>
-        <span>Services</span>
+      <button class="tab" data-tab="demandes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        <span>Demandes</span>
       </button>
       <button class="tab" data-tab="coordonnees">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg>
@@ -177,10 +188,10 @@
       </div>
     </div>
 
-    <div class="panel" id="panel-services">
+    <div class="panel" id="panel-demandes">
       <div class="panel-card">
-        <div class="panel-title">Services</div>
-        <div class="placeholder-note">La section « Comment ça marche » n'est pas encore éditable depuis ce panneau. Dis-le-moi si tu veux pouvoir la modifier ici aussi.</div>
+        <div class="panel-title"><span>Demandes de devis</span><span class="count" id="countDemandes"></span></div>
+        <div id="listDemandes"></div>
       </div>
     </div>
 
@@ -290,6 +301,7 @@
     listenRealisations();
     loadCoordonnees();
     loadGrille();
+    listenDemandes();
 
     document.getElementById('saveCoord').addEventListener('click', saveCoordonnees);
     document.getElementById('saveRealisation').addEventListener('click', saveRealisation);
@@ -388,6 +400,35 @@
     }
   }
 
+  /* Demandes de devis */
+  function listenDemandes() {
+    onSnapshot(query(collection(db, 'demandes'), orderBy('date', 'desc')), snap => {
+      const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      document.getElementById('countDemandes').textContent = '(' + items.length + ')';
+      const el = document.getElementById('listDemandes');
+      el.innerHTML = items.length ? '' : '<div class="empty-state">Aucune demande reçue pour l’instant.</div>';
+      items.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'demande-item' + (item.traite ? ' traite' : '');
+        const dateStr = item.date ? new Date(item.date).toLocaleString('fr-FR') : '';
+        const contactParts = [item.telephone, item.email].filter(Boolean).join(' · ');
+        div.innerHTML = `
+          <div class="demande-top">
+            <div class="demande-contact">${contactParts || 'Sans contact'}</div>
+            <div class="demande-date">${dateStr}</div>
+          </div>
+          <div class="demande-message">${(item.message || '').replace(/</g, '&lt;')}</div>
+          <div class="demande-actions">
+            <button class="btn-small done">${item.traite ? 'Marquer non traité' : 'Marquer traité'}</button>
+            <button class="btn-small del">Supprimer</button>
+          </div>`;
+        div.querySelector('.done').addEventListener('click', () => updateDoc(doc(db, 'demandes', item.id), { traite: !item.traite }));
+        div.querySelector('.del').addEventListener('click', () => { if (confirm('Supprimer cette demande ?')) deleteDoc(doc(db, 'demandes', item.id)); });
+        el.appendChild(div);
+      });
+    });
+  }
+
   /* Coordonnées */
   async function loadCoordonnees() {
     const snap = await getDoc(doc(db, 'site', 'coordonnees'));
@@ -395,7 +436,7 @@
       document.getElementById('coordEmail').value = snap.data().email || '';
       document.getElementById('coordTel').value = snap.data().telephone || '';
     } else {
-      document.getElementById('coordEmail').value = 'mbenguearchobuilding@gmail.com';
+      document.getElementById('coordEmail').value = 'mbenguearchibuilding@gmail.com';
       document.getElementById('coordTel').value = '+221 70 562 32 06';
     }
   }
