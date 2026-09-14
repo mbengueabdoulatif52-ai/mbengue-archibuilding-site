@@ -211,7 +211,21 @@
   </div>
 </footer>
 
-<script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, onSnapshot, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCS4jMyT5aVq7fs1Dytj4e8zRNMDYg6W4o",
+    authDomain: "mbengue-archibuilding-site.firebaseapp.com",
+    projectId: "mbengue-archibuilding-site",
+    storageBucket: "mbengue-archibuilding-site.firebasestorage.app",
+    messagingSenderId: "572525413618",
+    appId: "1:572525413618:web:6a30c33ee1b86b36073c6b"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
   const menuBtn = document.getElementById('menuBtn');
   const mobileLinks = document.getElementById('mobileLinks');
   menuBtn.addEventListener('click', () => {
@@ -223,14 +237,15 @@
     menuBtn.setAttribute('aria-expanded', false);
   }));
 
-  /* Contenu temporaire : sera remplacé par une lecture Firestore
-     une fois le panneau d'administration branché. */
-  const realisations = [
+  /* Contenu de repli : affiché tant que rien n'a encore été ajouté
+     depuis le panneau d'administration, pour que le site ne soit
+     jamais vide. */
+  const fallbackRealisations = [
     { titre: 'Building Mbollo', tag: 'Campus · Institutionnel' },
     { titre: 'Bâtiment Mayacine', tag: 'R+2 · Résidentiel' },
     { titre: 'Duplex', tag: 'RDC+1 · Résidentiel' }
   ];
-  const prices = [
+  const fallbackPrices = [
     { titre: 'Plan archi', montant: '70 000 FCFA', note: 'Ex. RDC, 150 m²', featured: true },
     { titre: 'Plan béton', montant: 'Sur devis', note: 'Selon niveau et surface', featured: false },
     { titre: 'Devis quantitatif', montant: 'Sur devis', note: 'Selon niveau et surface', featured: false }
@@ -241,21 +256,51 @@
   const calcIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>';
   const priceIcons = [rulerIcon, buildingIcon, calcIcon];
 
-  document.getElementById('cardsGrid').innerHTML = realisations.map(r => `
-    <div class="card">
-      <div class="card-media">${photoIcon}<div class="card-tag">${r.titre}</div></div>
-      <div class="card-body">${r.tag}</div>
-    </div>
-  `).join('');
+  function renderRealisations(list) {
+    document.getElementById('cardsGrid').innerHTML = list.map(r => `
+      <div class="card">
+        <div class="card-media" style="${r.photoUrl ? `background-image:url('${r.photoUrl}');background-size:cover;background-position:center;border-bottom:none;` : ''}">
+          ${r.photoUrl ? '' : photoIcon}
+          <div class="card-tag">${r.titre}</div>
+        </div>
+        <div class="card-body">${r.tag || ''}</div>
+      </div>
+    `).join('');
+  }
 
-  document.getElementById('pricesGrid').innerHTML = prices.map((p, i) => `
-    <div class="price-card ${p.featured ? 'featured' : ''}">
-      ${priceIcons[i]}
-      <h3>${p.titre}</h3>
-      <div class="amount">${p.montant}</div>
-      <div class="note">${p.note}</div>
-    </div>
-  `).join('');
+  function renderPrices(list) {
+    document.getElementById('pricesGrid').innerHTML = list.map((p, i) => `
+      <div class="price-card ${p.featured ? 'featured' : ''}">
+        ${priceIcons[i % priceIcons.length]}
+        <h3>${p.titre}</h3>
+        <div class="amount">${p.montant}</div>
+        <div class="note">${p.note || ''}</div>
+      </div>
+    `).join('');
+  }
+
+  renderRealisations(fallbackRealisations);
+  renderPrices(fallbackPrices);
+
+  try {
+    onSnapshot(query(collection(db, 'realisations'), orderBy('ordre', 'asc')), snap => {
+      if (!snap.empty) renderRealisations(snap.docs.map(d => d.data()));
+    });
+    onSnapshot(query(collection(db, 'prix'), orderBy('ordre', 'asc')), snap => {
+      if (!snap.empty) renderPrices(snap.docs.map(d => d.data()));
+    });
+    onSnapshot(doc(db, 'site', 'coordonnees'), snap => {
+      if (snap.exists()) {
+        const d = snap.data();
+        const mailLink = document.querySelector('footer a[href^="mailto:"]');
+        const telLink = document.querySelector('footer a[href^="tel:"]');
+        if (d.email && mailLink) { mailLink.href = 'mailto:' + d.email; mailLink.lastChild.textContent = d.email; }
+        if (d.telephone && telLink) { telLink.href = 'tel:' + d.telephone.replace(/\s/g, ''); telLink.lastChild.textContent = d.telephone; }
+      }
+    });
+  } catch (e) {
+    console.warn('Firestore indisponible, contenu statique affiché.', e);
+  }
 </script>
 
 </body>

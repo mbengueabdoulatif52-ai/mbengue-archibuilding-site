@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administration — MBENGUE ARCHIBUILDING</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B3A52; --navy-dark:#0F2436; --orange:#E8761A;
+    --paper:#F3EFE4; --line:#ECE7DA; --muted:#5C6B7A;
+    --font-head:'Space Grotesk',system-ui,sans-serif;
+    --font-body:'IBM Plex Sans',system-ui,sans-serif;
+    --font-mono:'IBM Plex Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--font-body);color:var(--navy-dark);background:var(--paper);min-height:100vh;}
+  h1,h2,h3{font-family:var(--font-head);font-weight:600;color:var(--navy);}
+  input,select,textarea,button{font-family:inherit;font-size:14px;}
+  input,select,textarea{width:100%;padding:9px 11px;border:1px solid #D8D2C2;border-radius:7px;background:#fff;margin-bottom:12px;}
+  label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;}
+  button{cursor:pointer;}
+  .hidden{display:none !important;}
+
+  /* login / denied */
+  .center-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+  .auth-card{background:#fff;border-radius:14px;padding:36px 32px;max-width:340px;width:100%;text-align:center;border:1px solid var(--line);}
+  .auth-card img{width:52px;margin:0 auto 16px;}
+  .auth-card h1{font-size:18px;margin-bottom:8px;}
+  .auth-card p{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .google-btn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:7px;padding:11px;font-size:14px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .google-btn:hover{background:var(--navy-dark);}
+  .denied{color:#a33;font-size:13px;margin-top:14px;}
+  .signout-link{margin-top:14px;font-size:12px;color:var(--muted);text-decoration:underline;background:none;border:none;}
+
+  /* app shell */
+  header.app{background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:12px 20px;}
+  header.app .brand{display:flex;align-items:center;gap:9px;}
+  header.app img{width:26px;height:26px;}
+  header.app .brand span{font-family:var(--font-head);font-size:13px;font-weight:600;color:#fff;}
+  header.app .user{display:flex;align-items:center;gap:8px;font-size:12px;color:#C7D3E0;}
+  header.app .avatar{width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;}
+  header.app button.signout{background:none;border:none;color:#C7D3E0;font-size:12px;cursor:pointer;text-decoration:underline;}
+
+  nav.tabs{display:flex;justify-content:space-around;align-items:center;padding:10px 12px;background:#fff;border-bottom:1px solid var(--line);}
+  nav.tabs .tab{text-align:center;color:#9aa5ae;cursor:pointer;background:none;border:none;font-family:inherit;padding:4px;}
+  nav.tabs .tab.active{color:var(--navy);font-weight:500;}
+  nav.tabs .tab svg{width:18px;height:18px;display:block;margin:0 auto 2px;}
+  nav.tabs .tab span{font-size:10px;}
+  .add-btn{width:34px;height:34px;border-radius:50%;background:var(--orange);border:none;display:flex;align-items:center;justify-content:center;}
+  .add-btn svg{width:18px;height:18px;color:#fff;}
+
+  main{max-width:760px;margin:0 auto;padding:22px 20px 60px;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .panel-title{font-size:15px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+
+  .list-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+  .item-card{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;position:relative;}
+  .item-media{height:64px;background:#F5F3EE;display:flex;align-items:center;justify-content:center;background-size:cover;background-position:center;}
+  .item-media svg{width:22px;height:22px;color:#C9C2AE;}
+  .item-body{padding:8px 10px;}
+  .item-body .t{font-size:12px;color:var(--navy);font-weight:500;}
+  .item-body .s{font-size:11px;color:var(--muted);font-family:var(--font-mono);}
+  .item-actions{position:absolute;top:5px;right:5px;display:flex;gap:4px;}
+  .item-actions button{width:22px;height:22px;border-radius:5px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;}
+  .item-actions svg{width:12px;height:12px;}
+  .empty-state{font-size:13px;color:var(--muted);text-align:center;padding:30px 0;}
+
+  .placeholder-note{background:#fff;border:1px dashed #D8D2C2;border-radius:10px;padding:20px;font-size:13px;color:var(--muted);text-align:center;}
+
+  /* modal */
+  .modal-overlay{position:fixed;inset:0;background:rgba(15,36,54,.5);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100;}
+  .modal{background:#fff;border-radius:12px;padding:20px 22px;width:100%;max-width:380px;max-height:90vh;overflow:auto;}
+  .modal h2{font-size:14px;margin-bottom:14px;}
+  .check-row{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+  .check-row input{width:auto;margin:0;}
+  .dropzone{border:1.5px dashed #D8D2C2;border-radius:8px;padding:16px;text-align:center;margin-bottom:12px;cursor:pointer;}
+  .dropzone svg{width:20px;height:20px;color:#C9C2AE;}
+  .dropzone span{display:block;font-size:11px;color:var(--muted);margin-top:4px;}
+  .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:6px;}
+  .btn-cancel{background:none;border:1px solid #D8D2C2;border-radius:7px;padding:9px 16px;}
+  .btn-save{background:var(--orange);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-weight:500;}
+  .save-status{font-size:12px;color:var(--muted);margin-top:8px;}
+</style>
+</head>
+<body>
+
+<div id="loginView" class="center-screen">
+  <div class="auth-card">
+    <img src="assets/icon-192.png" alt="Logo">
+    <h1>Administration du site</h1>
+    <p>Connecte-toi avec le compte Google autorisé pour gérer le contenu.</p>
+    <button class="google-btn" id="loginBtn">Se connecter avec Google</button>
+    <div id="loginError" class="denied hidden"></div>
+  </div>
+</div>
+
+<div id="deniedView" class="center-screen hidden">
+  <div class="auth-card">
+    <h1>Accès refusé</h1>
+    <p>Ce compte n'est pas autorisé à administrer ce site.</p>
+    <button class="signout-link" id="signOutDenied">Se déconnecter</button>
+  </div>
+</div>
+
+<div id="appView" class="hidden">
+  <header class="app">
+    <div class="brand">
+      <img src="assets/icon-192.png" alt="Logo">
+      <span>Administration du site</span>
+    </div>
+    <div class="user">
+      <div class="avatar" id="avatarInit">A</div>
+      <span id="userLabel"></span>
+      <button class="signout" id="signOutBtn">Déconnexion</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="realisations">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      <span>Réalisations</span>
+    </button>
+    <button class="tab" data-tab="prix">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+      <span>Prix</span>
+    </button>
+    <button class="add-btn" id="addBtn" aria-label="Ajouter">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+    <button class="tab" data-tab="services">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 3L3 21M14 3h7v7M3 14v7h7"/></svg>
+      <span>Services</span>
+    </button>
+    <button class="tab" data-tab="coordonnees">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg>
+      <span>Coordonnées</span>
+    </button>
+  </nav>
+
+  <main>
+    <div class="panel active" id="panel-realisations">
+      <div class="panel-title"><span>Réalisations</span><span id="countRealisations" style="font-size:12px;color:var(--muted);font-weight:400;"></span></div>
+      <div class="list-grid" id="listRealisations"></div>
+    </div>
+
+    <div class="panel" id="panel-prix">
+      <div class="panel-title"><span>Catalogue de prix</span><span id="countPrix" style="font-size:12px;color:var(--muted);font-weight:400;"></span></div>
+      <div class="list-grid" id="listPrix"></div>
+    </div>
+
+    <div class="panel" id="panel-services">
+      <div class="panel-title">Services</div>
+      <div class="placeholder-note">La section « Comment ça marche » n'est pas encore éditable depuis ce panneau. Dis-le-moi si tu veux pouvoir la modifier ici aussi.</div>
+    </div>
+
+    <div class="panel" id="panel-coordonnees">
+      <div class="panel-title">Coordonnées</div>
+      <label>Adresse e-mail affichée sur le site</label>
+      <input id="coordEmail" type="email" placeholder="contact@exemple.com">
+      <label>Téléphone affiché sur le site</label>
+      <input id="coordTel" type="text" placeholder="+221 XX XXX XX XX">
+      <button class="btn-save" id="saveCoord">Enregistrer</button>
+      <div class="save-status" id="coordStatus"></div>
+    </div>
+  </main>
+</div>
+
+<div class="modal-overlay hidden" id="modalRealisation">
+  <div class="modal">
+    <h2 id="modalRealisationTitle">Ajouter une réalisation</h2>
+    <input type="hidden" id="realisationId">
+    <label>Titre du projet</label>
+    <input id="realisationTitre" placeholder="Nom du projet">
+    <label>Catégorie</label>
+    <input id="realisationTag" placeholder="Ex. R+2 · Résidentiel">
+    <label>Chemin ou URL de la photo</label>
+    <input id="realisationPhoto" placeholder="assets/realisations/mbollo.jpg">
+    <div style="font-size:11px;color:var(--muted);margin:-6px 0 12px;">Ajoute d'abord le fichier dans <code>assets/realisations/</code> sur GitHub, puis colle son chemin ici. Laisser vide si pas encore de photo.</div>
+    <div class="modal-actions">
+      <button class="btn-cancel" data-close-modal>Annuler</button>
+      <button class="btn-save" id="saveRealisation">Enregistrer</button>
+    </div>
+    <div class="save-status" id="realisationStatus"></div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="modalPrix">
+  <div class="modal">
+    <h2 id="modalPrixTitle">Ajouter un tarif</h2>
+    <input type="hidden" id="prixId">
+    <label>Nom de la prestation</label>
+    <input id="prixTitre" placeholder="Ex. Plan archi">
+    <label>Montant affiché</label>
+    <input id="prixMontant" placeholder="Ex. 70 000 FCFA ou Sur devis">
+    <label>Note</label>
+    <input id="prixNote" placeholder="Ex. RDC, 150 m²">
+    <div class="check-row">
+      <input type="checkbox" id="prixFeatured">
+      <label style="margin:0;">Mettre en avant (encadré orange)</label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" data-close-modal>Annuler</button>
+      <button class="btn-save" id="savePrix">Enregistrer</button>
+    </div>
+    <div class="save-status" id="prixStatus"></div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, setDoc, getDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCS4jMyT5aVq7fs1Dytj4e8zRNMDYg6W4o",
+    authDomain: "mbengue-archibuilding-site.firebaseapp.com",
+    projectId: "mbengue-archibuilding-site",
+    storageBucket: "mbengue-archibuilding-site.firebasestorage.app",
+    messagingSenderId: "572525413618",
+    appId: "1:572525413618:web:6a30c33ee1b86b36073c6b"
+  };
+  const ALLOWED_EMAIL = "mbengueabdoulatif52@gmail.com";
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+
+  const loginView = document.getElementById('loginView');
+  const deniedView = document.getElementById('deniedView');
+  const appView = document.getElementById('appView');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginError = document.getElementById('loginError');
+
+  loginBtn.addEventListener('click', async () => {
+    loginError.classList.add('hidden');
+    try { await signInWithPopup(auth, provider); }
+    catch (e) { loginError.textContent = "Connexion impossible : " + e.message; loginError.classList.remove('hidden'); }
+  });
+  document.getElementById('signOutDenied').addEventListener('click', () => signOut(auth));
+  document.getElementById('signOutBtn').addEventListener('click', () => signOut(auth));
+
+  onAuthStateChanged(auth, user => {
+    [loginView, deniedView, appView].forEach(v => v.classList.add('hidden'));
+    if (!user) { loginView.classList.remove('hidden'); return; }
+    if (user.email !== ALLOWED_EMAIL) { deniedView.classList.remove('hidden'); return; }
+    appView.classList.remove('hidden');
+    document.getElementById('userLabel').textContent = user.email;
+    document.getElementById('avatarInit').textContent = (user.email || '?')[0].toUpperCase();
+    startAdmin();
+  });
+
+  let adminStarted = false;
+  let activeTab = 'realisations';
+
+  function startAdmin() {
+    if (adminStarted) return;
+    adminStarted = true;
+
+    document.querySelectorAll('.tab').forEach(btn => btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      activeTab = btn.dataset.tab;
+      document.getElementById('panel-' + activeTab).classList.add('active');
+      document.getElementById('addBtn').style.visibility = (activeTab === 'realisations' || activeTab === 'prix') ? 'visible' : 'hidden';
+    }));
+
+    document.querySelectorAll('[data-close-modal]').forEach(b => b.addEventListener('click', closeModals));
+
+    document.getElementById('addBtn').addEventListener('click', () => {
+      if (activeTab === 'realisations') openRealisationModal(null);
+      if (activeTab === 'prix') openPrixModal(null);
+    });
+
+    listenRealisations();
+    listenPrix();
+    loadCoordonnees();
+
+    document.getElementById('saveCoord').addEventListener('click', saveCoordonnees);
+    document.getElementById('saveRealisation').addEventListener('click', saveRealisation);
+    document.getElementById('savePrix').addEventListener('click', savePrix);
+    document.getElementById('dropzoneRealisation').addEventListener('click', () => document.getElementById('realisationPhoto').click());
+    document.getElementById('realisationPhoto').addEventListener('change', e => {
+      document.getElementById('dropzoneLabel').textContent = e.target.files[0] ? e.target.files[0].name : 'Cliquer pour choisir une photo';
+    });
+  }
+
+  function closeModals() {
+    document.getElementById('modalRealisation').classList.add('hidden');
+    document.getElementById('modalPrix').classList.add('hidden');
+  }
+
+  const photoIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
+  const editIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="#1B3A52" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>';
+  const trashIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="#c94b3f" stroke-width="1.8"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg>';
+
+  /* Réalisations */
+  let realisationsCache = [];
+  function listenRealisations() {
+    onSnapshot(query(collection(db, 'realisations'), orderBy('ordre', 'asc')), snap => {
+      realisationsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      document.getElementById('countRealisations').textContent = '(' + realisationsCache.length + ')';
+      const el = document.getElementById('listRealisations');
+      el.innerHTML = realisationsCache.length ? '' : '<div class="empty-state">Aucune réalisation pour l’instant. Clique sur + pour en ajouter une.</div>';
+      realisationsCache.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'item-card';
+        div.innerHTML = `
+          <div class="item-media" style="${r.photoUrl ? `background-image:url('${r.photoUrl}')` : ''}">${r.photoUrl ? '' : photoIcon}</div>
+          <div class="item-body"><div class="t">${r.titre || ''}</div><div class="s">${r.tag || ''}</div></div>
+          <div class="item-actions">
+            <button class="edit">${editIcon}</button>
+            <button class="del">${trashIcon}</button>
+          </div>`;
+        div.querySelector('.edit').addEventListener('click', () => openRealisationModal(r));
+        div.querySelector('.del').addEventListener('click', () => { if (confirm('Supprimer « ' + r.titre + ' » ?')) deleteDoc(doc(db, 'realisations', r.id)); });
+        el.appendChild(div);
+      });
+    });
+  }
+  function openRealisationModal(r) {
+    document.getElementById('modalRealisationTitle').textContent = r ? 'Modifier la réalisation' : 'Ajouter une réalisation';
+    document.getElementById('realisationId').value = r ? r.id : '';
+    document.getElementById('realisationTitre').value = r ? (r.titre || '') : '';
+    document.getElementById('realisationTag').value = r ? (r.tag || '') : '';
+    document.getElementById('realisationPhoto').value = r ? (r.photoUrl || '') : '';
+    document.getElementById('realisationStatus').textContent = '';
+    document.getElementById('modalRealisation').classList.remove('hidden');
+  }
+  async function saveRealisation() {
+    const id = document.getElementById('realisationId').value;
+    const titre = document.getElementById('realisationTitre').value.trim();
+    const tag = document.getElementById('realisationTag').value.trim();
+    const photoUrl = document.getElementById('realisationPhoto').value.trim();
+    if (!titre) { document.getElementById('realisationStatus').textContent = 'Le titre est requis.'; return; }
+    document.getElementById('realisationStatus').textContent = 'Enregistrement...';
+    try {
+      const data = { titre, tag, photoUrl: photoUrl || null };
+      if (id) {
+        await updateDoc(doc(db, 'realisations', id), data);
+      } else {
+        await addDoc(collection(db, 'realisations'), { ...data, ordre: Date.now() });
+      }
+      closeModals();
+    } catch (e) {
+      document.getElementById('realisationStatus').textContent = 'Erreur : ' + e.message;
+    }
+  }
+
+  /* Prix */
+  let prixCache = [];
+  function listenPrix() {
+    onSnapshot(query(collection(db, 'prix'), orderBy('ordre', 'asc')), snap => {
+      prixCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      document.getElementById('countPrix').textContent = '(' + prixCache.length + ')';
+      const el = document.getElementById('listPrix');
+      el.innerHTML = prixCache.length ? '' : '<div class="empty-state">Aucun tarif pour l’instant. Clique sur + pour en ajouter un.</div>';
+      prixCache.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'item-card';
+        div.innerHTML = `
+          <div class="item-body" style="padding-top:12px;">
+            <div class="t">${p.titre || ''} ${p.featured ? '★' : ''}</div>
+            <div class="s">${p.montant || ''}</div>
+            <div class="s" style="opacity:.7;">${p.note || ''}</div>
+          </div>
+          <div class="item-actions">
+            <button class="edit">${editIcon}</button>
+            <button class="del">${trashIcon}</button>
+          </div>`;
+        div.querySelector('.edit').addEventListener('click', () => openPrixModal(p));
+        div.querySelector('.del').addEventListener('click', () => { if (confirm('Supprimer « ' + p.titre + ' » ?')) deleteDoc(doc(db, 'prix', p.id)); });
+        el.appendChild(div);
+      });
+    });
+  }
+  function openPrixModal(p) {
+    document.getElementById('modalPrixTitle').textContent = p ? 'Modifier le tarif' : 'Ajouter un tarif';
+    document.getElementById('prixId').value = p ? p.id : '';
+    document.getElementById('prixTitre').value = p ? (p.titre || '') : '';
+    document.getElementById('prixMontant').value = p ? (p.montant || '') : '';
+    document.getElementById('prixNote').value = p ? (p.note || '') : '';
+    document.getElementById('prixFeatured').checked = p ? !!p.featured : false;
+    document.getElementById('prixStatus').textContent = '';
+    document.getElementById('modalPrix').classList.remove('hidden');
+  }
+  async function savePrix() {
+    const id = document.getElementById('prixId').value;
+    const titre = document.getElementById('prixTitre').value.trim();
+    const montant = document.getElementById('prixMontant').value.trim();
+    const note = document.getElementById('prixNote').value.trim();
+    const featured = document.getElementById('prixFeatured').checked;
+    if (!titre || !montant) { document.getElementById('prixStatus').textContent = 'Nom et montant sont requis.'; return; }
+    document.getElementById('prixStatus').textContent = 'Enregistrement...';
+    try {
+      const data = { titre, montant, note, featured };
+      if (id) await updateDoc(doc(db, 'prix', id), data);
+      else await addDoc(collection(db, 'prix'), { ...data, ordre: Date.now() });
+      closeModals();
+    } catch (e) {
+      document.getElementById('prixStatus').textContent = 'Erreur : ' + e.message;
+    }
+  }
+
+  /* Coordonnées */
+  async function loadCoordonnees() {
+    const snap = await getDoc(doc(db, 'site', 'coordonnees'));
+    if (snap.exists()) {
+      document.getElementById('coordEmail').value = snap.data().email || '';
+      document.getElementById('coordTel').value = snap.data().telephone || '';
+    } else {
+      document.getElementById('coordEmail').value = 'mbenguearchobuilding@gmail.com';
+      document.getElementById('coordTel').value = '+221 70 562 32 06';
+    }
+  }
+  async function saveCoordonnees() {
+    document.getElementById('coordStatus').textContent = 'Enregistrement...';
+    try {
+      await setDoc(doc(db, 'site', 'coordonnees'), {
+        email: document.getElementById('coordEmail').value.trim(),
+        telephone: document.getElementById('coordTel').value.trim()
+      });
+      document.getElementById('coordStatus').textContent = 'Enregistré.';
+    } catch (e) {
+      document.getElementById('coordStatus').textContent = 'Erreur : ' + e.message;
+    }
+  }
+</script>
+</body>
+</html>
