@@ -169,8 +169,11 @@
 
     <div class="panel" id="panel-prix">
       <div class="panel-card">
-        <div class="panel-title"><span>Catalogue de prix</span><span class="count" id="countPrix"></span></div>
-        <div class="list-grid" id="listPrix"></div>
+        <div class="panel-title"><span>Grille de prix</span></div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">Grille complète (niveau × surface × prestation) au format JSON. Modifie les montants directement dans le texte, sans casser la structure, puis enregistre.</p>
+        <textarea id="grilleJson" rows="18" style="font-family:var(--font-mono);font-size:12px;white-space:pre;"></textarea>
+        <button class="btn-save" id="saveGrille">Enregistrer la grille</button>
+        <div class="save-status" id="grilleStatus"></div>
       </div>
     </div>
 
@@ -211,28 +214,6 @@
       <button class="btn-save" id="saveRealisation">Enregistrer</button>
     </div>
     <div class="save-status" id="realisationStatus"></div>
-  </div>
-</div>
-
-<div class="modal-overlay hidden" id="modalPrix">
-  <div class="modal">
-    <h2 id="modalPrixTitle">Ajouter un tarif</h2>
-    <input type="hidden" id="prixId">
-    <label>Nom de la prestation</label>
-    <input id="prixTitre" placeholder="Ex. Plan archi">
-    <label>Montant affiché</label>
-    <input id="prixMontant" placeholder="Ex. 70 000 FCFA ou Sur devis">
-    <label>Note</label>
-    <input id="prixNote" placeholder="Ex. RDC, 150 m²">
-    <div class="check-row">
-      <input type="checkbox" id="prixFeatured">
-      <label style="margin:0;">Mettre en avant (encadré orange)</label>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" data-close-modal>Annuler</button>
-      <button class="btn-save" id="savePrix">Enregistrer</button>
-    </div>
-    <div class="save-status" id="prixStatus"></div>
   </div>
 </div>
 
@@ -297,32 +278,26 @@
       document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
       activeTab = btn.dataset.tab;
       document.getElementById('panel-' + activeTab).classList.add('active');
-      document.getElementById('addBtn').style.visibility = (activeTab === 'realisations' || activeTab === 'prix') ? 'visible' : 'hidden';
+      document.getElementById('addBtn').style.visibility = (activeTab === 'realisations') ? 'visible' : 'hidden';
     }));
 
     document.querySelectorAll('[data-close-modal]').forEach(b => b.addEventListener('click', closeModals));
 
     document.getElementById('addBtn').addEventListener('click', () => {
       if (activeTab === 'realisations') openRealisationModal(null);
-      if (activeTab === 'prix') openPrixModal(null);
     });
 
     listenRealisations();
-    listenPrix();
     loadCoordonnees();
+    loadGrille();
 
     document.getElementById('saveCoord').addEventListener('click', saveCoordonnees);
     document.getElementById('saveRealisation').addEventListener('click', saveRealisation);
-    document.getElementById('savePrix').addEventListener('click', savePrix);
-    document.getElementById('dropzoneRealisation').addEventListener('click', () => document.getElementById('realisationPhoto').click());
-    document.getElementById('realisationPhoto').addEventListener('change', e => {
-      document.getElementById('dropzoneLabel').textContent = e.target.files[0] ? e.target.files[0].name : 'Cliquer pour choisir une photo';
-    });
+    document.getElementById('saveGrille').addEventListener('click', saveGrille);
   }
 
   function closeModals() {
     document.getElementById('modalRealisation').classList.add('hidden');
-    document.getElementById('modalPrix').classList.add('hidden');
   }
 
   const photoIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
@@ -382,58 +357,34 @@
     }
   }
 
-  /* Prix */
-  let prixCache = [];
-  function listenPrix() {
-    onSnapshot(query(collection(db, 'prix'), orderBy('ordre', 'asc')), snap => {
-      prixCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      document.getElementById('countPrix').textContent = '(' + prixCache.length + ')';
-      const el = document.getElementById('listPrix');
-      el.innerHTML = prixCache.length ? '' : '<div class="empty-state">Aucun tarif pour l’instant. Clique sur + pour en ajouter un.</div>';
-      prixCache.forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'item-card';
-        div.innerHTML = `
-          <div class="item-body" style="padding-top:12px;">
-            <div class="t">${p.titre || ''} ${p.featured ? '★' : ''}</div>
-            <div class="s">${p.montant || ''}</div>
-            <div class="s" style="opacity:.7;">${p.note || ''}</div>
-          </div>
-          <div class="item-actions">
-            <button class="edit">${editIcon}</button>
-            <button class="del">${trashIcon}</button>
-          </div>`;
-        div.querySelector('.edit').addEventListener('click', () => openPrixModal(p));
-        div.querySelector('.del').addEventListener('click', () => { if (confirm('Supprimer « ' + p.titre + ' » ?')) deleteDoc(doc(db, 'prix', p.id)); });
-        el.appendChild(div);
-      });
-    });
+  /* Grille de prix */
+  const fallbackGrille = {
+    RDC: { archi:[56000,70000,105000,140000,175000,210000], beton:[70000,84000,119000,154000,189000,224000], devis:[63000,77000,112000,147000,182000,217000] },
+    R1:  { archi:[70000,84000,119000,154000,189000,224000], beton:[84000,98000,133000,168000,203000,238000], devis:[77000,91000,126000,161000,196000,231000] },
+    R2:  { archi:[84000,98000,133000,168000,203000,238000], beton:[98000,112000,147000,182000,217000,252000], devis:[91000,105000,140000,175000,210000,245000] },
+    R3:  { archi:[98000,112000,147000,182000,217000,252000], beton:[112000,126000,161000,196000,231000,266000], devis:[105000,119000,154000,189000,224000,259000] },
+    R4:  { archi:[112000,126000,161000,196000,231000,266000], beton:[126000,140000,175000,210000,245000,280000], devis:[119000,133000,168000,203000,238000,273000] }
+  };
+  async function loadGrille() {
+    const snap = await getDoc(doc(db, 'site', 'grille_prix'));
+    const data = (snap.exists() && snap.data().RDC) ? snap.data() : fallbackGrille;
+    document.getElementById('grilleJson').value = JSON.stringify(data, null, 2);
   }
-  function openPrixModal(p) {
-    document.getElementById('modalPrixTitle').textContent = p ? 'Modifier le tarif' : 'Ajouter un tarif';
-    document.getElementById('prixId').value = p ? p.id : '';
-    document.getElementById('prixTitre').value = p ? (p.titre || '') : '';
-    document.getElementById('prixMontant').value = p ? (p.montant || '') : '';
-    document.getElementById('prixNote').value = p ? (p.note || '') : '';
-    document.getElementById('prixFeatured').checked = p ? !!p.featured : false;
-    document.getElementById('prixStatus').textContent = '';
-    document.getElementById('modalPrix').classList.remove('hidden');
-  }
-  async function savePrix() {
-    const id = document.getElementById('prixId').value;
-    const titre = document.getElementById('prixTitre').value.trim();
-    const montant = document.getElementById('prixMontant').value.trim();
-    const note = document.getElementById('prixNote').value.trim();
-    const featured = document.getElementById('prixFeatured').checked;
-    if (!titre || !montant) { document.getElementById('prixStatus').textContent = 'Nom et montant sont requis.'; return; }
-    document.getElementById('prixStatus').textContent = 'Enregistrement...';
+  async function saveGrille() {
+    const status = document.getElementById('grilleStatus');
+    let parsed;
     try {
-      const data = { titre, montant, note, featured };
-      if (id) await updateDoc(doc(db, 'prix', id), data);
-      else await addDoc(collection(db, 'prix'), { ...data, ordre: Date.now() });
-      closeModals();
+      parsed = JSON.parse(document.getElementById('grilleJson').value);
     } catch (e) {
-      document.getElementById('prixStatus').textContent = 'Erreur : ' + e.message;
+      status.textContent = 'JSON invalide : ' + e.message;
+      return;
+    }
+    status.textContent = 'Enregistrement...';
+    try {
+      await setDoc(doc(db, 'site', 'grille_prix'), parsed);
+      status.textContent = 'Grille enregistrée. Le site public se met à jour automatiquement.';
+    } catch (e) {
+      status.textContent = 'Erreur : ' + e.message;
     }
   }
 

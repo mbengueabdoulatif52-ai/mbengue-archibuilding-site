@@ -80,14 +80,13 @@
   .card-body{padding:12px 14px;font-family:var(--font-mono);font-size:12px;color:var(--ink-muted);}
 
   /* pricing */
-  .prices{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-  .price-card{border:1px solid #ECE7DA;border-radius:14px;padding:22px;}
-  .price-card.featured{border-color:var(--orange);border-width:1.5px;}
-  .price-card svg{width:22px;height:22px;color:var(--navy);margin-bottom:10px;}
-  .price-card.featured svg{color:var(--orange);}
-  .price-card h3{font-size:14px;margin-bottom:6px;}
-  .price-card .amount{font-family:var(--font-mono);font-size:20px;font-weight:500;color:var(--navy);margin-bottom:4px;}
-  .price-card .note{font-size:12px;color:#8a8a85;}
+  .calc-box{max-width:640px;margin:0 auto;background:var(--paper);border:1px solid #ECE7DA;border-radius:16px;padding:26px;}
+  .calc-row{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:14px;margin-bottom:18px;}
+  .calc-box label{display:block;font-size:12px;color:var(--ink-muted);margin-bottom:5px;}
+  .calc-box select,.calc-box input{width:100%;padding:10px 11px;border:1px solid #D8D2C2;border-radius:7px;font-family:var(--font-body);font-size:14px;background:#fff;}
+  .calc-result{margin-top:16px;font-family:var(--font-mono);font-size:15px;color:var(--navy);min-height:22px;}
+  .calc-result .big{font-size:26px;font-weight:500;}
+  .calc-result .err{font-family:var(--font-body);color:#b23;font-size:13px;}
   .price-note{text-align:center;font-size:13px;color:var(--ink-muted);margin-top:22px;}
 
   /* footer */
@@ -104,6 +103,7 @@
     .steps{grid-template-columns:repeat(2,1fr);row-gap:32px;}
     .steps::before{display:none;}
     .cards,.prices{grid-template-columns:1fr;}
+    .calc-row{grid-template-columns:1fr;}
     .hero h1{font-size:1.9rem;}
   }
   nav.mobile-links{display:none;flex-direction:column;gap:4px;padding:0 24px 16px;}
@@ -196,8 +196,35 @@
 <section id="prix">
   <div class="wrap">
     <h2 class="section-title">Catalogue de prix</h2>
-    <div class="prices" id="pricesGrid"></div>
-    <p class="price-note">Tarifs indicatifs, variables selon le niveau et la surface du projet.</p>
+    <div class="calc-box">
+      <div class="calc-row">
+        <div>
+          <label>Prestation</label>
+          <select id="calcPrestation">
+            <option value="archi">Plan architecture</option>
+            <option value="beton">Plan béton</option>
+            <option value="devis">Devis quantitatif</option>
+          </select>
+        </div>
+        <div>
+          <label>Niveau</label>
+          <select id="calcNiveau">
+            <option value="RDC">RDC</option>
+            <option value="R1">R+1</option>
+            <option value="R2">R+2</option>
+            <option value="R3">R+3</option>
+            <option value="R4">R+4</option>
+          </select>
+        </div>
+        <div>
+          <label>Surface (m²)</label>
+          <input type="number" id="calcSurface" placeholder="Ex. 180" min="1">
+        </div>
+      </div>
+      <button class="cta-btn" id="calcBtn" type="button">Calculer le prix</button>
+      <div class="calc-result" id="calcResult"></div>
+    </div>
+    <p class="price-note">Tarifs indicatifs, calculés à partir de notre grille par niveau et surface.</p>
   </div>
 </section>
 
@@ -245,16 +272,42 @@
     { titre: 'Bâtiment Mayacine', tag: 'R+2 · Résidentiel' },
     { titre: 'Duplex', tag: 'RDC+1 · Résidentiel' }
   ];
-  const fallbackPrices = [
-    { titre: 'Plan archi', montant: '70 000 FCFA', note: 'Ex. RDC, 150 m²', featured: true },
-    { titre: 'Plan béton', montant: 'Sur devis', note: 'Selon niveau et surface', featured: false },
-    { titre: 'Devis quantitatif', montant: 'Sur devis', note: 'Selon niveau et surface', featured: false }
-  ];
+  const fallbackGrille = {
+    RDC: { archi:[56000,70000,105000,140000,175000,210000], beton:[70000,84000,119000,154000,189000,224000], devis:[63000,77000,112000,147000,182000,217000] },
+    R1:  { archi:[70000,84000,119000,154000,189000,224000], beton:[84000,98000,133000,168000,203000,238000], devis:[77000,91000,126000,161000,196000,231000] },
+    R2:  { archi:[84000,98000,133000,168000,203000,238000], beton:[98000,112000,147000,182000,217000,252000], devis:[91000,105000,140000,175000,210000,245000] },
+    R3:  { archi:[98000,112000,147000,182000,217000,252000], beton:[112000,126000,161000,196000,231000,266000], devis:[105000,119000,154000,189000,224000,259000] },
+    R4:  { archi:[112000,126000,161000,196000,231000,266000], beton:[126000,140000,175000,210000,245000,280000], devis:[119000,133000,168000,203000,238000,273000] }
+  };
+  let grilleActuelle = fallbackGrille;
+  const prestationLabels = { archi: 'Plan architecture', beton: 'Plan béton', devis: 'Devis quantitatif' };
+  const surfaceLabels = ['< 150 m²', '150 m²', '200 m²', '300 m²', '400 m²', '500 m²'];
+
+  function surfaceIndex(surface) {
+    if (surface < 150) return 0;
+    if (surface < 200) return 1;
+    if (surface < 300) return 2;
+    if (surface < 400) return 3;
+    if (surface < 500) return 4;
+    return 5;
+  }
+
+  document.getElementById('calcBtn').addEventListener('click', () => {
+    const prestation = document.getElementById('calcPrestation').value;
+    const niveau = document.getElementById('calcNiveau').value;
+    const surfaceVal = parseFloat(document.getElementById('calcSurface').value);
+    const resultEl = document.getElementById('calcResult');
+    if (!surfaceVal || surfaceVal <= 0) {
+      resultEl.innerHTML = '<span class="err">Indique une surface en m² pour calculer le prix.</span>';
+      return;
+    }
+    const idx = surfaceIndex(surfaceVal);
+    const prix = grilleActuelle[niveau][prestation][idx];
+    const niveauLabel = niveau === 'RDC' ? 'RDC' : niveau.replace('R', 'R+');
+    resultEl.innerHTML = `<span class="big">${prix.toLocaleString('fr-FR')} FCFA</span><br>${prestationLabels[prestation]} · ${niveauLabel} · palier ${surfaceLabels[idx]}`;
+  });
+
   const photoIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
-  const rulerIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 3L3 21M14 3h7v7M3 14v7h7"/></svg>';
-  const buildingIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg>';
-  const calcIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>';
-  const priceIcons = [rulerIcon, buildingIcon, calcIcon];
 
   function renderRealisations(list) {
     document.getElementById('cardsGrid').innerHTML = list.map(r => `
@@ -268,26 +321,14 @@
     `).join('');
   }
 
-  function renderPrices(list) {
-    document.getElementById('pricesGrid').innerHTML = list.map((p, i) => `
-      <div class="price-card ${p.featured ? 'featured' : ''}">
-        ${priceIcons[i % priceIcons.length]}
-        <h3>${p.titre}</h3>
-        <div class="amount">${p.montant}</div>
-        <div class="note">${p.note || ''}</div>
-      </div>
-    `).join('');
-  }
-
   renderRealisations(fallbackRealisations);
-  renderPrices(fallbackPrices);
 
   try {
     onSnapshot(query(collection(db, 'realisations'), orderBy('ordre', 'asc')), snap => {
       if (!snap.empty) renderRealisations(snap.docs.map(d => d.data()));
     });
-    onSnapshot(query(collection(db, 'prix'), orderBy('ordre', 'asc')), snap => {
-      if (!snap.empty) renderPrices(snap.docs.map(d => d.data()));
+    onSnapshot(doc(db, 'site', 'grille_prix'), snap => {
+      if (snap.exists() && snap.data() && snap.data().RDC) grilleActuelle = snap.data();
     });
     onSnapshot(doc(db, 'site', 'coordonnees'), snap => {
       if (snap.exists()) {
