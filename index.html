@@ -201,9 +201,10 @@
         <div>
           <label>Prestation</label>
           <select id="calcPrestation">
-            <option value="archi">Plan architecture</option>
-            <option value="beton">Plan béton</option>
+            <option value="archi">Plan architectural</option>
+            <option value="beton">Plan béton armé</option>
             <option value="devis">Devis quantitatif</option>
+            <option value="toutes">Toutes les prestations</option>
           </select>
         </div>
         <div>
@@ -280,7 +281,7 @@
     R4:  { archi:[112000,126000,161000,196000,231000,266000], beton:[126000,140000,175000,210000,245000,280000], devis:[119000,133000,168000,203000,238000,273000] }
   };
   let grilleActuelle = fallbackGrille;
-  const prestationLabels = { archi: 'Plan architecture', beton: 'Plan béton', devis: 'Devis quantitatif' };
+  const prestationLabels = { archi: 'Plan architectural', beton: 'Plan béton armé', devis: 'Devis quantitatif', toutes: 'Toutes les prestations' };
 
   function calculerPrix(arr, surface) {
     const p150 = arr[1], p200 = arr[2], p500 = arr[5];
@@ -299,7 +300,10 @@
       resultEl.innerHTML = '<span class="err">Indique une surface en m² pour calculer le prix.</span>';
       return;
     }
-    const prix = calculerPrix(grilleActuelle[niveau][prestation], surfaceVal);
+    const niveauData = grilleActuelle[niveau];
+    const prix = prestation === 'toutes'
+      ? calculerPrix(niveauData.archi, surfaceVal) + calculerPrix(niveauData.beton, surfaceVal) + calculerPrix(niveauData.devis, surfaceVal)
+      : calculerPrix(niveauData[prestation], surfaceVal);
     const niveauLabel = niveau === 'RDC' ? 'RDC' : niveau.replace('R', 'R+');
     resultEl.innerHTML = `<span class="big">${prix.toLocaleString('fr-FR')} FCFA</span><br>${prestationLabels[prestation]} · ${niveauLabel} · ${surfaceVal} m²`;
   });
