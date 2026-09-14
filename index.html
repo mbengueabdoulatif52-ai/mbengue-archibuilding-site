@@ -281,15 +281,13 @@
   };
   let grilleActuelle = fallbackGrille;
   const prestationLabels = { archi: 'Plan architecture', beton: 'Plan béton', devis: 'Devis quantitatif' };
-  const surfaceLabels = ['< 150 m²', '150 m²', '200 m²', '300 m²', '400 m²', '500 m²'];
 
-  function surfaceIndex(surface) {
-    if (surface < 150) return 0;
-    if (surface < 200) return 1;
-    if (surface < 300) return 2;
-    if (surface < 400) return 3;
-    if (surface < 500) return 4;
-    return 5;
+  function calculerPrix(arr, surface) {
+    const p150 = arr[1], p200 = arr[2], p500 = arr[5];
+    const rateLow = (p200 - p150) / 50;
+    const rateHigh = (p500 - p200) / 300;
+    if (surface <= 200) return Math.round(p200 - rateLow * (200 - surface));
+    return Math.round(p200 + rateHigh * (surface - 200));
   }
 
   document.getElementById('calcBtn').addEventListener('click', () => {
@@ -301,10 +299,9 @@
       resultEl.innerHTML = '<span class="err">Indique une surface en m² pour calculer le prix.</span>';
       return;
     }
-    const idx = surfaceIndex(surfaceVal);
-    const prix = grilleActuelle[niveau][prestation][idx];
+    const prix = calculerPrix(grilleActuelle[niveau][prestation], surfaceVal);
     const niveauLabel = niveau === 'RDC' ? 'RDC' : niveau.replace('R', 'R+');
-    resultEl.innerHTML = `<span class="big">${prix.toLocaleString('fr-FR')} FCFA</span><br>${prestationLabels[prestation]} · ${niveauLabel} · palier ${surfaceLabels[idx]}`;
+    resultEl.innerHTML = `<span class="big">${prix.toLocaleString('fr-FR')} FCFA</span><br>${prestationLabels[prestation]} · ${niveauLabel} · ${surfaceVal} m²`;
   });
 
   const photoIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
