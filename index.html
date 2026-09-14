@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MBENGUE ARCHIBUILDING — Plans architecturaux et étude de structure à Dakar</title>
-<meta name="description" content="Plans architecturaux, étude de structure béton BAEL 91, devis et suivi de chantier à Dakar, Sénégal.">
+<meta name="description" content="Plans architecturaux, étude de structure béton, devis et suivi de chantier à Dakar, Sénégal.">
 <link rel="icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,11 +45,23 @@
   .menu-btn{display:none;background:none;border:none;font-size:22px;color:var(--navy);cursor:pointer;}
 
   /* hero */
-  .hero{background:#ffffff;padding:60px 0;}
-  .hero h1{font-size:2.4rem;margin-bottom:18px;}
-  .hero p.lead{color:var(--ink-muted);font-size:1.02rem;max-width:44ch;margin-bottom:26px;}
+  .hero{position:relative;padding:90px 0;overflow:hidden;background:#0B2545;}
+  .hero-bg{position:absolute;inset:0;background:url('assets/hero.jpg') center/cover no-repeat;}
+  .hero-overlay{position:absolute;inset:0;background:linear-gradient(100deg,rgba(11,37,69,.92) 0%,rgba(11,37,69,.72) 40%,rgba(11,37,69,.25) 100%);}
+  .hero h1{font-size:2.4rem;margin-bottom:18px;color:#fff;}
+  .hero p.lead{color:#D7DEE5;font-size:1.02rem;max-width:44ch;margin-bottom:26px;}
   .hero .actions{display:flex;gap:12px;flex-wrap:wrap;}
-  .hero-content{max-width:560px;}
+  .hero-content{max-width:560px;position:relative;z-index:1;}
+  .hero .cta-ghost{border-color:rgba(255,255,255,.6);color:#fff;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+  .hero-content{animation:fadeInUp .8s ease both;}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+  .steps .step:nth-child(2){transition-delay:.08s;}
+  .steps .step:nth-child(3){transition-delay:.16s;}
+  .steps .step:nth-child(4){transition-delay:.24s;}
+  .cards .card:nth-child(2){transition-delay:.08s;}
+  .cards .card:nth-child(3){transition-delay:.16s;}
 
   /* positioning band */
   .band{background:var(--navy);color:#fff;text-align:center;padding:20px 0;font-size:15px;}
@@ -66,22 +78,22 @@
   .step p{font-size:13px;color:var(--ink-muted);}
 
   /* realisations */
-  .realisations{background:var(--paper);}
+  .realisations{background:#F7F7F5;}
   .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-  .card{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #ECE7DA;}
-  .card-media{height:150px;background:#F5F3EE;position:relative;display:flex;align-items:center;justify-content:center;border-bottom:1px dashed var(--paper-line);}
-  .card-media svg{width:32px;height:32px;color:var(--paper-line);}
-  .card-tag{position:absolute;bottom:0;left:0;right:0;background:rgba(27,58,82,.88);color:#fff;font-size:13px;padding:8px 12px;}
+  .card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(11,37,69,.06);}
+  .card-media{height:150px;position:relative;display:flex;align-items:center;justify-content:center;}
+  .card-media svg{width:32px;height:32px;}
+  .card-tag{position:absolute;bottom:0;left:0;right:0;background:rgba(11,37,69,.85);color:#fff;font-size:13px;padding:8px 12px;}
   .card-body{padding:12px 14px;font-family:var(--font-mono);font-size:12px;color:var(--ink-muted);}
 
   /* pricing */
-  .calc-box{max-width:640px;margin:0 auto;background:var(--paper);border:1px solid #ECE7DA;border-radius:16px;padding:28px;}
+  .calc-box{max-width:640px;margin:0 auto;background:#fff;border:1px solid #ECE7DA;border-top:3px solid var(--orange);border-radius:16px;padding:28px;box-shadow:0 4px 16px rgba(11,37,69,.06);}
   .calc-row{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:16px;margin-bottom:22px;}
   .calc-box label{display:block;font-size:12px;color:var(--ink-muted);margin-bottom:6px;letter-spacing:.01em;}
-  .calc-box select,.calc-box input{width:100%;padding:11px 12px;border:1px solid #D8D2C2;border-radius:8px;font-family:var(--font-body);font-size:14.5px;background:#fff;color:var(--navy-dark);transition:border-color .15s;}
+  .calc-box select,.calc-box input{width:100%;padding:11px 12px;border:1px solid #D8D2C2;border-radius:8px;font-family:var(--font-body);font-size:14.5px;background:#F7F7F5;color:var(--navy-dark);transition:border-color .15s;}
   .calc-box select:focus,.calc-box input:focus{outline:none;border-color:var(--orange);}
   #calcBtn{width:100%;}
-  .calc-result{margin-top:18px;background:#fff;border:1px solid #ECE7DA;border-radius:12px;padding:22px 24px;min-height:26px;}
+  .calc-result{margin-top:18px;background:#F7F7F5;border:1px solid #ECE7DA;border-radius:12px;padding:22px 24px;min-height:26px;}
   .calc-placeholder{font-size:13.5px;color:var(--ink-muted);}
   .calc-eyebrow{font-size:12px;color:var(--ink-muted);margin-bottom:6px;}
   .calc-amount{font-family:var(--font-head);font-size:32px;font-weight:600;color:var(--navy);line-height:1.15;}
@@ -118,6 +130,8 @@
     .cards,.prices{grid-template-columns:1fr;}
     .calc-row{grid-template-columns:1fr;}
     .hero h1{font-size:1.9rem;}
+    .hero{padding:64px 0;}
+    .hero-overlay{background:linear-gradient(180deg,rgba(11,37,69,.85),rgba(11,37,69,.85));}
   }
   nav.mobile-links{display:none;flex-direction:column;gap:4px;padding:0 24px 16px;}
   nav.mobile-links.open{display:flex;}
@@ -152,9 +166,11 @@
 </header>
 
 <section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
   <div class="wrap hero-content">
     <h1>Vos plans et votre structure, pensés ensemble</h1>
-    <p class="lead">Plans architecturaux, étude de structure béton BAEL 91, devis et suivi de chantier : un service complet pour vos projets à Dakar.</p>
+    <p class="lead">Plans architecturaux, étude de structure béton, devis et suivi de chantier : un service complet pour vos projets à Dakar.</p>
     <div class="actions">
       <button class="cta-btn" id="openDevisBtn" type="button">Demander un devis</button>
       <a class="cta-ghost" href="#realisations">Voir mes réalisations</a>
@@ -162,28 +178,28 @@
   </div>
 </section>
 
-<div class="band">Plans architecturaux et étude de structure béton, un seul interlocuteur pour tout le projet.</div>
+<div class="band reveal">Plans architecturaux et étude de structure béton, un seul interlocuteur pour tout le projet.</div>
 
 <section id="comment-ca-marche">
   <div class="wrap">
     <h2 class="section-title">Comment ça marche</h2>
     <div class="steps">
-      <div class="step">
+      <div class="step reveal">
         <div class="num"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 3L3 21M14 3h7v7M3 14v7h7"/></svg></div>
         <h3>01 · Plan archi</h3>
         <p>Esquisse et modélisation</p>
       </div>
-      <div class="step">
+      <div class="step reveal">
         <div class="num"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg></div>
         <h3>02 · Étude structure</h3>
-        <p>Calcul BAEL 91</p>
+        <p>Calcul de structure</p>
       </div>
-      <div class="step">
+      <div class="step reveal">
         <div class="num"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
         <h3>03 · Devis</h3>
         <p>Estimation des coûts</p>
       </div>
-      <div class="step">
+      <div class="step reveal">
         <div class="num"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
         <h3>04 · Suivi chantier</h3>
         <p>Jusqu'à livraison</p>
@@ -202,7 +218,7 @@
 <section id="prix">
   <div class="wrap">
     <h2 class="section-title">Catalogue de prix</h2>
-    <div class="calc-box">
+    <div class="calc-box reveal">
       <div class="calc-row">
         <div>
           <label>Prestation</label>
@@ -280,6 +296,22 @@
   };
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  function observeReveals() {
+    document.querySelectorAll('.reveal:not(.observed)').forEach(el => {
+      el.classList.add('observed');
+      revealObserver.observe(el);
+    });
+  }
+  observeReveals();
 
   const menuBtn = document.getElementById('menuBtn');
   const mobileLinks = document.getElementById('mobileLinks');
@@ -369,25 +401,37 @@
     resultEl.innerHTML = `<div class="calc-eyebrow">Prix estimé</div><div class="calc-amount">${prix.toLocaleString('fr-FR')} FCFA</div><div class="calc-detail">${prestationLabels[prestation]} · ${niveauLabel} · ${surfaceVal} m²</div>`;
   });
 
-  const photoIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
+  const buildingIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg>';
+  const cardPalette = [
+    { bg: '#0B2545', icon: '#5D7A9C' },
+    { bg: '#E2703A', icon: '#F8D6C2' },
+    { bg: '#5C6B7A', icon: '#D7DEE5' }
+  ];
 
   function renderRealisations(list) {
-    document.getElementById('cardsGrid').innerHTML = list.map(r => `
-      <div class="card">
-        <div class="card-media" style="${r.photoUrl ? `background-image:url('${r.photoUrl}');background-size:cover;background-position:center;border-bottom:none;` : ''}">
-          ${r.photoUrl ? '' : photoIcon}
+    document.getElementById('cardsGrid').innerHTML = list.map((r, i) => {
+      const c = cardPalette[i % cardPalette.length];
+      const mediaStyle = r.photoUrl
+        ? `background-image:url('${r.photoUrl}');background-size:cover;background-position:center;`
+        : `background:${c.bg};color:${c.icon};`;
+      return `
+      <div class="card reveal">
+        <div class="card-media" style="${mediaStyle}">
+          ${r.photoUrl ? '' : buildingIcon}
           <div class="card-tag">${r.titre}</div>
         </div>
         <div class="card-body">${r.tag || ''}</div>
       </div>
-    `).join('');
+    `;
+    }).join('');
   }
 
   renderRealisations(fallbackRealisations);
+  observeReveals();
 
   try {
     onSnapshot(query(collection(db, 'realisations'), orderBy('ordre', 'asc')), snap => {
-      if (!snap.empty) renderRealisations(snap.docs.map(d => d.data()));
+      if (!snap.empty) { renderRealisations(snap.docs.map(d => d.data())); observeReveals(); }
     });
     onSnapshot(doc(db, 'site', 'grille_prix'), snap => {
       if (snap.exists() && snap.data() && snap.data().RDC) grilleActuelle = snap.data();
