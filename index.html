@@ -47,12 +47,14 @@
   /* hero */
   .hero{position:relative;padding:90px 0;overflow:hidden;background:#0B2545;}
   .hero-bg{position:absolute;inset:0;background:url('assets/hero.jpg') center/cover no-repeat;}
-  .hero-overlay{position:absolute;inset:0;background:linear-gradient(100deg,rgba(11,37,69,.92) 0%,rgba(11,37,69,.72) 40%,rgba(11,37,69,.25) 100%);}
+  .hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,37,69,.90) 0%,rgba(11,37,69,.55) 45%,rgba(11,37,69,.15) 100%);}
+  .hero-badge{position:absolute;top:50%;right:70px;transform:translateY(-50%);width:110px;height:110px;clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);background:rgba(226,112,58,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(0,0,0,.3);z-index:1;}
+  .hero-badge svg{width:44px;height:44px;stroke:#fff;}
   .hero h1{font-size:2.4rem;margin-bottom:18px;color:#fff;}
   .hero p.lead{color:#D7DEE5;font-size:1.02rem;max-width:44ch;margin-bottom:26px;}
   .hero .actions{display:flex;gap:12px;flex-wrap:wrap;}
-  .hero-content{max-width:560px;position:relative;z-index:1;}
-  .hero .cta-ghost{border-color:rgba(255,255,255,.6);color:#fff;}
+  .hero-content{max-width:460px;position:relative;z-index:1;}
+  .hero .cta-ghost{border-color:rgba(255,255,255,.6);color:#fff;background:rgba(255,255,255,.1);}
   @keyframes fadeInUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
   .hero-content{animation:fadeInUp .8s ease both;}
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
@@ -132,6 +134,8 @@
     .hero h1{font-size:1.9rem;}
     .hero{padding:64px 0;}
     .hero-overlay{background:linear-gradient(180deg,rgba(11,37,69,.85),rgba(11,37,69,.85));}
+    .hero-badge{width:70px;height:70px;right:24px;top:24px;transform:none;}
+    .hero-badge svg{width:28px;height:28px;}
   }
   nav.mobile-links{display:none;flex-direction:column;gap:4px;padding:0 24px 16px;}
   nav.mobile-links.open{display:flex;}
@@ -168,6 +172,7 @@
 <section class="hero" id="top">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
+  <div class="hero-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
   <div class="wrap hero-content">
     <h1>Vos plans et votre structure, pensés ensemble</h1>
     <p class="lead">Plans architecturaux, étude de structure béton, devis et suivi de chantier : un service complet pour vos projets à Dakar.</p>
