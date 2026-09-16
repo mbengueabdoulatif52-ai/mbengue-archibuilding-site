@@ -81,12 +81,19 @@
 
   /* realisations */
   .realisations{background:#F7F7F5;}
-  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-  .card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(11,37,69,.06);}
-  .card-media{height:150px;position:relative;display:flex;align-items:center;justify-content:center;}
-  .card-media svg{width:32px;height:32px;}
-  .card-tag{position:absolute;bottom:0;left:0;right:0;background:rgba(11,37,69,.85);color:#fff;font-size:13px;padding:8px 12px;}
-  .card-body{padding:12px 14px;font-family:var(--font-mono);font-size:12px;color:var(--ink-muted);}
+  .cards{display:flex;flex-direction:column;gap:20px;max-width:860px;margin:0 auto;}
+  .card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(11,37,69,.06);display:flex;}
+  .card-media{width:420px;height:320px;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center;}
+  .card-media svg{width:40px;height:40px;}
+  .card-body{padding:26px 28px;align-self:center;}
+  .card-body .t{font-family:var(--font-head);font-size:18px;font-weight:600;color:var(--navy);margin-bottom:5px;}
+  .card-body .s{font-family:var(--font-mono);font-size:11px;color:#8a8a85;margin-bottom:14px;}
+  .card-body .d{font-size:13px;color:var(--ink-muted);line-height:1.65;}
+  @media (max-width:760px){
+    .card{flex-direction:column;}
+    .card-media{width:100%;height:220px;}
+    .card-body{padding:18px 20px;}
+  }
 
   /* pricing */
   .calc-box{max-width:640px;margin:0 auto;background:#fff;border:1px solid #ECE7DA;border-top:3px solid var(--orange);border-radius:16px;padding:28px;box-shadow:0 4px 16px rgba(11,37,69,.06);}
@@ -451,7 +458,9 @@
   const cardPalette = [
     { bg: '#0B2545', icon: '#5D7A9C' },
     { bg: '#E2703A', icon: '#F8D6C2' },
-    { bg: '#5C6B7A', icon: '#D7DEE5' }
+    { bg: '#5C6B7A', icon: '#D7DEE5' },
+    { bg: '#8B5E3C', icon: '#E8CBAE' },
+    { bg: '#3D5A73', icon: '#B9D0DE' }
   ];
   let realisationsData = [];
 
@@ -472,9 +481,12 @@
         <div class="card-media" style="${mediaStyle}">
           ${photos.length ? '' : buildingIcon}
           ${photos.length > 1 ? `<div class="card-badge">${photoIcon}${photos.length}</div>` : ''}
-          <div class="card-tag">${r.titre}</div>
         </div>
-        <div class="card-body">${r.tag || ''}</div>
+        <div class="card-body">
+          <div class="t">${r.titre || ''}</div>
+          <div class="s">${r.tag || ''}</div>
+          ${r.description ? `<div class="d">${r.description}</div>` : ''}
+        </div>
       </div>
     `;
     }).join('');
