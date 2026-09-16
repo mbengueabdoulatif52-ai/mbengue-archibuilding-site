@@ -108,6 +108,23 @@
   .btn-cancel{background:none;border:1px solid #D8D2C2;border-radius:7px;padding:9px 16px;}
   .btn-save{background:var(--orange);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-weight:500;}
   .save-status{font-size:12px;color:var(--muted);margin-top:8px;}
+  .photo-thumb{width:72px;height:72px;border-radius:8px;background-size:cover;background-position:center;position:relative;flex-shrink:0;}
+  .photo-thumb .del{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#c94b3f;color:#fff;border:none;display:flex;align-items:center;justify-content:center;font-size:13px;line-height:1;cursor:pointer;}
+
+  @media (max-width:600px){
+    header.app .wrap{flex-wrap:wrap;gap:8px;row-gap:6px;}
+    header.app .user{font-size:11px;gap:6px;flex-wrap:wrap;}
+    header.app .user span{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .wrap{padding:0 14px;}
+    nav.tabs .wrap{gap:10px;padding:10px 8px;}
+    nav.tabs .tab svg{width:16px;height:16px;}
+    nav.tabs .tab span{font-size:9px;}
+    .add-btn{width:30px;height:30px;}
+    .add-btn svg{width:15px;height:15px;}
+    main{padding:16px 0 40px;}
+    .panel-card{padding:18px 16px;}
+    .list-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+  }
 </style>
 </head>
 <body>
@@ -217,14 +234,15 @@
     <input id="realisationTitre" placeholder="Nom du projet">
     <label>Catégorie</label>
     <input id="realisationTag" placeholder="Ex. R+2 · Résidentiel">
-    <label>Photo</label>
+    <label>Description détaillée</label>
+    <textarea id="realisationDescription" rows="4" placeholder="Décris le projet : contexte, surface, particularités..."></textarea>
+    <label>Photos</label>
+    <div id="photoThumbs" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;"></div>
     <div class="dropzone" id="dropzoneRealisation">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-      <span id="dropzoneLabel">Cliquer pour choisir une photo</span>
+      <span id="dropzoneLabel">Cliquer pour ajouter une photo</span>
     </div>
     <input type="file" id="realisationPhoto" accept="image/*" class="hidden">
-    <input type="hidden" id="realisationPhotoUrl">
-    <div style="font-size:11px;color:var(--muted);margin:-6px 0 12px;">Ajoute d'abord le fichier dans <code>assets/realisations/</code> sur GitHub, puis colle son chemin ici. Laisser vide si pas encore de photo.</div>
     <div class="modal-actions">
       <button class="btn-cancel" data-close-modal>Annuler</button>
       <button class="btn-save" id="saveRealisation">Enregistrer</button>
@@ -311,8 +329,21 @@
     document.getElementById('saveCoord').addEventListener('click', saveCoordonnees);
     document.getElementById('saveRealisation').addEventListener('click', saveRealisation);
     document.getElementById('dropzoneRealisation').addEventListener('click', () => document.getElementById('realisationPhoto').click());
-    document.getElementById('realisationPhoto').addEventListener('change', e => {
-      document.getElementById('dropzoneLabel').textContent = e.target.files[0] ? e.target.files[0].name : 'Cliquer pour choisir une photo';
+    document.getElementById('realisationPhoto').addEventListener('change', async e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const label = document.getElementById('dropzoneLabel');
+      const prevLabel = label.textContent;
+      label.textContent = 'Envoi en cours...';
+      try {
+        const url = await uploadToCloudinary(file);
+        currentPhotos.push(url);
+        renderPhotoThumbs();
+      } catch (err) {
+        document.getElementById('realisationStatus').textContent = 'Erreur : ' + err.message;
+      }
+      label.textContent = 'Cliquer pour ajouter une photo';
+      e.target.value = '';
     });
     document.getElementById('saveGrille').addEventListener('click', saveGrille);
   }
@@ -362,14 +393,30 @@
     return data.secure_url;
   }
 
+  let currentPhotos = [];
+  function renderPhotoThumbs() {
+    const el = document.getElementById('photoThumbs');
+    el.innerHTML = currentPhotos.map((url, i) => `
+      <div class="photo-thumb" style="background-image:url('${url}')">
+        <button type="button" class="del" data-i="${i}">&times;</button>
+      </div>
+    `).join('');
+    el.querySelectorAll('.del').forEach(btn => btn.addEventListener('click', () => {
+      currentPhotos.splice(parseInt(btn.dataset.i), 1);
+      renderPhotoThumbs();
+    }));
+  }
+
   function openRealisationModal(r) {
     document.getElementById('modalRealisationTitle').textContent = r ? 'Modifier la réalisation' : 'Ajouter une réalisation';
     document.getElementById('realisationId').value = r ? r.id : '';
     document.getElementById('realisationTitre').value = r ? (r.titre || '') : '';
     document.getElementById('realisationTag').value = r ? (r.tag || '') : '';
-    document.getElementById('realisationPhotoUrl').value = r ? (r.photoUrl || '') : '';
+    document.getElementById('realisationDescription').value = r ? (r.description || '') : '';
+    currentPhotos = r ? (r.photos && r.photos.length ? [...r.photos] : (r.photoUrl ? [r.photoUrl] : [])) : [];
+    renderPhotoThumbs();
     document.getElementById('realisationPhoto').value = '';
-    document.getElementById('dropzoneLabel').textContent = r && r.photoUrl ? 'Photo actuelle conservée si tu n\'en choisis pas une nouvelle' : 'Cliquer pour choisir une photo';
+    document.getElementById('dropzoneLabel').textContent = 'Cliquer pour ajouter une photo';
     document.getElementById('realisationStatus').textContent = '';
     document.getElementById('modalRealisation').classList.remove('hidden');
   }
@@ -377,17 +424,12 @@
     const id = document.getElementById('realisationId').value;
     const titre = document.getElementById('realisationTitre').value.trim();
     const tag = document.getElementById('realisationTag').value.trim();
-    const file = document.getElementById('realisationPhoto').files[0];
+    const description = document.getElementById('realisationDescription').value.trim();
     const statusEl = document.getElementById('realisationStatus');
     if (!titre) { statusEl.textContent = 'Le titre est requis.'; return; }
+    statusEl.textContent = 'Enregistrement...';
     try {
-      let photoUrl = document.getElementById('realisationPhotoUrl').value || null;
-      if (file) {
-        statusEl.textContent = 'Envoi de la photo...';
-        photoUrl = await uploadToCloudinary(file);
-      }
-      statusEl.textContent = 'Enregistrement...';
-      const data = { titre, tag, photoUrl };
+      const data = { titre, tag, description, photos: currentPhotos, photoUrl: currentPhotos[0] || null };
       if (id) {
         await updateDoc(doc(db, 'realisations', id), data);
       } else {

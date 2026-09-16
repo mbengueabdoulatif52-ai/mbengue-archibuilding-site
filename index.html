@@ -120,6 +120,31 @@
   .modal-box label{display:block;font-size:12px;color:var(--ink-muted);margin-bottom:5px;margin-top:12px;}
   .modal-box input,.modal-box textarea{width:100%;padding:10px 12px;border:1px solid #D8D2C2;border-radius:8px;font-family:var(--font-body);font-size:14px;resize:vertical;}
   .modal-box input:focus,.modal-box textarea:focus{outline:none;border-color:var(--orange);}
+
+  /* card badge + pointer */
+  .card{cursor:pointer;}
+  .card-badge{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;padding:3px 8px;border-radius:10px;display:flex;align-items:center;gap:4px;}
+  .card-badge svg{width:12px;height:12px;}
+
+  /* realisation detail */
+  .rd-box{max-width:640px;padding:0;overflow:hidden;}
+  .rd-photo{position:relative;height:560px;background:#111820;background-size:cover;background-position:center;}
+  .rd-close{position:absolute;top:14px;right:16px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.4);color:#fff;border:none;font-size:20px;line-height:1;cursor:pointer;z-index:2;}
+  .rd-arrow{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;}
+  .rd-arrow svg{width:22px;height:22px;}
+  .rd-prev{left:16px;}
+  .rd-next{right:16px;}
+  .rd-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:2;}
+  .rd-dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4);}
+  .rd-dots span.active{background:#fff;}
+  .rd-body{padding:22px 26px 26px;}
+  .rd-title{font-family:var(--font-head);font-size:19px;font-weight:600;color:var(--navy);margin-bottom:5px;}
+  .rd-tag{font-family:var(--font-mono);font-size:11.5px;color:#8a8a85;margin-bottom:14px;}
+  .rd-desc{font-size:13px;color:var(--ink-muted);line-height:1.65;white-space:pre-wrap;}
+  @media (max-width:600px){
+    .rd-photo{height:280px;}
+    .rd-body{padding:18px 20px 22px;}
+  }
   #submitDevisBtn{margin-top:18px;}
   .modal-error{font-size:12.5px;color:#b23;margin-top:10px;}
   .modal-success{font-size:13px;color:#2a7d46;margin-top:14px;text-align:center;}
@@ -286,6 +311,22 @@
   </div>
 </div>
 
+<div class="modal-overlay hidden" id="rdModal">
+  <div class="modal-box rd-box">
+    <div class="rd-photo" id="rdPhoto">
+      <button type="button" class="rd-close" id="rdClose" aria-label="Fermer">&times;</button>
+      <button type="button" class="rd-arrow rd-prev" id="rdPrev" aria-label="Photo précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button type="button" class="rd-arrow rd-next" id="rdNext" aria-label="Photo suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+      <div class="rd-dots" id="rdDots"></div>
+    </div>
+    <div class="rd-body">
+      <div class="rd-title" id="rdTitle"></div>
+      <div class="rd-tag" id="rdTag"></div>
+      <div class="rd-desc" id="rdDesc"></div>
+    </div>
+  </div>
+</div>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, collection, addDoc, onSnapshot, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -406,32 +447,79 @@
   });
 
   const buildingIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg>';
+  const photoIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
   const cardPalette = [
     { bg: '#0B2545', icon: '#5D7A9C' },
     { bg: '#E2703A', icon: '#F8D6C2' },
     { bg: '#5C6B7A', icon: '#D7DEE5' }
   ];
+  let realisationsData = [];
+
+  function photosOf(r) {
+    return (r.photos && r.photos.length) ? r.photos : (r.photoUrl ? [r.photoUrl] : []);
+  }
 
   function renderRealisations(list) {
+    realisationsData = list;
     document.getElementById('cardsGrid').innerHTML = list.map((r, i) => {
       const c = cardPalette[i % cardPalette.length];
-      const mediaStyle = r.photoUrl
-        ? `background-image:url('${r.photoUrl}');background-size:cover;background-position:center;`
+      const photos = photosOf(r);
+      const mediaStyle = photos.length
+        ? `background-image:url('${photos[0]}');background-size:cover;background-position:center;`
         : `background:${c.bg};color:${c.icon};`;
       return `
-      <div class="card reveal">
+      <div class="card reveal" data-i="${i}">
         <div class="card-media" style="${mediaStyle}">
-          ${r.photoUrl ? '' : buildingIcon}
+          ${photos.length ? '' : buildingIcon}
+          ${photos.length > 1 ? `<div class="card-badge">${photoIcon}${photos.length}</div>` : ''}
           <div class="card-tag">${r.titre}</div>
         </div>
         <div class="card-body">${r.tag || ''}</div>
       </div>
     `;
     }).join('');
+    document.querySelectorAll('#cardsGrid .card').forEach(el => {
+      el.addEventListener('click', () => openRealisationDetail(realisationsData[parseInt(el.dataset.i)]));
+    });
   }
 
   renderRealisations(fallbackRealisations);
   observeReveals();
+
+  /* Fiche détail réalisation */
+  const rdModal = document.getElementById('rdModal');
+  let rdPhotos = [];
+  let rdIndex = 0;
+
+  function renderRdPhoto() {
+    const photoEl = document.getElementById('rdPhoto');
+    photoEl.style.backgroundImage = rdPhotos[rdIndex] ? `url('${rdPhotos[rdIndex]}')` : 'none';
+    const multi = rdPhotos.length > 1;
+    document.getElementById('rdPrev').style.display = multi ? 'flex' : 'none';
+    document.getElementById('rdNext').style.display = multi ? 'flex' : 'none';
+    document.getElementById('rdDots').innerHTML = multi
+      ? rdPhotos.map((_, i) => `<span class="${i === rdIndex ? 'active' : ''}"></span>`).join('')
+      : '';
+  }
+  function openRealisationDetail(r) {
+    rdPhotos = photosOf(r);
+    rdIndex = 0;
+    document.getElementById('rdTitle').textContent = r.titre || '';
+    document.getElementById('rdTag').textContent = r.tag || '';
+    document.getElementById('rdDesc').textContent = r.description || '';
+    renderRdPhoto();
+    rdModal.classList.remove('hidden');
+  }
+  document.getElementById('rdClose').addEventListener('click', () => rdModal.classList.add('hidden'));
+  rdModal.addEventListener('click', e => { if (e.target === rdModal) rdModal.classList.add('hidden'); });
+  document.getElementById('rdPrev').addEventListener('click', () => { rdIndex = (rdIndex - 1 + rdPhotos.length) % rdPhotos.length; renderRdPhoto(); });
+  document.getElementById('rdNext').addEventListener('click', () => { rdIndex = (rdIndex + 1) % rdPhotos.length; renderRdPhoto(); });
+  document.addEventListener('keydown', e => {
+    if (rdModal.classList.contains('hidden')) return;
+    if (e.key === 'Escape') rdModal.classList.add('hidden');
+    if (e.key === 'ArrowLeft') document.getElementById('rdPrev').click();
+    if (e.key === 'ArrowRight') document.getElementById('rdNext').click();
+  });
 
   try {
     onSnapshot(query(collection(db, 'realisations'), orderBy('ordre', 'asc')), snap => {
