@@ -75,6 +75,20 @@
   .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative;}
   .steps::before{content:'';position:absolute;top:24px;left:12%;right:12%;border-top:1px dashed var(--paper-line);}
   .step{text-align:center;position:relative;}
+
+  /* services */
+  .services-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:760px;margin:0 auto;}
+  .service-card{border:1px solid #ECE7DA;border-radius:14px;padding:24px;}
+  .service-icon{width:40px;height:40px;border-radius:10px;background:var(--navy);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+  .service-icon svg{width:19px;height:19px;color:#fff;}
+  .service-title{font-family:var(--font-head);font-size:15px;font-weight:600;color:var(--navy);margin-bottom:5px;}
+  .service-sub{font-family:var(--font-mono);font-size:11.5px;color:#8a8a85;margin-bottom:12px;}
+  .service-desc{font-size:12.5px;color:var(--ink-muted);line-height:1.6;margin-bottom:10px;display:none;}
+  .service-card.open .service-desc{display:block;}
+  .service-toggle{background:none;border:none;font-size:11.5px;color:var(--orange);font-weight:500;cursor:pointer;padding:0;}
+  @media (max-width:640px){
+    .services-grid{grid-template-columns:1fr;}
+  }
   .step .num{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--navy);background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;position:relative;z-index:1;}
   .step .num svg{width:20px;height:20px;color:var(--navy);}
   .step h3{font-size:14px;margin-bottom:4px;}
@@ -191,7 +205,7 @@
     </a>
     <nav class="links">
       <a href="#top">Accueil</a>
-      <a href="#comment-ca-marche">Services</a>
+      <a href="#services">Services</a>
       <a href="#realisations">Réalisations</a>
       <a href="#prix">Prix</a>
       <a href="#contact">Contact</a>
@@ -201,7 +215,7 @@
   </div>
   <nav class="mobile-links" id="mobileLinks">
     <a href="#top">Accueil</a>
-    <a href="#comment-ca-marche">Services</a>
+    <a href="#services">Services</a>
     <a href="#realisations">Réalisations</a>
     <a href="#prix">Prix</a>
     <a href="#prix">Devis gratuit</a>
@@ -225,6 +239,42 @@
 </section>
 
 <div class="band reveal">Plans architecturaux et étude de structure béton, un seul interlocuteur pour tout le projet.</div>
+
+<section id="services">
+  <div class="wrap">
+    <h2 class="section-title">Nos services</h2>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 3L3 21M14 3h7v7M3 14v7h7"/></svg></div>
+        <div class="service-title">Plans Architecturaux</div>
+        <div class="service-sub">Esquisse et modélisation</div>
+        <div class="service-desc">Réalisation de plans précis et conformes aux normes locales pour tous types de bâtiments résidentiels, commerciaux et industriels.</div>
+        <button type="button" class="service-toggle">En savoir plus +</button>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg></div>
+        <div class="service-title">Dimensionnement Béton Armé</div>
+        <div class="service-sub">Calcul de structure</div>
+        <div class="service-desc">Calcul rigoureux des structures en béton armé selon les normes en vigueur pour une construction solide, sécurisée et pérenne.</div>
+        <button type="button" class="service-toggle">En savoir plus +</button>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+        <div class="service-title">Élaboration de Devis</div>
+        <div class="service-sub">Estimation des coûts</div>
+        <div class="service-desc">Estimation détaillée et transparente de vos coûts de construction, sans mauvaises surprises. Chaque poste est justifié et documenté.</div>
+        <button type="button" class="service-toggle">En savoir plus +</button>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+        <div class="service-title">Suivi de Chantier</div>
+        <div class="service-sub">Jusqu'à livraison</div>
+        <div class="service-desc">Supervision continue avec rapports réguliers, contrôle qualité à chaque phase et interface directe entre le client et les équipes terrain.</div>
+        <button type="button" class="service-toggle">En savoir plus +</button>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section id="comment-ca-marche">
   <div class="wrap">
@@ -362,6 +412,14 @@
   };
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+
+  document.querySelectorAll('.service-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.service-card');
+      const open = card.classList.toggle('open');
+      btn.textContent = open ? 'En savoir moins -' : 'En savoir plus +';
+    });
+  });
 
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
