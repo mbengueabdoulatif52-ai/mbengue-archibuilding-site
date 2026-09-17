@@ -219,6 +219,8 @@
         <input id="coordEmail" type="email" placeholder="contact@exemple.com">
         <label>Téléphone affiché sur le site</label>
         <input id="coordTel" type="text" placeholder="+221 XX XXX XX XX">
+        <label>Bio / À propos</label>
+        <textarea id="coordBio" rows="4" placeholder="Texte affiché dans la section À propos du site"></textarea>
         <button class="btn-save" id="saveCoord">Enregistrer</button>
         <div class="save-status" id="coordStatus"></div>
       </div>
@@ -502,14 +504,17 @@
   }
 
   /* Coordonnées */
+  const defaultBio = "Diplômé de l'École Polytechnique de Thiès (2021). Spécialisé en conception architecturale (ArchiCAD, AutoCAD) et étude de structure béton armé, à Dakar.";
   async function loadCoordonnees() {
     const snap = await getDoc(doc(db, 'site', 'coordonnees'));
     if (snap.exists()) {
       document.getElementById('coordEmail').value = snap.data().email || '';
       document.getElementById('coordTel').value = snap.data().telephone || '';
+      document.getElementById('coordBio').value = snap.data().bio || defaultBio;
     } else {
       document.getElementById('coordEmail').value = 'mbenguearchibuilding@gmail.com';
       document.getElementById('coordTel').value = '+221 70 562 32 06';
+      document.getElementById('coordBio').value = defaultBio;
     }
   }
   async function saveCoordonnees() {
@@ -517,7 +522,8 @@
     try {
       await setDoc(doc(db, 'site', 'coordonnees'), {
         email: document.getElementById('coordEmail').value.trim(),
-        telephone: document.getElementById('coordTel').value.trim()
+        telephone: document.getElementById('coordTel').value.trim(),
+        bio: document.getElementById('coordBio').value.trim()
       });
       document.getElementById('coordStatus').textContent = 'Enregistré.';
     } catch (e) {
