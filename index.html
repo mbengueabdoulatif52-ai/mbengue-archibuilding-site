@@ -168,6 +168,14 @@
   .foot-row a{display:inline-flex;align-items:center;gap:6px;}
   .foot-row a:hover{color:#fff;}
   .foot-row svg{width:15px;height:15px;}
+  .final-cta{background:var(--navy);}
+  .final-cta-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;}
+  .final-cta-title{font-family:var(--font-head);font-size:22px;font-weight:600;color:#fff;}
+  .final-cta-sub{font-size:13px;color:#D7DEE5;margin-top:3px;}
+  .final-cta-actions{display:flex;gap:10px;flex-wrap:wrap;}
+  .whatsapp-cta-btn{background:#25D366;color:#fff;font-size:14px;font-weight:500;padding:10px 18px;border-radius:6px;display:inline-flex;align-items:center;gap:7px;}
+  .whatsapp-cta-btn svg{width:16px;height:16px;}
+  .whatsapp-cta-btn:hover{background:#1ebd5a;}
   .whatsapp-btn{position:fixed;bottom:22px;right:22px;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.28);z-index:100;transition:transform .15s;}
   .whatsapp-btn:hover{transform:scale(1.06);}
   .whatsapp-btn svg{width:28px;height:28px;color:#fff;}
@@ -226,6 +234,8 @@
     .hero{min-height:560px;}
     .hero-overlay{background:linear-gradient(180deg,rgba(11,37,69,.85),rgba(11,37,69,.85));}
     .hero-logo-panel{display:none;}
+    .final-cta-row{text-align:center;justify-content:center;flex-direction:column;}
+    .final-cta-title{font-size:19px;}
   }
   nav.mobile-links{display:none;flex-direction:column;gap:4px;padding:0 24px 16px;}
   nav.mobile-links.open{display:flex;}
@@ -435,12 +445,30 @@
   </div>
 </section>
 
+<section class="final-cta">
+  <div class="wrap final-cta-row">
+    <div>
+      <div class="final-cta-title">Un projet en tête ?</div>
+      <div class="final-cta-sub">Parlons-en dès aujourd'hui.</div>
+    </div>
+    <div class="final-cta-actions">
+      <button class="cta-btn" id="openDevisBtn2" type="button">Demander un devis</button>
+      <a class="whatsapp-cta-btn" href="https://wa.me/221705623206" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.02a7.95 7.95 0 0 0 5.53-13.58Z"/></svg>
+        Discuter sur WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
 <footer id="contact">
   <div class="wrap foot-row">
     <span>MBENGUE ARCHIBUILDING — Dakar, Sénégal</span>
-    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+    <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:center;">
       <a href="mailto:mbenguearchibuilding@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg>mbenguearchibuilding@gmail.com</a>
       <a href="tel:+221705623206"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>+221 70 562 32 06</a>
+      <a href="https://www.facebook.com/share/1Deg1CRtbd/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 10-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.78-3.89 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0022 12z"/></svg></a>
+      <a href="https://www.tiktok.com/@mbengarchb" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82a4.28 4.28 0 01-3.14-1.4V15.4a5.6 5.6 0 11-4.83-5.55v2.3a3.3 3.3 0 103.36 3.28V2h2.6a4.28 4.28 0 001 2.8 4.24 4.24 0 003 1.28V8.4a6.3 6.3 0 01-1.99-.2z"/></svg></a>
     </div>
   </div>
 </footer>
@@ -535,11 +563,13 @@
   }));
 
   const devisModal = document.getElementById('devisModal');
-  document.getElementById('openDevisBtn').addEventListener('click', () => {
+  function openDevisModal() {
     document.getElementById('devisError').classList.add('hidden');
     document.getElementById('devisSuccess').classList.add('hidden');
     devisModal.classList.remove('hidden');
-  });
+  }
+  document.getElementById('openDevisBtn').addEventListener('click', openDevisModal);
+  document.getElementById('openDevisBtn2').addEventListener('click', openDevisModal);
   document.getElementById('closeDevisBtn').addEventListener('click', () => devisModal.classList.add('hidden'));
   devisModal.addEventListener('click', e => { if (e.target === devisModal) devisModal.classList.add('hidden'); });
 
