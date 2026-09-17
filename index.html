@@ -60,9 +60,9 @@
   .hero-content{animation:fadeInUp .8s ease both;}
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
   .reveal.visible{opacity:1;transform:translateY(0);}
-  .steps .step:nth-child(2){transition-delay:.08s;}
-  .steps .step:nth-child(3){transition-delay:.16s;}
-  .steps .step:nth-child(4){transition-delay:.24s;}
+  .service-card:nth-child(2){transition-delay:.08s;}
+  .service-card:nth-child(3){transition-delay:.16s;}
+  .service-card:nth-child(4){transition-delay:.24s;}
   .cards .card:nth-child(2){transition-delay:.08s;}
   .cards .card:nth-child(3){transition-delay:.16s;}
 
@@ -71,47 +71,21 @@
 
   /* process */
   section{padding:64px 0;}
-  .section-title{text-align:center;font-size:1.5rem;margin-bottom:40px;}
-  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative;}
-  .steps::before{content:'';position:absolute;top:24px;left:12%;right:12%;border-top:1px dashed var(--paper-line);}
-  .step{text-align:center;position:relative;}
+  .section-title{text-align:center;font-size:1.5rem;margin-bottom:8px;}
+  .section-sub{text-align:center;font-size:13px;color:#8a8a85;margin-bottom:36px;}
 
-  /* comment ca marche - bandeau marine */
-  .steps-band{background:var(--navy);padding:44px 0;}
-  .steps-title{color:#fff;}
-  .steps-band .steps{display:flex;align-items:flex-start;justify-content:center;gap:0;}
-  .steps-band .step{flex:0 1 150px;}
-  .steps-band .step .num{width:38px;height:38px;border-radius:50%;background:#fff;color:var(--navy);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-family:var(--font-head);font-size:14px;font-weight:600;}
-  .steps-band .step h3{font-size:13px;color:#fff;margin-bottom:4px;}
-  .steps-band .step p{font-size:11px;color:#9BB0C4;}
-  .steps-band .steps::before{display:none;}
-  .step-arrow{flex:0 0 auto;color:#5D7A9C;padding-top:8px;}
-  .step-arrow svg{width:18px;height:18px;}
-  @media (max-width:700px){
-    .steps-band .steps{flex-direction:column;gap:8px;}
-    .steps-band .step{flex:none;}
-    .steps-band .step .num{margin:0 auto 6px;}
-    .steps-band{padding:30px 0;}
-    .step-arrow{display:none;}
-  }
-
-  /* services */
-  .services-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:760px;margin:0 auto;}
-  .service-card{border:1px solid #ECE7DA;border-radius:14px;padding:24px;}
-  .service-icon{width:40px;height:40px;border-radius:50%;background:#FBE4D6;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
-  .service-icon svg{width:19px;height:19px;color:var(--orange);}
-  .service-title{font-family:var(--font-head);font-size:15px;font-weight:600;color:var(--navy);margin-bottom:5px;}
-  .service-sub{font-family:var(--font-mono);font-size:11.5px;color:#8a8a85;margin-bottom:12px;}
-  .service-desc{font-size:12.5px;color:var(--ink-muted);line-height:1.6;margin-bottom:10px;display:none;}
-  .service-card.open .service-desc{display:block;}
-  .service-toggle{background:none;border:none;font-size:11.5px;color:var(--orange);font-weight:500;cursor:pointer;padding:0;}
-  @media (max-width:640px){
-    .services-grid{grid-template-columns:1fr;}
-  }
-  .step .num{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--navy);background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;position:relative;z-index:1;}
-  .step .num svg{width:20px;height:20px;color:var(--navy);}
-  .step h3{font-size:14px;margin-bottom:4px;}
-  .step p{font-size:13px;color:var(--ink-muted);}
+  /* services (fusionné avec l'ancien "comment ça marche") */
+  .services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;max-width:1000px;margin:0 auto;}
+  .service-card{border:1px solid #ECE7DA;border-radius:14px;padding:22px 20px;}
+  .service-icon-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .service-icon{width:38px;height:38px;border-radius:50%;background:#FBE4D6;display:flex;align-items:center;justify-content:center;}
+  .service-icon svg{width:18px;height:18px;color:var(--orange);}
+  .service-num{width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-family:var(--font-head);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;}
+  .service-title{font-family:var(--font-head);font-size:14.5px;font-weight:600;color:var(--navy);margin-bottom:5px;}
+  .service-sub{font-family:var(--font-mono);font-size:11px;color:#8a8a85;margin-bottom:10px;}
+  .service-desc{font-size:12px;color:var(--ink-muted);line-height:1.6;}
+  @media (max-width:900px){ .services-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:600px){ .services-grid{grid-template-columns:1fr;} }
 
   /* realisations */
   .realisations{background:#F7F7F5;}
@@ -302,65 +276,43 @@
 <section id="services">
   <div class="wrap">
     <h2 class="section-title">Nos services</h2>
+    <p class="section-sub">De la conception à la livraison, étape par étape</p>
     <div class="services-grid">
       <div class="service-card reveal">
-        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 3L3 21M14 3h7v7M3 14v7h7"/></svg></div>
+        <div class="service-icon-row">
+          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 3L3 21M14 3h7v7M3 14v7h7"/></svg></div>
+          <div class="service-num">01</div>
+        </div>
         <div class="service-title">Plans Architecturaux</div>
         <div class="service-sub">Esquisse et modélisation</div>
         <div class="service-desc">Réalisation de plans précis et conformes aux normes locales pour tous types de bâtiments résidentiels, commerciaux et industriels.</div>
-        <button type="button" class="service-toggle">En savoir plus +</button>
       </div>
       <div class="service-card reveal">
-        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg></div>
+        <div class="service-icon-row">
+          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg></div>
+          <div class="service-num">02</div>
+        </div>
         <div class="service-title">Dimensionnement Béton Armé</div>
         <div class="service-sub">Calcul de structure</div>
         <div class="service-desc">Calcul rigoureux des structures en béton armé selon les normes en vigueur pour une construction solide, sécurisée et pérenne.</div>
-        <button type="button" class="service-toggle">En savoir plus +</button>
       </div>
       <div class="service-card reveal">
-        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+        <div class="service-icon-row">
+          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+          <div class="service-num">03</div>
+        </div>
         <div class="service-title">Élaboration de Devis</div>
         <div class="service-sub">Estimation des coûts</div>
         <div class="service-desc">Estimation détaillée et transparente de vos coûts de construction, sans mauvaises surprises. Chaque poste est justifié et documenté.</div>
-        <button type="button" class="service-toggle">En savoir plus +</button>
       </div>
       <div class="service-card reveal">
-        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+        <div class="service-icon-row">
+          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+          <div class="service-num">04</div>
+        </div>
         <div class="service-title">Suivi de Chantier</div>
         <div class="service-sub">Jusqu'à livraison</div>
         <div class="service-desc">Supervision continue avec rapports réguliers, contrôle qualité à chaque phase et interface directe entre le client et les équipes terrain.</div>
-        <button type="button" class="service-toggle">En savoir plus +</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="comment-ca-marche" class="steps-band">
-  <div class="wrap">
-    <h2 class="section-title steps-title">Comment ça marche</h2>
-    <div class="steps">
-      <div class="step reveal">
-        <div class="num">01</div>
-        <h3>Plan archi</h3>
-        <p>Esquisse et modélisation</p>
-      </div>
-      <div class="step-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-      <div class="step reveal">
-        <div class="num">02</div>
-        <h3>Étude structure</h3>
-        <p>Calcul de structure</p>
-      </div>
-      <div class="step-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-      <div class="step reveal">
-        <div class="num">03</div>
-        <h3>Devis</h3>
-        <p>Estimation des coûts</p>
-      </div>
-      <div class="step-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-      <div class="step reveal">
-        <div class="num">04</div>
-        <h3>Suivi chantier</h3>
-        <p>Jusqu'à livraison</p>
       </div>
     </div>
   </div>
@@ -538,14 +490,6 @@
   };
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-
-  document.querySelectorAll('.service-toggle').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const card = btn.closest('.service-card');
-      const open = card.classList.toggle('open');
-      btn.textContent = open ? 'En savoir moins -' : 'En savoir plus +';
-    });
-  });
 
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
