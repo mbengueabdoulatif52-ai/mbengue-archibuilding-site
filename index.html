@@ -45,10 +45,11 @@
   .menu-btn{display:none;background:none;border:none;font-size:22px;color:var(--navy);cursor:pointer;}
 
   /* hero */
-  .hero{position:relative;padding:90px 0;overflow:hidden;background:#0B2545;}
+  .hero{position:relative;min-height:520px;overflow:hidden;background:#0B2545;}
   .hero-bg{position:absolute;inset:0;background:url('assets/hero.jpg') center/cover no-repeat;}
   .hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,37,69,.90) 0%,rgba(11,37,69,.55) 45%,rgba(11,37,69,.15) 100%);}
-  .hero-logo-panel{position:absolute;top:0;right:0;bottom:0;width:260px;background:rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;z-index:1;}
+  .hero-inner{position:absolute;inset:0;max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;}
+  .hero-logo-panel{position:absolute;top:0;right:24px;bottom:0;width:260px;background:rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;z-index:1;}
   .hero-logo-panel img{width:150px;display:block;}
   .hero h1{font-size:2.4rem;margin-bottom:18px;color:#fff;}
   .hero p.lead{color:#D7DEE5;font-size:1.02rem;max-width:44ch;margin-bottom:26px;}
@@ -171,7 +172,7 @@
     .cards,.prices{grid-template-columns:1fr;}
     .calc-row{grid-template-columns:1fr;}
     .hero h1{font-size:1.9rem;}
-    .hero{padding:64px 0;}
+    .hero{min-height:560px;}
     .hero-overlay{background:linear-gradient(180deg,rgba(11,37,69,.85),rgba(11,37,69,.85));}
     .hero-logo-panel{display:none;}
   }
@@ -210,13 +211,15 @@
 <section class="hero" id="top">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
-  <div class="hero-logo-panel"><img src="assets/logo-full-transparent.png" alt="MBENGUE ARCHIBUILDING"></div>
-  <div class="wrap hero-content">
-    <h1>Vos plans et votre structure, pensés ensemble</h1>
-    <p class="lead">Plans architecturaux, étude de structure béton, devis et suivi de chantier : un service complet pour vos projets à Dakar.</p>
-    <div class="actions">
-      <button class="cta-btn" id="openDevisBtn" type="button">Demander un devis</button>
-      <a class="cta-ghost" href="#realisations">Voir mes réalisations</a>
+  <div class="hero-inner">
+    <div class="hero-logo-panel"><img src="assets/logo-full-transparent.png" alt="MBENGUE ARCHIBUILDING"></div>
+    <div class="hero-content">
+      <h1>Vos plans et votre structure, pensés ensemble</h1>
+      <p class="lead">Plans architecturaux, étude de structure béton, devis et suivi de chantier : un service complet pour vos projets à Dakar.</p>
+      <div class="actions">
+        <button class="cta-btn" id="openDevisBtn" type="button">Demander un devis</button>
+        <a class="cta-ghost" href="#realisations">Voir mes réalisations</a>
+      </div>
     </div>
   </div>
 </section>
