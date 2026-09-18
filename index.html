@@ -74,16 +74,14 @@
   .section-title{text-align:center;font-size:1.5rem;margin-bottom:8px;}
   .section-sub{text-align:center;font-size:13px;color:#8a8a85;margin-bottom:36px;}
 
-  /* services (fusionné avec l'ancien "comment ça marche") */
-  .services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;max-width:1000px;margin:0 auto;}
-  .service-card{border:1px solid #ECE7DA;border-radius:14px;padding:22px 20px;}
-  .service-icon-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-  .service-icon{width:38px;height:38px;border-radius:50%;background:#FBE4D6;display:flex;align-items:center;justify-content:center;}
-  .service-icon svg{width:18px;height:18px;color:var(--orange);}
-  .service-num{width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-family:var(--font-head);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;}
-  .service-title{font-family:var(--font-head);font-size:14.5px;font-weight:600;color:var(--navy);margin-bottom:5px;}
-  .service-sub{font-family:var(--font-mono);font-size:11px;color:#8a8a85;margin-bottom:10px;}
-  .service-desc{font-size:12px;color:var(--ink-muted);line-height:1.6;}
+  /* services */
+  .services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;max-width:1100px;margin:0 auto;}
+  .service-num-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .service-num{font-family:var(--font-head);font-size:12px;font-weight:600;color:var(--orange);letter-spacing:.02em;}
+  .service-num-line{flex:1;height:1px;background:#DDD6C4;}
+  .service-title{font-family:var(--font-head);font-size:16px;font-weight:600;color:var(--navy);margin-bottom:14px;}
+  .service-img{width:100%;height:150px;object-fit:cover;border-radius:8px;margin-bottom:14px;display:block;}
+  .service-desc{font-size:12.5px;color:var(--ink-muted);line-height:1.65;}
   @media (max-width:900px){ .services-grid{grid-template-columns:1fr 1fr;} }
   @media (max-width:600px){ .services-grid{grid-template-columns:1fr;} }
 
@@ -326,39 +324,27 @@
     <p class="section-sub">De la conception à la livraison, étape par étape</p>
     <div class="services-grid">
       <div class="service-card reveal">
-        <div class="service-icon-row">
-          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 3L3 21M14 3h7v7M3 14v7h7"/></svg></div>
-          <div class="service-num">01</div>
-        </div>
+        <div class="service-num-row"><span class="service-num">01</span><span class="service-num-line"></span></div>
         <div class="service-title">Plans Architecturaux</div>
-        <div class="service-sub">Esquisse et modélisation</div>
+        <img class="service-img" src="https://images.unsplash.com/photo-1762146828422-50a8bd416d3c?w=800&h=560&fit=crop&auto=format&q=75" alt="Plans architecturaux">
         <div class="service-desc">Réalisation de plans précis et conformes aux normes locales pour tous types de bâtiments résidentiels, commerciaux et industriels.</div>
       </div>
       <div class="service-card reveal">
-        <div class="service-icon-row">
-          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg></div>
-          <div class="service-num">02</div>
-        </div>
+        <div class="service-num-row"><span class="service-num">02</span><span class="service-num-line"></span></div>
         <div class="service-title">Dimensionnement Béton Armé</div>
-        <div class="service-sub">Calcul de structure</div>
+        <img class="service-img" src="https://images.unsplash.com/photo-1763771420303-0f11ccf613d1?w=800&h=560&fit=crop&auto=format&q=75" alt="Dimensionnement béton armé">
         <div class="service-desc">Calcul rigoureux des structures en béton armé selon les normes en vigueur pour une construction solide, sécurisée et pérenne.</div>
       </div>
       <div class="service-card reveal">
-        <div class="service-icon-row">
-          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
-          <div class="service-num">03</div>
-        </div>
+        <div class="service-num-row"><span class="service-num">03</span><span class="service-num-line"></span></div>
         <div class="service-title">Élaboration de Devis</div>
-        <div class="service-sub">Estimation des coûts</div>
+        <img class="service-img" src="https://images.unsplash.com/photo-1761546571631-a4d61b55cd2f?w=800&h=560&fit=crop&auto=format&q=75" alt="Élaboration de devis">
         <div class="service-desc">Estimation détaillée et transparente de vos coûts de construction, sans mauvaises surprises. Chaque poste est justifié et documenté.</div>
       </div>
       <div class="service-card reveal">
-        <div class="service-icon-row">
-          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
-          <div class="service-num">04</div>
-        </div>
+        <div class="service-num-row"><span class="service-num">04</span><span class="service-num-line"></span></div>
         <div class="service-title">Suivi de Chantier</div>
-        <div class="service-sub">Jusqu'à livraison</div>
+        <img class="service-img" src="https://images.unsplash.com/photo-1564483335100-3413b45dbd37?w=800&h=560&fit=crop&auto=format&q=75" alt="Suivi de chantier">
         <div class="service-desc">Supervision continue avec rapports réguliers, contrôle qualité à chaque phase et interface directe entre le client et les équipes terrain.</div>
       </div>
     </div>
