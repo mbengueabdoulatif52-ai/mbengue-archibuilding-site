@@ -71,8 +71,9 @@
 
   /* process */
   section{padding:64px 0;}
-  .section-title{text-align:center;font-size:1.5rem;margin-bottom:8px;}
-  .section-sub{text-align:center;font-size:13px;color:#8a8a85;margin-bottom:36px;}
+  .section-title{text-align:center;font-size:1.5rem;margin-bottom:28px;}
+  .section-title:has(+ .section-sub){margin-bottom:6px;}
+  .section-sub{text-align:center;font-size:13px;color:#8a8a85;margin-bottom:28px;}
 
   /* services */
   .services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;max-width:1100px;margin:0 auto;}
@@ -88,6 +89,14 @@
   /* realisations */
   .realisations{background:#F7F7F5;}
   .cards{display:flex;flex-direction:column;gap:20px;max-width:860px;margin:0 auto;}
+  .card-skel{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(11,37,69,.06);display:flex;padding:0;}
+  .card-skel-img{width:420px;height:320px;flex-shrink:0;background:#EDEAE0;animation:skelPulse 1.4s ease-in-out infinite;}
+  .card-skel-line{height:14px;margin:26px 28px 0;border-radius:4px;background:#EDEAE0;animation:skelPulse 1.4s ease-in-out infinite;}
+  @keyframes skelPulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+  @media (max-width:760px){
+    .card-skel{flex-direction:column;}
+    .card-skel-img{width:100%;height:220px;}
+  }
   .card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(11,37,69,.06);display:flex;}
   .card-media{width:420px;height:320px;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center;}
   .card-media svg{width:40px;height:40px;}
@@ -265,9 +274,10 @@
     .final-cta-row{text-align:center;justify-content:center;flex-direction:column;}
     .final-cta-title{font-size:19px;}
   }
-  nav.mobile-links{display:none;flex-direction:column;gap:4px;padding:0 24px 16px;}
-  nav.mobile-links.open{display:flex;}
-  nav.mobile-links a{padding:10px 0;font-size:15px;border-bottom:1px solid #ECE7DA;}
+  nav.mobile-links{display:flex;flex-direction:column;gap:4px;padding:0 24px;max-height:0;overflow:hidden;opacity:0;transition:max-height .3s ease,opacity .25s ease,padding .3s ease;}
+  nav.mobile-links.open{max-height:420px;opacity:1;padding:8px 24px 20px;}
+  nav.mobile-links a{padding:11px 0;font-size:15px;color:var(--navy);border-bottom:1px solid #ECE7DA;}
+  nav.mobile-links a:last-child{background:var(--orange);color:#fff;text-align:center;border-radius:6px;border-bottom:none;padding:12px;margin-top:8px;font-weight:500;}
 </style>
 </head>
 <body>
@@ -354,7 +364,10 @@
 <section class="realisations" id="realisations">
   <div class="wrap">
     <h2 class="section-title">Réalisations</h2>
-    <div class="cards" id="cardsGrid"></div>
+    <div class="cards" id="cardsGrid">
+      <div class="card-skel"><div class="card-skel-img"></div><div class="card-skel-line" style="width:60%"></div><div class="card-skel-line" style="width:35%"></div></div>
+      <div class="card-skel"><div class="card-skel-img"></div><div class="card-skel-line" style="width:60%"></div><div class="card-skel-line" style="width:35%"></div></div>
+    </div>
   </div>
 </section>
 
@@ -577,10 +590,12 @@
   menuBtn.addEventListener('click', () => {
     const open = mobileLinks.classList.toggle('open');
     menuBtn.setAttribute('aria-expanded', open);
+    menuBtn.textContent = open ? '✕' : '☰';
   });
   mobileLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
     mobileLinks.classList.remove('open');
     menuBtn.setAttribute('aria-expanded', false);
+    menuBtn.textContent = '☰';
   }));
 
   const devisModal = document.getElementById('devisModal');
