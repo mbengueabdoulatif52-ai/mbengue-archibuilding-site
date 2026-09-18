@@ -175,6 +175,7 @@
   .modal-head h3{font-size:17px;}
   .modal-head button{background:none;border:none;font-size:22px;line-height:1;color:var(--ink-muted);cursor:pointer;}
   .modal-lead{font-size:12.5px;color:var(--ink-muted);margin-bottom:18px;}
+  #submitDevisBtn{margin-top:18px;}
   .modal-box label{display:block;font-size:12px;color:var(--ink-muted);margin-bottom:5px;margin-top:12px;}
   .modal-box input,.modal-box textarea{width:100%;padding:10px 12px;border:1px solid #D8D2C2;border-radius:8px;font-family:var(--font-body);font-size:14px;resize:vertical;}
   .modal-box input:focus,.modal-box textarea:focus{outline:none;border-color:var(--orange);}
@@ -184,26 +185,44 @@
   .card-badge{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;padding:3px 8px;border-radius:10px;display:flex;align-items:center;gap:4px;}
   .card-badge svg{width:12px;height:12px;}
 
-  /* realisation detail */
-  .rd-box{max-width:640px;padding:0;overflow:hidden;}
-  .rd-photo{position:relative;height:560px;background:#111820;background-size:cover;background-position:center;}
-  .rd-close{position:absolute;top:14px;right:16px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.4);color:#fff;border:none;font-size:20px;line-height:1;cursor:pointer;z-index:2;}
-  .rd-arrow{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;}
-  .rd-arrow svg{width:22px;height:22px;}
-  .rd-prev{left:16px;}
-  .rd-next{right:16px;}
-  .rd-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:2;}
+  /* realisation detail — page complète */
+  #realisationPage{background:#fff;}
+  .rd-page-inner{padding:26px 24px 60px;}
+  .rd-breadcrumb{font-size:11.5px;color:#8a8a85;margin-bottom:16px;}
+  .rd-breadcrumb a{color:#8a8a85;}
+  .rd-breadcrumb a:hover{color:var(--orange);}
+  .rd-breadcrumb span{color:var(--navy);}
+  .rd-photo{position:relative;height:420px;border-radius:14px;overflow:hidden;background:#111820;background-size:cover;background-position:center;margin-bottom:16px;}
+  .rd-count{position:absolute;top:14px;left:16px;background:rgba(0,0,0,.45);color:#fff;font-size:11px;padding:5px 11px;border-radius:12px;z-index:2;}
+  .rd-arrow{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;}
+  .rd-arrow svg{width:20px;height:20px;}
+  .rd-prev{left:14px;}
+  .rd-next{right:14px;}
+  .rd-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:2;}
   .rd-dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4);}
   .rd-dots span.active{background:#fff;}
-  .rd-body{padding:22px 26px 26px;}
-  .rd-title{font-family:var(--font-head);font-size:19px;font-weight:600;color:var(--navy);margin-bottom:5px;}
-  .rd-tag{font-family:var(--font-mono);font-size:11.5px;color:#8a8a85;margin-bottom:14px;}
-  .rd-desc{font-size:13px;color:var(--ink-muted);line-height:1.65;white-space:pre-wrap;}
-  @media (max-width:600px){
-    .rd-photo{height:280px;}
-    .rd-body{padding:18px 20px 22px;}
+  .rd-back{background:none;border:none;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--navy);font-weight:500;cursor:pointer;padding:0;margin-bottom:16px;}
+  .rd-back svg{width:15px;height:15px;}
+  .rd-title{font-family:var(--font-head);font-size:22px;font-weight:600;color:var(--navy);line-height:1.3;margin-bottom:22px;max-width:44ch;}
+  .rd-main-grid{display:grid;grid-template-columns:1fr 240px;gap:28px;margin-bottom:36px;}
+  .rd-desc{font-size:13.5px;color:var(--ink-muted);line-height:1.75;white-space:pre-wrap;}
+  .rd-infobox{background:#F7F7F5;border-radius:12px;padding:18px;align-self:start;}
+  .rd-infobox-title{font-family:var(--font-head);font-size:12px;font-weight:600;color:var(--navy);margin-bottom:14px;}
+  .rd-info-row{margin-bottom:14px;}
+  .rd-info-row:last-child{margin-bottom:0;}
+  .rd-info-label{font-size:10px;color:#8a8a85;display:flex;align-items:center;gap:5px;letter-spacing:.02em;}
+  .rd-info-label svg{width:13px;height:13px;}
+  .rd-info-value{font-size:13px;color:var(--navy);font-weight:500;margin-top:3px;}
+  .rd-gallery-title{font-family:var(--font-head);font-size:15px;font-weight:600;color:var(--navy);margin-bottom:14px;}
+  .rd-gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:34px;}
+  .rd-gallery-grid div{height:90px;border-radius:10px;background-size:cover;background-position:center;cursor:pointer;}
+  .rd-cta{width:100%;max-width:420px;}
+  @media (max-width:700px){
+    .rd-main-grid{grid-template-columns:1fr;gap:20px;}
+    .rd-photo{height:240px;}
+    .rd-title{font-size:19px;}
+    .rd-gallery-grid{grid-template-columns:repeat(2,1fr);}
   }
-  #submitDevisBtn{margin-top:18px;}
   .modal-error{font-size:12.5px;color:#b23;margin-top:10px;}
   .modal-success{font-size:13px;color:#2a7d46;margin-top:14px;text-align:center;}
 
@@ -255,6 +274,7 @@
   </nav>
 </header>
 
+<div id="mainContent">
 <section class="hero" id="top">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
@@ -432,6 +452,7 @@
     </div>
   </div>
 </footer>
+</div>
 
 <div class="float-social">
   <a class="float-badge" style="background:#1877F2;" href="https://www.facebook.com/share/1Deg1CRtbd/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="#fff"><path d="M14 13.5h2.5l.5-3H14v-2c0-.85.3-1.5 1.5-1.5H17V4.1c-.3 0-1.3-.1-2.5-.1-2.5 0-4 1.5-4 4.3V10.5H8v3h2.5V21h3.5v-7.5z"/></svg></a>
@@ -460,21 +481,46 @@
   </div>
 </div>
 
-<div class="modal-overlay hidden" id="rdModal">
-  <div class="modal-box rd-box">
+<div id="realisationPage" class="hidden">
+  <div class="wrap rd-page-inner">
+    <div class="rd-breadcrumb">
+      <a href="#top" id="rdBackLink1">Accueil</a> › <a href="#top" id="rdBackLink2">Réalisations</a> › <span id="rdBreadcrumbTitle"></span>
+    </div>
     <div class="rd-photo" id="rdPhoto">
-      <button type="button" class="rd-close" id="rdClose" aria-label="Fermer">&times;</button>
+      <div class="rd-count" id="rdCount"></div>
       <button type="button" class="rd-arrow rd-prev" id="rdPrev" aria-label="Photo précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
       <button type="button" class="rd-arrow rd-next" id="rdNext" aria-label="Photo suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
       <div class="rd-dots" id="rdDots"></div>
     </div>
-    <div class="rd-body">
-      <div class="rd-title" id="rdTitle"></div>
-      <div class="rd-tag" id="rdTag"></div>
+    <button type="button" class="rd-back" id="rdBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Retour aux réalisations</button>
+    <div class="rd-title" id="rdTitle"></div>
+
+    <div class="rd-main-grid">
       <div class="rd-desc" id="rdDesc"></div>
+      <div class="rd-infobox">
+        <div class="rd-infobox-title">Informations du projet</div>
+        <div class="rd-info-row">
+          <div class="rd-info-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.59 13.41L11 3.83A2 2 0 009.59 3.24L3 3v6.59a2 2 0 00.59 1.41l9.58 9.58a2 2 0 002.83 0l4.59-4.58a2 2 0 000-2.83z"/><circle cx="7.5" cy="7.5" r="1"/></svg>CATÉGORIE</div>
+          <div class="rd-info-value" id="rdTag"></div>
+        </div>
+        <div class="rd-info-row" id="rdLocRow">
+          <div class="rd-info-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>LOCALISATION</div>
+          <div class="rd-info-value" id="rdLoc"></div>
+        </div>
+        <div class="rd-info-row" id="rdYearRow">
+          <div class="rd-info-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>ANNÉE</div>
+          <div class="rd-info-value" id="rdYear"></div>
+        </div>
+      </div>
     </div>
+
+    <div class="rd-gallery-title" id="rdGalleryTitle">Galerie photos</div>
+    <div class="rd-gallery-grid" id="rdGalleryGrid"></div>
+
+    <button type="button" class="cta-btn rd-cta" id="rdDevisBtn">Demander un devis pour un projet similaire</button>
   </div>
 </div>
+
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -649,8 +695,9 @@
   renderRealisations(fallbackRealisations);
   observeReveals();
 
-  /* Fiche détail réalisation */
-  const rdModal = document.getElementById('rdModal');
+  /* Fiche détail réalisation — page complète */
+  const mainContent = document.getElementById('mainContent');
+  const realisationPage = document.getElementById('realisationPage');
   let rdPhotos = [];
   let rdIndex = 0;
 
@@ -660,6 +707,8 @@
     const multi = rdPhotos.length > 1;
     document.getElementById('rdPrev').style.display = multi ? 'flex' : 'none';
     document.getElementById('rdNext').style.display = multi ? 'flex' : 'none';
+    document.getElementById('rdCount').style.display = rdPhotos.length ? 'block' : 'none';
+    document.getElementById('rdCount').textContent = rdPhotos.length ? `${rdIndex + 1} / ${rdPhotos.length}` : '';
     document.getElementById('rdDots').innerHTML = multi
       ? rdPhotos.map((_, i) => `<span class="${i === rdIndex ? 'active' : ''}"></span>`).join('')
       : '';
@@ -668,18 +717,49 @@
     rdPhotos = photosOf(r);
     rdIndex = 0;
     document.getElementById('rdTitle').textContent = r.titre || '';
+    document.getElementById('rdBreadcrumbTitle').textContent = r.titre || '';
     document.getElementById('rdTag').textContent = r.tag || '';
     document.getElementById('rdDesc').textContent = r.description || '';
+    const loc = r.localisation || '';
+    const year = r.annee || '';
+    document.getElementById('rdLocRow').style.display = loc ? 'block' : 'none';
+    document.getElementById('rdLoc').textContent = loc;
+    document.getElementById('rdYearRow').style.display = year ? 'block' : 'none';
+    document.getElementById('rdYear').textContent = year;
+    const galleryEl = document.getElementById('rdGalleryGrid');
+    if (rdPhotos.length > 1) {
+      document.getElementById('rdGalleryTitle').style.display = 'block';
+      galleryEl.style.display = 'grid';
+      galleryEl.innerHTML = rdPhotos.map((url, i) => `<div style="background-image:url('${url}')" data-i="${i}"></div>`).join('');
+      galleryEl.querySelectorAll('div').forEach(div => {
+        div.addEventListener('click', () => { rdIndex = parseInt(div.dataset.i); renderRdPhoto(); window.scrollTo({ top: realisationPage.offsetTop, behavior: 'smooth' }); });
+      });
+    } else {
+      document.getElementById('rdGalleryTitle').style.display = 'none';
+      galleryEl.style.display = 'none';
+    }
     renderRdPhoto();
-    rdModal.classList.remove('hidden');
+    mainContent.classList.add('hidden');
+    realisationPage.classList.remove('hidden');
+    window.scrollTo(0, 0);
   }
-  document.getElementById('rdClose').addEventListener('click', () => rdModal.classList.add('hidden'));
-  rdModal.addEventListener('click', e => { if (e.target === rdModal) rdModal.classList.add('hidden'); });
+  function closeRealisationDetail() {
+    realisationPage.classList.add('hidden');
+    mainContent.classList.remove('hidden');
+  }
+  document.getElementById('rdBack').addEventListener('click', closeRealisationDetail);
+  document.getElementById('rdBackLink1').addEventListener('click', e => { e.preventDefault(); closeRealisationDetail(); window.scrollTo(0, 0); });
+  document.getElementById('rdBackLink2').addEventListener('click', e => {
+    e.preventDefault();
+    closeRealisationDetail();
+    document.getElementById('realisations').scrollIntoView();
+  });
+  document.getElementById('rdDevisBtn').addEventListener('click', () => { closeRealisationDetail(); openDevisModal(); });
   document.getElementById('rdPrev').addEventListener('click', () => { rdIndex = (rdIndex - 1 + rdPhotos.length) % rdPhotos.length; renderRdPhoto(); });
   document.getElementById('rdNext').addEventListener('click', () => { rdIndex = (rdIndex + 1) % rdPhotos.length; renderRdPhoto(); });
   document.addEventListener('keydown', e => {
-    if (rdModal.classList.contains('hidden')) return;
-    if (e.key === 'Escape') rdModal.classList.add('hidden');
+    if (realisationPage.classList.contains('hidden')) return;
+    if (e.key === 'Escape') closeRealisationDetail();
     if (e.key === 'ArrowLeft') document.getElementById('rdPrev').click();
     if (e.key === 'ArrowRight') document.getElementById('rdNext').click();
   });

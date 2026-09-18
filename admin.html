@@ -236,6 +236,10 @@
     <input id="realisationTitre" placeholder="Nom du projet">
     <label>Catégorie</label>
     <input id="realisationTag" placeholder="Ex. R+2 · Résidentiel">
+    <label>Localisation</label>
+    <input id="realisationLoc" placeholder="Ex. Dakar">
+    <label>Année</label>
+    <input id="realisationYear" placeholder="Ex. 2025">
     <label>Description détaillée</label>
     <textarea id="realisationDescription" rows="4" placeholder="Décris le projet : contexte, surface, particularités..."></textarea>
     <label>Photos</label>
@@ -414,6 +418,8 @@
     document.getElementById('realisationId').value = r ? r.id : '';
     document.getElementById('realisationTitre').value = r ? (r.titre || '') : '';
     document.getElementById('realisationTag').value = r ? (r.tag || '') : '';
+    document.getElementById('realisationLoc').value = r ? (r.localisation || '') : '';
+    document.getElementById('realisationYear').value = r ? (r.annee || '') : '';
     document.getElementById('realisationDescription').value = r ? (r.description || '') : '';
     currentPhotos = r ? (r.photos && r.photos.length ? [...r.photos] : (r.photoUrl ? [r.photoUrl] : [])) : [];
     renderPhotoThumbs();
@@ -426,12 +432,14 @@
     const id = document.getElementById('realisationId').value;
     const titre = document.getElementById('realisationTitre').value.trim();
     const tag = document.getElementById('realisationTag').value.trim();
+    const localisation = document.getElementById('realisationLoc').value.trim();
+    const annee = document.getElementById('realisationYear').value.trim();
     const description = document.getElementById('realisationDescription').value.trim();
     const statusEl = document.getElementById('realisationStatus');
     if (!titre) { statusEl.textContent = 'Le titre est requis.'; return; }
     statusEl.textContent = 'Enregistrement...';
     try {
-      const data = { titre, tag, description, photos: currentPhotos, photoUrl: currentPhotos[0] || null };
+      const data = { titre, tag, localisation, annee, description, photos: currentPhotos, photoUrl: currentPhotos[0] || null };
       if (id) {
         await updateDoc(doc(db, 'realisations', id), data);
       } else {
