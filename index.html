@@ -191,7 +191,8 @@
   .rd-breadcrumb a{color:#8a8a85;}
   .rd-breadcrumb a:hover{color:var(--orange);}
   .rd-breadcrumb span{color:var(--navy);}
-  .rd-photo{position:relative;height:420px;border-radius:14px;overflow:hidden;background:#111820;background-size:contain;background-repeat:no-repeat;background-position:center;margin-bottom:16px;}
+  .rd-photo{position:relative;border-radius:14px;overflow:hidden;background:#F5F3EE;margin-bottom:16px;}
+  .rd-photo img{width:100%;display:block;cursor:pointer;}
   .rd-count{position:absolute;top:14px;left:16px;background:rgba(0,0,0,.45);color:#fff;font-size:11px;padding:5px 11px;border-radius:12px;z-index:2;}
   .rd-arrow{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;}
   .rd-arrow svg{width:20px;height:20px;}
@@ -214,9 +215,39 @@
   .rd-info-label svg{width:13px;height:13px;}
   .rd-info-value{font-size:13px;color:var(--navy);font-weight:500;margin-top:3px;}
   .rd-cta{width:100%;max-width:420px;}
+
+  /* visionneuse plein ecran */
+  .lightbox{position:fixed;inset:0;background:rgba(8,15,22,.96);z-index:300;display:flex;align-items:center;justify-content:center;}
+  .lightbox img{max-width:92vw;max-height:88vh;object-fit:contain;}
+  .lb-close{position:absolute;top:18px;right:20px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;border:none;font-size:22px;cursor:pointer;}
+  .lb-arrow{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .lb-arrow svg{width:22px;height:22px;}
+  .lb-prev{left:20px;}
+  .lb-next{right:20px;}
+  .lb-count{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.7);font-size:12px;}
+  @media (max-width:600px){
+    .lb-arrow{width:38px;height:38px;}
+    .lb-prev{left:8px;}
+    .lb-next{right:8px;}
+  }
+
+  /* visionneuse plein ecran */
+  .lightbox{position:fixed;inset:0;background:rgba(5,10,16,.95);z-index:300;display:flex;align-items:center;justify-content:center;}
+  .lightbox-img{max-width:92vw;max-height:88vh;background-size:contain;background-repeat:no-repeat;background-position:center;}
+  .lightbox-close{position:absolute;top:18px;right:20px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;border:none;font-size:22px;line-height:1;cursor:pointer;z-index:2;}
+  .lightbox-arrow{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;}
+  .lightbox-arrow svg{width:24px;height:24px;}
+  .lightbox-prev{left:16px;}
+  .lightbox-next{right:16px;}
+  .lightbox-dots{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:8px;}
+  .lightbox-dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);}
+  .lightbox-dots span.active{background:#fff;}
+  @media (max-width:600px){
+    .lightbox-arrow{width:38px;height:38px;}
+    .lightbox-arrow svg{width:18px;height:18px;}
+  }
   @media (max-width:700px){
     .rd-main-grid{grid-template-columns:1fr;gap:20px;}
-    .rd-photo{height:240px;}
     .rd-title{font-size:19px;}
   }
   .modal-error{font-size:12.5px;color:#b23;margin-top:10px;}
@@ -483,6 +514,7 @@
       <a href="#top" id="rdBackLink1">Accueil</a> › <a href="#top" id="rdBackLink2">Réalisations</a> › <span id="rdBreadcrumbTitle"></span>
     </div>
     <div class="rd-photo" id="rdPhoto">
+      <img id="rdPhotoImg" src="" alt="">
       <div class="rd-count" id="rdCount"></div>
       <button type="button" class="rd-arrow rd-prev" id="rdPrev" aria-label="Photo précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
       <button type="button" class="rd-arrow rd-next" id="rdNext" aria-label="Photo suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
@@ -512,6 +544,14 @@
 
     <button type="button" class="cta-btn rd-cta" id="rdDevisBtn">Demander un devis pour un projet similaire</button>
   </div>
+</div>
+
+<div class="lightbox hidden" id="lightbox">
+  <button type="button" class="lb-close" id="lbClose" aria-label="Fermer">&times;</button>
+  <button type="button" class="lb-arrow lb-prev" id="lbPrev" aria-label="Photo précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <img id="lbImg" src="" alt="">
+  <button type="button" class="lb-arrow lb-next" id="lbNext" aria-label="Photo suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+  <div class="lb-count" id="lbCount"></div>
 </div>
 
 
@@ -694,8 +734,7 @@
   let rdIndex = 0;
 
   function renderRdPhoto() {
-    const photoEl = document.getElementById('rdPhoto');
-    photoEl.style.backgroundImage = rdPhotos[rdIndex] ? `url('${rdPhotos[rdIndex]}')` : 'none';
+    document.getElementById('rdPhotoImg').src = rdPhotos[rdIndex] || '';
     const multi = rdPhotos.length > 1;
     document.getElementById('rdPrev').style.display = multi ? 'flex' : 'none';
     document.getElementById('rdNext').style.display = multi ? 'flex' : 'none';
@@ -704,7 +743,9 @@
     document.getElementById('rdDots').innerHTML = multi
       ? rdPhotos.map((_, i) => `<span class="${i === rdIndex ? 'active' : ''}"></span>`).join('')
       : '';
+    if (!lightbox.classList.contains('hidden')) renderLbImg();
   }
+  document.getElementById('rdPhotoImg').addEventListener('click', () => openLightbox());
   function openRealisationDetail(r) {
     rdPhotos = photosOf(r);
     rdIndex = 0;
@@ -733,6 +774,32 @@
     e.preventDefault();
     closeRealisationDetail();
     document.getElementById('realisations').scrollIntoView();
+  });
+
+  /* Visionneuse plein écran */
+  const lightbox = document.getElementById('lightbox');
+  function renderLbImg() {
+    document.getElementById('lbImg').src = rdPhotos[rdIndex] || '';
+    document.getElementById('lbCount').textContent = rdPhotos.length ? `${rdIndex + 1} / ${rdPhotos.length}` : '';
+    const multi = rdPhotos.length > 1;
+    document.getElementById('lbPrev').style.display = multi ? 'flex' : 'none';
+    document.getElementById('lbNext').style.display = multi ? 'flex' : 'none';
+  }
+  function openLightbox() {
+    if (!rdPhotos.length) return;
+    renderLbImg();
+    lightbox.classList.remove('hidden');
+  }
+  function closeLightbox() { lightbox.classList.add('hidden'); }
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+  document.getElementById('lbPrev').addEventListener('click', () => { rdIndex = (rdIndex - 1 + rdPhotos.length) % rdPhotos.length; renderRdPhoto(); });
+  document.getElementById('lbNext').addEventListener('click', () => { rdIndex = (rdIndex + 1) % rdPhotos.length; renderRdPhoto(); });
+  document.addEventListener('keydown', e => {
+    if (lightbox.classList.contains('hidden')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') document.getElementById('lbPrev').click();
+    if (e.key === 'ArrowRight') document.getElementById('lbNext').click();
   });
   document.getElementById('rdDevisBtn').addEventListener('click', () => { closeRealisationDetail(); openDevisModal(); });
   document.getElementById('rdPrev').addEventListener('click', () => { rdIndex = (rdIndex - 1 + rdPhotos.length) % rdPhotos.length; renderRdPhoto(); });
