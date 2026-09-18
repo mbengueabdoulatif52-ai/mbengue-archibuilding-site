@@ -96,7 +96,6 @@
   .card-body{padding:26px 28px;align-self:center;}
   .card-body .t{font-family:var(--font-head);font-size:18px;font-weight:600;color:var(--navy);margin-bottom:5px;}
   .card-body .s{font-family:var(--font-mono);font-size:11px;color:#8a8a85;margin-bottom:14px;}
-  .card-body .d{font-size:13px;color:var(--ink-muted);line-height:1.65;white-space:pre-wrap;}
   @media (max-width:760px){
     .card{flex-direction:column;}
     .card-media{width:100%;height:220px;}
@@ -192,7 +191,7 @@
   .rd-breadcrumb a{color:#8a8a85;}
   .rd-breadcrumb a:hover{color:var(--orange);}
   .rd-breadcrumb span{color:var(--navy);}
-  .rd-photo{position:relative;height:420px;border-radius:14px;overflow:hidden;background:#111820;background-size:cover;background-position:center;margin-bottom:16px;}
+  .rd-photo{position:relative;height:420px;border-radius:14px;overflow:hidden;background:#111820;background-size:contain;background-repeat:no-repeat;background-position:center;margin-bottom:16px;}
   .rd-count{position:absolute;top:14px;left:16px;background:rgba(0,0,0,.45);color:#fff;font-size:11px;padding:5px 11px;border-radius:12px;z-index:2;}
   .rd-arrow{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;}
   .rd-arrow svg{width:20px;height:20px;}
@@ -201,7 +200,8 @@
   .rd-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:2;}
   .rd-dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4);}
   .rd-dots span.active{background:#fff;}
-  .rd-back{background:none;border:none;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--navy);font-weight:500;cursor:pointer;padding:0;margin-bottom:16px;}
+  .rd-back{background:#fff;border:1px solid var(--navy);display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--navy);font-weight:500;cursor:pointer;padding:9px 16px;border-radius:6px;margin-bottom:20px;}
+  .rd-back:hover{background:var(--navy);color:#fff;}
   .rd-back svg{width:15px;height:15px;}
   .rd-title{font-family:var(--font-head);font-size:22px;font-weight:600;color:var(--navy);line-height:1.3;margin-bottom:22px;max-width:44ch;}
   .rd-main-grid{display:grid;grid-template-columns:1fr 240px;gap:28px;margin-bottom:36px;}
@@ -213,15 +213,11 @@
   .rd-info-label{font-size:10px;color:#8a8a85;display:flex;align-items:center;gap:5px;letter-spacing:.02em;}
   .rd-info-label svg{width:13px;height:13px;}
   .rd-info-value{font-size:13px;color:var(--navy);font-weight:500;margin-top:3px;}
-  .rd-gallery-title{font-family:var(--font-head);font-size:15px;font-weight:600;color:var(--navy);margin-bottom:14px;}
-  .rd-gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:34px;}
-  .rd-gallery-grid div{height:90px;border-radius:10px;background-size:cover;background-position:center;cursor:pointer;}
   .rd-cta{width:100%;max-width:420px;}
   @media (max-width:700px){
     .rd-main-grid{grid-template-columns:1fr;gap:20px;}
     .rd-photo{height:240px;}
     .rd-title{font-size:19px;}
-    .rd-gallery-grid{grid-template-columns:repeat(2,1fr);}
   }
   .modal-error{font-size:12.5px;color:#b23;margin-top:10px;}
   .modal-success{font-size:13px;color:#2a7d46;margin-top:14px;text-align:center;}
@@ -514,9 +510,6 @@
       </div>
     </div>
 
-    <div class="rd-gallery-title" id="rdGalleryTitle">Galerie photos</div>
-    <div class="rd-gallery-grid" id="rdGalleryGrid"></div>
-
     <button type="button" class="cta-btn rd-cta" id="rdDevisBtn">Demander un devis pour un projet similaire</button>
   </div>
 </div>
@@ -682,7 +675,6 @@
         <div class="card-body">
           <div class="t">${r.titre || ''}</div>
           <div class="s">${r.tag || ''}</div>
-          ${r.description ? `<div class="d">${r.description}</div>` : ''}
         </div>
       </div>
     `;
@@ -726,18 +718,6 @@
     document.getElementById('rdLoc').textContent = loc;
     document.getElementById('rdYearRow').style.display = year ? 'block' : 'none';
     document.getElementById('rdYear').textContent = year;
-    const galleryEl = document.getElementById('rdGalleryGrid');
-    if (rdPhotos.length > 1) {
-      document.getElementById('rdGalleryTitle').style.display = 'block';
-      galleryEl.style.display = 'grid';
-      galleryEl.innerHTML = rdPhotos.map((url, i) => `<div style="background-image:url('${url}')" data-i="${i}"></div>`).join('');
-      galleryEl.querySelectorAll('div').forEach(div => {
-        div.addEventListener('click', () => { rdIndex = parseInt(div.dataset.i); renderRdPhoto(); window.scrollTo({ top: realisationPage.offsetTop, behavior: 'smooth' }); });
-      });
-    } else {
-      document.getElementById('rdGalleryTitle').style.display = 'none';
-      galleryEl.style.display = 'none';
-    }
     renderRdPhoto();
     mainContent.classList.add('hidden');
     realisationPage.classList.remove('hidden');
