@@ -241,6 +241,10 @@
   .modal-box label{display:block;font-size:12px;color:var(--ink-muted);margin-bottom:5px;margin-top:12px;}
   .modal-box input,.modal-box textarea{width:100%;padding:10px 12px;border:1px solid #D8D2C2;border-radius:8px;font-family:var(--font-body);font-size:14px;resize:vertical;}
   .modal-box input:focus,.modal-box textarea:focus{outline:none;border-color:var(--orange);}
+  .fi-step{display:flex;gap:10px;margin-bottom:14px;}
+  .fi-step-num{width:22px;height:22px;border-radius:50%;background:#F7F1E8;color:var(--orange);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;}
+  .fi-step p{font-size:13.5px;color:var(--navy-dark);line-height:1.5;margin:0;}
+  .fi-note{font-size:12px;color:var(--ink-muted);margin-top:14px;line-height:1.5;}
 
   /* card badge + pointer */
   .card{cursor:pointer;}
@@ -618,17 +622,28 @@
 <div class="modal-overlay hidden" id="formationInteretModal">
   <div class="modal-box">
     <div class="modal-head">
-      <h3>Je suis intéressé</h3>
+      <h3 id="fiModalTitle">Je suis intéressé</h3>
       <button type="button" id="fiClose" aria-label="Fermer">&times;</button>
     </div>
-    <p class="modal-lead" id="fiLead"></p>
-    <label>Adresse Gmail</label>
-    <input type="email" id="fiEmail" placeholder="toi@gmail.com">
-    <label>Téléphone (optionnel)</label>
-    <input type="tel" id="fiTel" placeholder="+221 XX XXX XX XX">
-    <div id="fiError" class="modal-error hidden"></div>
-    <button class="cta-btn" id="fiSubmitBtn" type="button" style="width:100%;">Envoyer ma demande</button>
-    <div id="fiSuccess" class="modal-success hidden">Merci ! On te recontacte pour le paiement (Wave / Orange Money), puis tu reçois l'accès au dossier complet sur Google Drive.</div>
+    <div id="fiFormStep">
+      <p class="modal-lead" id="fiLead"></p>
+      <label>Adresse Gmail</label>
+      <input type="email" id="fiEmail" placeholder="toi@gmail.com">
+      <label>Téléphone (optionnel)</label>
+      <input type="tel" id="fiTel" placeholder="+221 XX XXX XX XX">
+      <div id="fiError" class="modal-error hidden"></div>
+      <button class="cta-btn" id="fiSubmitBtn" type="button" style="width:100%;">Envoyer ma demande</button>
+    </div>
+    <div id="fiPaymentStep" class="hidden">
+      <p class="modal-lead" id="fiPaymentLead"></p>
+      <div class="fi-step"><span class="fi-step-num">1</span><p>Envoie <strong id="fiPrixSpan"></strong> par Wave au <strong>+221 70 562 32 06</strong> (Abdou Latif Mbengue)</p></div>
+      <div class="fi-step"><span class="fi-step-num">2</span><p>Envoie la capture d'écran du paiement sur WhatsApp, avec le nom de la formation</p></div>
+      <a class="whatsapp-cta-btn" id="fiWhatsappBtn" href="#" target="_blank" rel="noopener" style="width:100%;justify-content:center;">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.02a7.95 7.95 0 0 0 5.53-13.58Z"/></svg>
+        Envoyer la capture sur WhatsApp
+      </a>
+      <p class="fi-note">Tu reçois l'accès au dossier complet sur Google Drive dès réception du paiement.</p>
+    </div>
   </div>
 </div>
 
@@ -927,14 +942,17 @@
   formationPreviewModal.addEventListener('click', e => { if (e.target === formationPreviewModal) closeFormationPreview(); });
   document.getElementById('fpInteretBtn').addEventListener('click', () => { closeFormationPreview(); openFormationInteret(currentFormation); });
 
+  const WHATSAPP_NUMBER = '221705623206';
   const formationInteretModal = document.getElementById('formationInteretModal');
   function openFormationInteret(f) {
     currentFormation = f;
-    document.getElementById('fiLead').textContent = `Formation ${f.logiciel} — ${(f.prix || 1000).toLocaleString('fr-FR')} FCFA. Indique ton adresse Gmail (utilisée pour te partager le dossier) : on te recontacte pour le paiement (Wave / Orange Money), puis tu reçois l'accès.`;
+    document.getElementById('fiModalTitle').textContent = 'Je suis intéressé';
+    document.getElementById('fiFormStep').classList.remove('hidden');
+    document.getElementById('fiPaymentStep').classList.add('hidden');
+    document.getElementById('fiLead').textContent = `Formation ${f.logiciel} — ${(f.prix || 1000).toLocaleString('fr-FR')} FCFA. Indique ton adresse Gmail (utilisée pour te partager le dossier) : à l'étape suivante, tu sauras comment payer.`;
     document.getElementById('fiEmail').value = '';
     document.getElementById('fiTel').value = '';
     document.getElementById('fiError').classList.add('hidden');
-    document.getElementById('fiSuccess').classList.add('hidden');
     formationInteretModal.classList.remove('hidden');
   }
   function closeFormationInteret() { formationInteretModal.classList.add('hidden'); }
@@ -950,16 +968,22 @@
     const btn = document.getElementById('fiSubmitBtn');
     btn.textContent = 'Envoi...';
     try {
+      const prix = currentFormation.prix || 1000;
       await addDoc(collection(db, 'demandes_formation'), {
         logiciel: currentFormation.logiciel || '',
-        prix: currentFormation.prix || 1000,
-        email, telephone: tel,
+        prix, email, telephone: tel,
         statut: 'nouveau',
         date: Date.now()
       });
-      document.getElementById('fiSuccess').classList.remove('hidden');
       btn.textContent = 'Envoyer ma demande';
-      setTimeout(closeFormationInteret, 2200);
+      const prixStr = prix.toLocaleString('fr-FR') + ' FCFA';
+      document.getElementById('fiModalTitle').textContent = 'Dernière étape : paiement';
+      document.getElementById('fiPaymentLead').textContent = `Formation ${currentFormation.logiciel} — ${prixStr}`;
+      document.getElementById('fiPrixSpan').textContent = prixStr;
+      const waMessage = `Bonjour, je viens de payer ${prixStr} pour la formation ${currentFormation.logiciel}, voici la capture :`;
+      document.getElementById('fiWhatsappBtn').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
+      document.getElementById('fiFormStep').classList.add('hidden');
+      document.getElementById('fiPaymentStep').classList.remove('hidden');
     } catch (e) {
       errorEl.textContent = "Erreur lors de l'envoi : " + e.message;
       errorEl.classList.remove('hidden');
