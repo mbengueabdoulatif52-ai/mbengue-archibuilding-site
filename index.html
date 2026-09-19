@@ -132,7 +132,7 @@
   .tool-result-rows>div span:last-child{color:var(--navy);font-weight:500;text-align:right;}
 
   /* outils de calcul */
-  .tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1100px;margin:0 auto;}
+  .tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;max-width:1100px;margin:0 auto;}
   .tool-card{background:#fff;border:1px solid #ECE7DA;border-radius:14px;padding:26px 22px;cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .15s;position:relative;}
   .tool-card:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:0 8px 20px rgba(11,37,69,.08);}
   .tool-icon{width:42px;height:42px;border-radius:10px;background:#F7F1E8;display:flex;align-items:center;justify-content:center;margin-bottom:16px;color:var(--orange);}
@@ -147,6 +147,20 @@
   .tool-fields-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:22px;}
   @media (max-width:820px){ .tools-grid{grid-template-columns:1fr 1fr;} }
   @media (max-width:560px){ .tools-grid{grid-template-columns:1fr;} }
+
+  /* béton & mortier */
+  .bm-type-toggle{display:flex;gap:8px;margin-bottom:20px;}
+  .bm-type-btn{flex:1;padding:11px;border-radius:8px;border:1px solid #D8D2C2;background:#F7F7F5;color:var(--navy);font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:border-color .15s,background .15s,color .15s;}
+  .bm-type-btn.active{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .bm-field-block{margin-bottom:18px;}
+  .bm-dosage-box,.bm-conv-box{background:#F7F7F5;border:1px solid #ECE7DA;border-radius:12px;padding:16px;margin-bottom:18px;}
+  .bm-dosage-box .tool-fields-grid,.bm-conv-box .tool-fields-grid{margin-bottom:0;}
+  .bm-dosage-label{font-size:12px;color:var(--ink-muted);margin-bottom:12px;}
+  .bm-result-rows{display:flex;flex-direction:column;}
+  .bm-result-rows>div{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:12px 0;border-bottom:1px solid #ECE7DA;}
+  .bm-result-rows>div:last-child{border-bottom:none;}
+  .bm-result-rows>div span:first-child{font-size:13px;color:var(--ink-muted);}
+  .bm-result-rows>div span:last-child{font-size:14.5px;color:var(--navy);font-weight:500;text-align:right;}
 
   /* pourquoi nous choisir */
   .why-band{background:#F7F7F5;}
@@ -414,17 +428,10 @@
         <h3>Quantité de peinture</h3>
         <p>Calcule les litres et pots nécessaires.</p>
       </div>
-      <div class="tool-card disabled reveal">
+      <div class="tool-card reveal" data-tool="beton_mortier">
         <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg></div>
-        <h3>Volume de béton</h3>
-        <p>Calcule le volume et le dosage en ciment.</p>
-        <span class="tool-soon">Bientôt</span>
-      </div>
-      <div class="tool-card disabled reveal">
-        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4v10a4 4 0 004 4h8M4 4h6M16 12v8M12 18h8"/></svg></div>
-        <h3>Quantité de fer</h3>
-        <p>Estime le poids d'acier par élément.</p>
-        <span class="tool-soon">Bientôt</span>
+        <h3>Béton & Mortier</h3>
+        <p>Ciment, sable, gravier et fer pour tes ouvrages.</p>
       </div>
     </div>
   </div>
@@ -1047,10 +1054,199 @@
     }
   };
 
+  /* ===== Béton & Mortier (données issues des normes d'extrait des matériaux) ===== */
+  const BETON_MORTIER = {
+    beton: {
+      hasGravier: true, hasFer: true,
+      groups: [
+        { label: "Fondations", elements: [
+          { id: 'semelle_isolee', label: 'Semelle isolée', geo: 'box', dims: ['Longueur (m)', 'Largeur (m)', 'Hauteur (m)'], ciment: 300, sable: 0.400, gravier: 0.800, acier: 30 },
+          { id: 'semelle_filante', label: 'Semelle filante', geo: 'box', dims: ['Longueur (m)', 'Largeur (m)', 'Hauteur (m)'], ciment: 300, sable: 0.400, gravier: 0.800, acier: 30 },
+          { id: 'massif', label: 'Massif / plot BA', geo: 'box', dims: ['Longueur (m)', 'Largeur (m)', 'Hauteur (m)'], ciment: 250, sable: 0.400, gravier: 0.800, acier: 140 },
+          { id: 'longrine', label: 'Longrine', geo: 'box', dims: ['Longueur (m)', 'Largeur (m)', 'Hauteur (m)'], ciment: 300, sable: 0.400, gravier: 0.800, acier: 200 },
+          { id: 'radier', label: 'Radier', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 300, sable: 0.400, gravier: 0.800, acier: 50 },
+          { id: 'dalle_fondation', label: 'Dalle de fondation', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 300, sable: 0.400, gravier: 0.800, acier: 50 }
+        ] },
+        { label: "Élévation", elements: [
+          { id: 'poteau', label: 'Poteau', geo: 'box', dims: ['Section a (m)', 'Section b (m)', 'Hauteur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 80 },
+          { id: 'poutre', label: 'Poutre', geo: 'box', dims: ['Longueur (m)', 'Base (m)', 'Hauteur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 70 },
+          { id: 'chainage', label: 'Chaînage', geo: 'box', dims: ['Longueur (m)', 'Base (m)', 'Hauteur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: null },
+          { id: 'linteau', label: 'Linteau', geo: 'box', dims: ['Longueur (m)', 'Base (m)', 'Hauteur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: null },
+          { id: 'acrotere', label: 'Acrotère', geo: 'box', dims: ['Longueur (m)', 'Hauteur (m)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 4 },
+          { id: 'voile_non_arme', label: 'Voile non armé', geo: 'box', dims: ['Longueur (m)', 'Hauteur (m)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 18 },
+          { id: 'voile_arme', label: 'Voile armé', geo: 'box', dims: ['Longueur (m)', 'Hauteur (m)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 50 },
+          { id: 'voile_fort_arme', label: 'Voile fortement armé', geo: 'box', dims: ['Longueur (m)', 'Hauteur (m)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 150 },
+          { id: 'escalier', label: 'Escalier', geo: 'direct', dims: ['Volume (m³)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: null }
+        ] },
+        { label: "Plancher", elements: [
+          { id: 'dalle_monolithe', label: 'Dalle monolithe / portée', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 19 },
+          { id: 'dalle_radier_etage', label: 'Dalle radier (étage)', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 50 },
+          { id: 'balcon', label: 'Balcon', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 25 },
+          { id: 'dallage_terre_plein', label: 'Dallage sur terre-plein', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 300, sable: 0.400, gravier: 0.800, acier: 2.5 },
+          { id: 'dallage_peu_ferraille', label: 'Dallage peu ferraillé', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 300, sable: 0.400, gravier: 0.800, acier: 30 }
+        ] }
+      ]
+    },
+    mortier: {
+      hasGravier: false, hasFer: false,
+      groups: [
+        { label: "Agglomérés", elements: [
+          { id: 'agglo7', label: 'Pose agglos 7×20×40', geo: 'area', dims: ['Surface de mur (m²)'], ciment: 5, sable: 0.016 },
+          { id: 'agglo10', label: 'Pose agglos 10×20×40', geo: 'area', dims: ['Surface de mur (m²)'], ciment: 7, sable: 0.018 },
+          { id: 'agglo15', label: 'Pose agglos 15×20×40', geo: 'area', dims: ['Surface de mur (m²)'], ciment: 10, sable: 0.022 },
+          { id: 'agglo20', label: 'Pose agglos 20×20×40', geo: 'area', dims: ['Surface de mur (m²)'], ciment: 13, sable: 0.025 },
+          { id: 'joint_plat', label: 'Joint plat / tiré', geo: 'area', dims: ['Surface (m²)'], ciment: 4, sable: 0.010 },
+          { id: 'joint_saillant', label: 'Joint saillant', geo: 'area', dims: ['Surface (m²)'], ciment: 8, sable: 0.020 }
+        ] },
+        { label: "Enduits", elements: [
+          { id: 'enduit_ordinaire', label: 'Enduit / crépi ordinaire 1,5cm', geo: 'area', dims: ['Surface (m²)'], ciment: 8, sable: 0.020 },
+          { id: 'enduit_etanche', label: 'Enduit étanche 2cm', geo: 'area', dims: ['Surface (m²)'], ciment: 18, sable: 0.030 }
+        ] },
+        { label: "Chapes et dallages", elements: [
+          { id: 'chape_15', label: 'Chape ordinaire 1,5cm', geo: 'area', dims: ['Surface (m²)'], ciment: 10, sable: 0.017 },
+          { id: 'chape_2', label: 'Chape ordinaire 2cm', geo: 'area', dims: ['Surface (m²)'], ciment: 13, sable: 0.022 },
+          { id: 'chape_3', label: 'Chape ordinaire 3cm', geo: 'area', dims: ['Surface (m²)'], ciment: 19, sable: 0.032 },
+          { id: 'chape_4', label: 'Chape ordinaire 4cm', geo: 'area', dims: ['Surface (m²)'], ciment: 26, sable: 0.043 }
+        ] }
+      ]
+    }
+  };
+  let bmType = 'beton';
+  let bmElem = null;
+
+  function bmGetElement(id) {
+    for (const g of BETON_MORTIER[bmType].groups) {
+      const f = g.elements.find(e => e.id === id);
+      if (f) return f;
+    }
+    return null;
+  }
+
+  function bmRenderDims() {
+    document.getElementById('bmDimsGrid').innerHTML = bmElem.dims.map((label, i) =>
+      `<div><label>${label}</label><input type="number" step="any" data-bmdim="${i}" placeholder="Ex. 3"></div>`
+    ).join('');
+  }
+
+  function bmRenderDosage() {
+    const conf = BETON_MORTIER[bmType];
+    const unitSuffix = bmElem.geo === 'area' ? '/m²' : '/m³';
+    const fields = [
+      { id: 'ciment', label: `Ciment (kg${unitSuffix})`, val: bmElem.ciment },
+      { id: 'sable', label: `Sable (m³${unitSuffix})`, val: bmElem.sable }
+    ];
+    if (conf.hasGravier) fields.push({ id: 'gravier', label: `Gravier (m³${unitSuffix})`, val: bmElem.gravier });
+    if (conf.hasFer && bmElem.acier != null) fields.push({ id: 'acier', label: `Acier (kg${unitSuffix})`, val: bmElem.acier });
+    document.getElementById('bmDosageGrid').innerHTML = fields.map(f =>
+      `<div><label>${f.label}</label><input type="number" step="any" data-bmdosage="${f.id}" value="${f.val}"></div>`
+    ).join('');
+    document.getElementById('toolResult').innerHTML = '<p class="calc-placeholder">Renseigne les champs, puis clique sur « Calculer ».</p>';
+  }
+
+  function bmPopulateElemSelect() {
+    const sel = document.getElementById('bmElemSelect');
+    sel.innerHTML = BETON_MORTIER[bmType].groups.map(g =>
+      `<optgroup label="${g.label}">${g.elements.map(e => `<option value="${e.id}">${e.label}</option>`).join('')}</optgroup>`
+    ).join('');
+    bmElem = BETON_MORTIER[bmType].groups[0].elements[0];
+    sel.value = bmElem.id;
+    bmRenderDims();
+    bmRenderDosage();
+  }
+
+  function renderBetonMortierPage() {
+    document.getElementById('toolBreadcrumbTitle').textContent = 'Béton & Mortier';
+    document.getElementById('toolTitle').textContent = 'Béton & Mortier';
+    document.getElementById('toolSubtitle').textContent = "Calcule le ciment, le sable, le gravier et le fer nécessaires pour un ouvrage en béton armé, ou le ciment et le sable pour un mortier.";
+    bmType = 'beton';
+    document.getElementById('toolFields').classList.remove('tool-fields-grid');
+    document.getElementById('toolFields').innerHTML = `
+      <div class="bm-type-toggle">
+        <button type="button" class="bm-type-btn active" data-bmtype="beton">Béton armé</button>
+        <button type="button" class="bm-type-btn" data-bmtype="mortier">Mortier</button>
+      </div>
+      <div class="bm-field-block">
+        <label>Type d'élément</label>
+        <select id="bmElemSelect"></select>
+      </div>
+      <div class="tool-fields-grid" id="bmDimsGrid"></div>
+      <div class="bm-dosage-box">
+        <p class="bm-dosage-label">Dosage (prérempli selon le type, modifiable)</p>
+        <div class="tool-fields-grid" id="bmDosageGrid"></div>
+      </div>
+      <div class="bm-conv-box">
+        <p class="bm-dosage-label">Unités de conversion (modifiables)</p>
+        <div class="tool-fields-grid">
+          <div><label>Sac de ciment (kg)</label><input type="number" step="any" id="bmSac" value="50"></div>
+          <div><label>Brouette (L)</label><input type="number" step="any" id="bmBrouette" value="65"></div>
+          <div><label>Seau (L)</label><input type="number" step="any" id="bmSeau" value="15"></div>
+        </div>
+      </div>
+    `;
+    document.querySelectorAll('.bm-type-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        bmType = btn.dataset.bmtype;
+        document.querySelectorAll('.bm-type-btn').forEach(b => b.classList.toggle('active', b === btn));
+        bmPopulateElemSelect();
+      });
+    });
+    document.getElementById('bmElemSelect').addEventListener('change', () => {
+      bmElem = bmGetElement(document.getElementById('bmElemSelect').value);
+      bmRenderDims();
+      bmRenderDosage();
+    });
+    bmPopulateElemSelect();
+  }
+
+  function computeBetonMortier() {
+    const dims = Array.from(document.querySelectorAll('[data-bmdim]')).map(el => parseFloat(el.value));
+    const resultEl = document.getElementById('toolResult');
+    if (dims.some(d => !d || d <= 0)) {
+      resultEl.innerHTML = '<span class="err">Renseigne toutes les dimensions.</span>';
+      return;
+    }
+    let qty;
+    if (bmElem.geo === 'box') qty = dims[0] * dims[1] * dims[2];
+    else if (bmElem.geo === 'surface') qty = dims[0] * dims[1];
+    else qty = dims[0];
+
+    const dosage = {};
+    document.querySelectorAll('[data-bmdosage]').forEach(el => { dosage[el.dataset.bmdosage] = parseFloat(el.value) || 0; });
+    const sac = parseFloat(document.getElementById('bmSac').value) || 50;
+    const brouette = parseFloat(document.getElementById('bmBrouette').value) || 65;
+    const seau = parseFloat(document.getElementById('bmSeau').value) || 15;
+
+    const ciment = qty * dosage.ciment;
+    const sable = qty * dosage.sable;
+    const gravier = dosage.gravier !== undefined ? qty * dosage.gravier : null;
+    const fer = dosage.acier !== undefined ? qty * dosage.acier : null;
+    const unit = bmElem.geo === 'area' ? 'm²' : 'm³';
+
+    const plur = (n, s, p) => n <= 1 ? s : p;
+    const nSacs = Math.ceil(ciment / sac);
+    const sableBrouettes = Math.ceil(sable * 1000 / brouette);
+    const sableSeaux = Math.ceil(sable * 1000 / seau);
+
+    const rows = [];
+    rows.push([bmElem.geo === 'area' ? 'Surface' : 'Volume', qty.toFixed(2) + ' ' + unit]);
+    rows.push(['Ciment', Math.round(ciment).toLocaleString('fr-FR') + ' kg (≈ ' + nSacs + ' ' + plur(nSacs, 'sac', 'sacs') + ' de ' + sac + ' kg)']);
+    rows.push(['Sable', sable.toFixed(3) + ' m³ (≈ ' + sableBrouettes + ' ' + plur(sableBrouettes, 'brouette', 'brouettes') + ' / ' + sableSeaux + ' ' + plur(sableSeaux, 'seau', 'seaux') + ')']);
+    if (gravier !== null) {
+      const gravierBrouettes = Math.ceil(gravier * 1000 / brouette);
+      const gravierSeaux = Math.ceil(gravier * 1000 / seau);
+      rows.push(['Gravier', gravier.toFixed(3) + ' m³ (≈ ' + gravierBrouettes + ' ' + plur(gravierBrouettes, 'brouette', 'brouettes') + ' / ' + gravierSeaux + ' ' + plur(gravierSeaux, 'seau', 'seaux') + ')']);
+    }
+    if (fer !== null) rows.push(['Fer', Math.round(fer).toLocaleString('fr-FR') + ' kg']);
+
+    const rowsHtml = rows.map(([l, v]) => `<div><span>${l}</span><span>${v}</span></div>`).join('');
+    resultEl.innerHTML = `<div class="bm-result-rows">${rowsHtml}</div>`;
+  }
+
   let currentToolId = null;
   let toolValues = {};
 
   function renderToolFields() {
+    document.getElementById('toolFields').classList.add('tool-fields-grid');
     const tool = TOOLS[currentToolId];
     const visibleFields = tool.fields.filter(f => !f.showIf || f.showIf(toolValues));
     document.getElementById('toolFields').innerHTML = visibleFields.map(f => {
@@ -1076,13 +1272,17 @@
 
   function openToolPage(id) {
     currentToolId = id;
-    const tool = TOOLS[id];
-    toolValues = {};
-    tool.fields.forEach(f => { if (f.default !== undefined) toolValues[f.id] = f.default; });
-    document.getElementById('toolBreadcrumbTitle').textContent = tool.title;
-    document.getElementById('toolTitle').textContent = tool.title;
-    document.getElementById('toolSubtitle').textContent = tool.subtitle || '';
-    renderToolFields();
+    if (id === 'beton_mortier') {
+      renderBetonMortierPage();
+    } else {
+      const tool = TOOLS[id];
+      toolValues = {};
+      tool.fields.forEach(f => { if (f.default !== undefined) toolValues[f.id] = f.default; });
+      document.getElementById('toolBreadcrumbTitle').textContent = tool.title;
+      document.getElementById('toolTitle').textContent = tool.title;
+      document.getElementById('toolSubtitle').textContent = tool.subtitle || '';
+      renderToolFields();
+    }
     realisationPage.classList.add('hidden');
     mainContent.classList.add('hidden');
     toolPage.classList.remove('hidden');
@@ -1103,6 +1303,7 @@
     document.getElementById('outils').scrollIntoView();
   });
   document.getElementById('toolCalcBtn').addEventListener('click', () => {
+    if (currentToolId === 'beton_mortier') { computeBetonMortier(); return; }
     const tool = TOOLS[currentToolId];
     const result = tool.compute(toolValues);
     const resultEl = document.getElementById('toolResult');
