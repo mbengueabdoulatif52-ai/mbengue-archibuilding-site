@@ -126,6 +126,27 @@
   .calc-inclus li::before{content:'✓';position:absolute;left:0;color:var(--orange);font-weight:600;}
   .calc-result .err{font-size:13.5px;color:#b23;}
   .price-note{text-align:center;font-size:13px;color:var(--ink-muted);margin-top:22px;}
+  .calc-unit{font-size:16px;font-weight:500;color:var(--ink-muted);margin-left:4px;}
+  .tool-result-rows{margin-top:14px;padding-top:14px;border-top:1px solid #ECE7DA;display:flex;flex-direction:column;gap:7px;}
+  .tool-result-rows>div{display:flex;justify-content:space-between;gap:14px;font-size:12.5px;color:var(--ink-muted);}
+  .tool-result-rows>div span:last-child{color:var(--navy);font-weight:500;text-align:right;}
+
+  /* outils de calcul */
+  .tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1100px;margin:0 auto;}
+  .tool-card{background:#fff;border:1px solid #ECE7DA;border-radius:14px;padding:26px 22px;cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .15s;position:relative;}
+  .tool-card:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:0 8px 20px rgba(11,37,69,.08);}
+  .tool-icon{width:42px;height:42px;border-radius:10px;background:#F7F1E8;display:flex;align-items:center;justify-content:center;margin-bottom:16px;color:var(--orange);}
+  .tool-icon svg{width:22px;height:22px;}
+  .tool-card h3{font-family:var(--font-head);font-size:15px;font-weight:600;color:var(--navy);margin-bottom:5px;}
+  .tool-card p{font-size:12.5px;color:var(--ink-muted);line-height:1.5;}
+  .tool-card.disabled{cursor:default;opacity:.55;}
+  .tool-card.disabled:hover{border-color:#ECE7DA;transform:none;box-shadow:none;}
+  .tool-soon{position:absolute;top:18px;right:18px;background:#ECE7DA;color:var(--ink-muted);font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500;letter-spacing:.02em;}
+  #toolTitle{margin-bottom:6px;}
+  .tool-subtitle{font-size:13px;color:var(--ink-muted);margin-bottom:24px;max-width:56ch;}
+  .tool-fields-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:22px;}
+  @media (max-width:820px){ .tools-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:560px){ .tools-grid{grid-template-columns:1fr;} }
 
   /* pourquoi nous choisir */
   .why-band{background:#F7F7F5;}
@@ -292,6 +313,7 @@
       <a href="#top">Accueil</a>
       <a href="#services">Services</a>
       <a href="#realisations">Réalisations</a>
+      <a href="#outils">Outils</a>
       <a href="#prix">Prix</a>
       <a href="#apropos">À propos</a>
       <a href="#contact">Contact</a>
@@ -303,6 +325,7 @@
     <a href="#top">Accueil</a>
     <a href="#services">Services</a>
     <a href="#realisations">Réalisations</a>
+    <a href="#outils">Outils</a>
     <a href="#prix">Prix</a>
     <a href="#apropos">À propos</a>
     <a href="#prix">Devis gratuit</a>
@@ -367,6 +390,42 @@
     <div class="cards" id="cardsGrid">
       <div class="card-skel"><div class="card-skel-img"></div><div class="card-skel-line" style="width:60%"></div><div class="card-skel-line" style="width:35%"></div></div>
       <div class="card-skel"><div class="card-skel-img"></div><div class="card-skel-line" style="width:60%"></div><div class="card-skel-line" style="width:35%"></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="outils">
+  <div class="wrap">
+    <h2 class="section-title">Outils de calcul</h2>
+    <p class="section-sub">Estime rapidement les quantités nécessaires pour ton chantier.</p>
+    <div class="tools-grid">
+      <div class="tool-card reveal" data-tool="agglos">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="9" height="6"/><rect x="13" y="4" width="9" height="6"/><rect x="2" y="14" width="4" height="6"/><rect x="8" y="14" width="9" height="6"/><rect x="19" y="14" width="3" height="6"/></svg></div>
+        <h3>Nombre d'agglos</h3>
+        <p>Calcule le nombre de blocs nécessaires pour un mur.</p>
+      </div>
+      <div class="tool-card reveal" data-tool="carrelage">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
+        <h3>Quantité de carrelage</h3>
+        <p>Calcule le nombre de carreaux pour une pièce.</p>
+      </div>
+      <div class="tool-card reveal" data-tool="peinture">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="14" height="6" rx="1"/><path d="M9 10v4a2 2 0 002 2 2 2 0 002-2"/><path d="M13 16v5"/></svg></div>
+        <h3>Quantité de peinture</h3>
+        <p>Calcule les litres et pots nécessaires.</p>
+      </div>
+      <div class="tool-card disabled reveal">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg></div>
+        <h3>Volume de béton</h3>
+        <p>Calcule le volume et le dosage en ciment.</p>
+        <span class="tool-soon">Bientôt</span>
+      </div>
+      <div class="tool-card disabled reveal">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4v10a4 4 0 004 4h8M4 4h6M16 12v8M12 18h8"/></svg></div>
+        <h3>Quantité de fer</h3>
+        <p>Estime le poids d'acier par élément.</p>
+        <span class="tool-soon">Bientôt</span>
+      </div>
     </div>
   </div>
 </section>
@@ -542,6 +601,25 @@
     </div>
 
     <button type="button" class="cta-btn rd-cta" id="rdDevisBtn">Demander un devis pour un projet similaire</button>
+  </div>
+</div>
+
+<div id="toolPage" class="hidden">
+  <div class="wrap rd-page-inner">
+    <div class="rd-breadcrumb">
+      <a href="#top" id="toolBackLink1">Accueil</a> › <a href="#outils" id="toolBackLink2">Outils</a> › <span id="toolBreadcrumbTitle"></span>
+    </div>
+    <button type="button" class="rd-back" id="toolBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Retour aux outils</button>
+    <div class="rd-title" id="toolTitle"></div>
+    <p class="tool-subtitle" id="toolSubtitle"></p>
+    <div class="calc-box reveal">
+      <div class="tool-fields-grid" id="toolFields"></div>
+      <button class="cta-btn" id="toolCalcBtn" type="button">Calculer</button>
+      <div class="calc-result" id="toolResult">
+        <p class="calc-placeholder">Renseigne les champs, puis clique sur « Calculer ».</p>
+      </div>
+    </div>
+    <p class="price-note">Ces outils donnent une estimation de quantité pour l'approvisionnement — ils ne remplacent pas une étude technique.</p>
   </div>
 </div>
 
@@ -731,6 +809,7 @@
   /* Fiche détail réalisation — page complète */
   const mainContent = document.getElementById('mainContent');
   const realisationPage = document.getElementById('realisationPage');
+  const toolPage = document.getElementById('toolPage');
   let rdPhotos = [];
   let rdIndex = 0;
 
@@ -810,6 +889,238 @@
     if (e.key === 'Escape') closeRealisationDetail();
     if (e.key === 'ArrowLeft') document.getElementById('rdPrev').click();
     if (e.key === 'ArrowRight') document.getElementById('rdNext').click();
+  });
+
+  /* ===== Outils de calcul ===== */
+  const poseLabels = { droite: 'Droite', decalee: 'Décalée / à joints rompus', diagonale: 'Diagonale', complexe: 'Complexe (mosaïque, motifs)' };
+  const poseDefaults = { droite: 8, decalee: 9, diagonale: 15, complexe: 18 };
+
+  const TOOLS = {
+    agglos: {
+      title: "Nombre d'agglos",
+      subtitle: "Estime le nombre de blocs nécessaires pour monter un mur.",
+      fields: [
+        { id: 'longueur', label: 'Longueur du mur', unit: 'm', type: 'number', placeholder: 'Ex. 12' },
+        { id: 'hauteur', label: 'Hauteur du mur', unit: 'm', type: 'number', placeholder: 'Ex. 3' },
+        { id: 'format', label: "Format d'agglo", type: 'select', options: [
+          { value: '10', label: '10×20×40 cm' },
+          { value: '15', label: '15×20×40 cm' },
+          { value: '20', label: '20×20×40 cm' }
+        ], default: '15' },
+        { id: 'ouvertures', label: 'Surface des ouvertures', unit: 'm²', type: 'number', placeholder: 'Ex. 4.5', default: 0 },
+        { id: 'perte', label: 'Marge de perte', unit: '%', type: 'number', default: 5 }
+      ],
+      compute(v) {
+        const L = parseFloat(v.longueur), H = parseFloat(v.hauteur);
+        if (!L || L <= 0 || !H || H <= 0) return { error: "Indique la longueur et la hauteur du mur." };
+        const ouvertures = parseFloat(v.ouvertures) || 0;
+        const perte = (v.perte === '' || v.perte == null) ? 5 : parseFloat(v.perte);
+        const Sb = L * H;
+        const Sn = Math.max(Sb - ouvertures, 0);
+        const Nt = Sn * 11.5;
+        const Nc = Nt * (1 + perte / 100);
+        const N = Math.ceil(Nc);
+        const formatLabels = { '10': '10×20×40 cm', '15': '15×20×40 cm', '20': '20×20×40 cm' };
+        return {
+          main: { label: "Nombre d'agglos nécessaires", value: N.toLocaleString('fr-FR'), unit: 'unités' },
+          rows: [
+            ['Surface brute du mur', Sb.toFixed(2) + ' m²'],
+            ['Surface nette (hors ouvertures)', Sn.toFixed(2) + ' m²'],
+            ["Format sélectionné", formatLabels[v.format] || v.format],
+            ['Marge de perte appliquée', perte + ' %']
+          ]
+        };
+      }
+    },
+    carrelage: {
+      title: 'Quantité de carrelage',
+      subtitle: "Estime le nombre de carreaux nécessaires pour une pièce.",
+      fields: [
+        { id: 'longueur', label: 'Longueur de la pièce', unit: 'm', type: 'number', placeholder: 'Ex. 5' },
+        { id: 'largeur', label: 'Largeur de la pièce', unit: 'm', type: 'number', placeholder: 'Ex. 4' },
+        { id: 'exclusions', label: 'Surfaces à exclure', unit: 'm²', type: 'number', placeholder: 'Ex. 1.2', default: 0 },
+        { id: 'format', label: 'Format du carreau', type: 'select', triggersRerender: true, options: [
+          { value: '30x30', label: '30×30 cm' },
+          { value: '40x40', label: '40×40 cm' },
+          { value: '45x45', label: '45×45 cm' },
+          { value: '60x60', label: '60×60 cm' },
+          { value: '30x60', label: '30×60 cm' },
+          { value: '60x120', label: '60×120 cm' },
+          { value: 'custom', label: 'Personnalisé' }
+        ], default: '60x60' },
+        { id: 'formatL', label: 'Longueur du carreau', unit: 'cm', type: 'number', placeholder: 'Ex. 50', showIf: v => v.format === 'custom' },
+        { id: 'formatl', label: 'Largeur du carreau', unit: 'cm', type: 'number', placeholder: 'Ex. 50', showIf: v => v.format === 'custom' },
+        { id: 'pose', label: 'Type de pose', type: 'select', triggersRerender: true, onChange: v => { v.perte = poseDefaults[v.pose]; }, options: [
+          { value: 'droite', label: 'Droite' },
+          { value: 'decalee', label: 'Décalée / à joints rompus' },
+          { value: 'diagonale', label: 'Diagonale' },
+          { value: 'complexe', label: 'Complexe (mosaïque, motifs)' }
+        ], default: 'droite' },
+        { id: 'perte', label: 'Marge de perte', unit: '%', type: 'number', default: 8 },
+        { id: 'boiteM2', label: 'Surface par boîte (optionnel)', unit: 'm²', type: 'number', placeholder: 'Ex. 1.44' }
+      ],
+      compute(v) {
+        const L = parseFloat(v.longueur), l = parseFloat(v.largeur);
+        if (!L || L <= 0 || !l || l <= 0) return { error: 'Indique la longueur et la largeur de la pièce.' };
+        const exclusions = parseFloat(v.exclusions) || 0;
+        const S = L * l;
+        const Sn = Math.max(S - exclusions, 0);
+        let Scarreau, formatLabel;
+        if (v.format === 'custom') {
+          const cl = parseFloat(v.formatL), cw = parseFloat(v.formatl);
+          if (!cl || cl <= 0 || !cw || cw <= 0) return { error: 'Indique les dimensions du carreau personnalisé.' };
+          Scarreau = (cl / 100) * (cw / 100);
+          formatLabel = cl + '×' + cw + ' cm';
+        } else {
+          const [a, b] = v.format.split('x').map(Number);
+          Scarreau = (a / 100) * (b / 100);
+          formatLabel = a + '×' + b + ' cm';
+        }
+        const perte = (v.perte === '' || v.perte == null) ? (poseDefaults[v.pose] || 8) : parseFloat(v.perte);
+        const Sc = Sn * (1 + perte / 100);
+        const N = Math.ceil(Sc / Scarreau);
+        const rows = [
+          ['Surface de la pièce', S.toFixed(2) + ' m²'],
+          ['Surface nette (hors exclusions)', Sn.toFixed(2) + ' m²'],
+          ['Format de carreau', formatLabel],
+          ['Type de pose', poseLabels[v.pose] || v.pose],
+          ['Marge de perte appliquée', perte + ' %'],
+          ['Surface totale à commander', Sc.toFixed(2) + ' m²']
+        ];
+        const bm2 = parseFloat(v.boiteM2);
+        if (bm2 > 0) rows.push(['Nombre de boîtes (à ' + bm2 + ' m²)', Math.ceil(Sc / bm2) + ' boîtes']);
+        return { main: { label: 'Nombre de carreaux nécessaires', value: N.toLocaleString('fr-FR'), unit: 'carreaux' }, rows };
+      }
+    },
+    peinture: {
+      title: 'Quantité de peinture',
+      subtitle: 'Estime les litres et pots de peinture nécessaires.',
+      fields: [
+        { id: 'zone', label: 'Zone à peindre', type: 'select', triggersRerender: true, options: [
+          { value: 'murs', label: 'Murs' },
+          { value: 'plafond', label: 'Plafond' },
+          { value: 'murs_plafond', label: 'Murs + plafond' }
+        ], default: 'murs' },
+        { id: 'longueur', label: 'Longueur de la pièce', unit: 'm', type: 'number', placeholder: 'Ex. 5' },
+        { id: 'largeur', label: 'Largeur de la pièce', unit: 'm', type: 'number', placeholder: 'Ex. 4' },
+        { id: 'hauteur', label: 'Hauteur sous plafond', unit: 'm', type: 'number', placeholder: 'Ex. 2.8', showIf: v => v.zone !== 'plafond' },
+        { id: 'portes', label: 'Surface des portes', unit: 'm²', type: 'number', placeholder: 'Ex. 1.8', default: 0, showIf: v => v.zone !== 'plafond' },
+        { id: 'fenetres', label: 'Surface des fenêtres', unit: 'm²', type: 'number', placeholder: 'Ex. 1.5', default: 0, showIf: v => v.zone !== 'plafond' },
+        { id: 'couches', label: 'Nombre de couches', type: 'number', default: 2 },
+        { id: 'rendement', label: 'Rendement de la peinture', unit: 'm²/L', type: 'number', default: 10 },
+        { id: 'contenance', label: 'Contenance du pot', unit: 'L', type: 'number', default: 15 }
+      ],
+      compute(v) {
+        const L = parseFloat(v.longueur), l = parseFloat(v.largeur);
+        if (!L || L <= 0 || !l || l <= 0) return { error: 'Indique les dimensions de la pièce.' };
+        let H = 0;
+        if (v.zone !== 'plafond') {
+          H = parseFloat(v.hauteur);
+          if (!H || H <= 0) return { error: 'Indique la hauteur sous plafond.' };
+        }
+        let Sb;
+        if (v.zone === 'murs') Sb = 2 * (L + l) * H;
+        else if (v.zone === 'plafond') Sb = L * l;
+        else Sb = 2 * (L + l) * H + L * l;
+        const portes = v.zone !== 'plafond' ? (parseFloat(v.portes) || 0) : 0;
+        const fenetres = v.zone !== 'plafond' ? (parseFloat(v.fenetres) || 0) : 0;
+        const Sn = Math.max(Sb - portes - fenetres, 0);
+        const couches = parseFloat(v.couches) || 2;
+        const rendement = parseFloat(v.rendement) || 10;
+        const contenance = parseFloat(v.contenance) || 15;
+        const Stotal = Sn * couches;
+        const Q = Stotal / rendement;
+        const Npots = Math.ceil(Q / contenance);
+        const zoneLabels = { murs: 'Murs', plafond: 'Plafond', murs_plafond: 'Murs + plafond' };
+        return {
+          main: { label: 'Nombre de pots à commander', value: Npots.toLocaleString('fr-FR'), unit: contenance + ' L' },
+          rows: [
+            ['Zone', zoneLabels[v.zone]],
+            ['Surface brute', Sb.toFixed(2) + ' m²'],
+            ['Surface nette (hors portes/fenêtres)', Sn.toFixed(2) + ' m²'],
+            ['Nombre de couches', String(couches)],
+            ['Rendement de la peinture', rendement + ' m²/L'],
+            ['Quantité de peinture nécessaire', Q.toFixed(1) + ' L']
+          ]
+        };
+      }
+    }
+  };
+
+  let currentToolId = null;
+  let toolValues = {};
+
+  function renderToolFields() {
+    const tool = TOOLS[currentToolId];
+    const visibleFields = tool.fields.filter(f => !f.showIf || f.showIf(toolValues));
+    document.getElementById('toolFields').innerHTML = visibleFields.map(f => {
+      const labelHtml = f.label + (f.unit ? ` (${f.unit})` : '');
+      if (f.type === 'select') {
+        const opts = f.options.map(o => `<option value="${o.value}" ${toolValues[f.id] === o.value ? 'selected' : ''}>${o.label}</option>`).join('');
+        return `<div><label>${labelHtml}</label><select data-field="${f.id}">${opts}</select></div>`;
+      }
+      const val = toolValues[f.id] ?? '';
+      return `<div><label>${labelHtml}</label><input type="number" step="any" data-field="${f.id}" value="${val}" placeholder="${f.placeholder || ''}"></div>`;
+    }).join('');
+    document.getElementById('toolFields').querySelectorAll('[data-field]').forEach(el => {
+      const f = tool.fields.find(x => x.id === el.dataset.field);
+      el.addEventListener('input', () => { toolValues[f.id] = el.value; });
+      el.addEventListener('change', () => {
+        toolValues[f.id] = el.value;
+        if (f.onChange) f.onChange(toolValues);
+        if (f.triggersRerender) renderToolFields();
+      });
+    });
+    document.getElementById('toolResult').innerHTML = '<p class="calc-placeholder">Renseigne les champs, puis clique sur « Calculer ».</p>';
+  }
+
+  function openToolPage(id) {
+    currentToolId = id;
+    const tool = TOOLS[id];
+    toolValues = {};
+    tool.fields.forEach(f => { if (f.default !== undefined) toolValues[f.id] = f.default; });
+    document.getElementById('toolBreadcrumbTitle').textContent = tool.title;
+    document.getElementById('toolTitle').textContent = tool.title;
+    document.getElementById('toolSubtitle').textContent = tool.subtitle || '';
+    renderToolFields();
+    realisationPage.classList.add('hidden');
+    mainContent.classList.add('hidden');
+    toolPage.classList.remove('hidden');
+    window.scrollTo(0, 0);
+  }
+  function closeToolPage() {
+    toolPage.classList.add('hidden');
+    mainContent.classList.remove('hidden');
+  }
+  document.querySelectorAll('.tool-card[data-tool]').forEach(el => {
+    el.addEventListener('click', () => openToolPage(el.dataset.tool));
+  });
+  document.getElementById('toolBack').addEventListener('click', closeToolPage);
+  document.getElementById('toolBackLink1').addEventListener('click', e => { e.preventDefault(); closeToolPage(); window.scrollTo(0, 0); });
+  document.getElementById('toolBackLink2').addEventListener('click', e => {
+    e.preventDefault();
+    closeToolPage();
+    document.getElementById('outils').scrollIntoView();
+  });
+  document.getElementById('toolCalcBtn').addEventListener('click', () => {
+    const tool = TOOLS[currentToolId];
+    const result = tool.compute(toolValues);
+    const resultEl = document.getElementById('toolResult');
+    if (result.error) { resultEl.innerHTML = `<span class="err">${result.error}</span>`; return; }
+    const rowsHtml = result.rows.map(([label, value]) => `<div><span>${label}</span><span>${value}</span></div>`).join('');
+    resultEl.innerHTML = `<div class="calc-eyebrow">${result.main.label}</div><div class="calc-amount">${result.main.value}<span class="calc-unit">${result.main.unit}</span></div><div class="tool-result-rows">${rowsHtml}</div>`;
+  });
+  document.addEventListener('keydown', e => {
+    if (toolPage.classList.contains('hidden')) return;
+    if (e.key === 'Escape') closeToolPage();
+  });
+
+  /* Ferme toute sous-page ouverte (réalisation ou outil) avant de naviguer vers une ancre */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', () => {
+      if (!realisationPage.classList.contains('hidden')) closeRealisationDetail();
+      if (!toolPage.classList.contains('hidden')) closeToolPage();
+    });
   });
 
   try {
