@@ -1574,7 +1574,17 @@
     const href = a.getAttribute('href');
     if (href === '#outils') { a.addEventListener('click', e => { e.preventDefault(); showPage(calculatricesPage); }); return; }
     if (href === '#formations') { a.addEventListener('click', e => { e.preventDefault(); showPage(formationsPage); }); return; }
-    a.addEventListener('click', () => { showHome(); });
+    // Scroll manuel : le menu mobile met ~0.3s à se refermer (transition CSS), le temps
+    // que la mise en page se stabilise avant de calculer la position de la section visée,
+    // sinon le saut d'ancre natif du navigateur arrive trop tôt et atterrit plus bas que prévu.
+    const isMobileMenuLink = a.closest('#mobileLinks') !== null;
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      showHome();
+      const target = document.getElementById(href.slice(1));
+      if (!target) return;
+      setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), isMobileMenuLink ? 320 : 0);
+    });
   });
 
   try {
