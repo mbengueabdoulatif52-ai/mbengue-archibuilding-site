@@ -821,12 +821,20 @@
     toutes: ['Plans architecturaux complets', 'Étude de structure béton armé', 'Devis quantitatif détaillé']
   };
 
+  const PRICE_TIERS = [100, 150, 200, 300, 400, 500];
   function calculerPrix(arr, surface) {
-    const p150 = arr[1], p200 = arr[2], p500 = arr[5];
-    const rateLow = (p200 - p150) / 50;
-    const rateHigh = (p500 - p200) / 300;
-    if (surface <= 200) return Math.round(p200 - rateLow * (200 - surface));
-    return Math.round(p200 + rateHigh * (surface - 200));
+    const t = PRICE_TIERS;
+    if (surface < t[1]) return arr[1];
+    if (surface >= t[t.length - 1]) {
+      const rate = (arr[5] - arr[4]) / (t[5] - t[4]);
+      return Math.round(arr[5] + rate * (surface - t[5]));
+    }
+    for (let i = 1; i < t.length - 1; i++) {
+      if (surface >= t[i] && surface <= t[i + 1]) {
+        const rate = (arr[i + 1] - arr[i]) / (t[i + 1] - t[i]);
+        return Math.round(arr[i] + rate * (surface - t[i]));
+      }
+    }
   }
 
   document.getElementById('calcBtn').addEventListener('click', () => {
