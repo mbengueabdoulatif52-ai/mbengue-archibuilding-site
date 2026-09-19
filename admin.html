@@ -173,12 +173,20 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
         <span>Prix</span>
       </button>
+      <button class="tab" data-tab="formations">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4z"/></svg>
+        <span>Formations</span>
+      </button>
       <button class="add-btn" id="addBtn" aria-label="Ajouter">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
       </button>
       <button class="tab" data-tab="demandes">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
         <span>Demandes</span>
+      </button>
+      <button class="tab" data-tab="demandes-formation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg>
+        <span>Dem. formations</span>
       </button>
       <button class="tab" data-tab="coordonnees">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg>
@@ -209,6 +217,20 @@
       <div class="panel-card">
         <div class="panel-title"><span>Demandes de devis</span><span class="count" id="countDemandes"></span></div>
         <div id="listDemandes"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-formations">
+      <div class="panel-card">
+        <div class="panel-title"><span>Formations</span><span class="count" id="countFormations"></span></div>
+        <div class="list-grid" id="listFormations"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-demandes-formation">
+      <div class="panel-card">
+        <div class="panel-title"><span>Demandes de formation</span><span class="count" id="countDemandesFormation"></span></div>
+        <div id="listDemandesFormation"></div>
       </div>
     </div>
 
@@ -254,6 +276,30 @@
       <button class="btn-save" id="saveRealisation">Enregistrer</button>
     </div>
     <div class="save-status" id="realisationStatus"></div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="modalFormation">
+  <div class="modal">
+    <h2 id="modalFormationTitle">Ajouter une formation</h2>
+    <input type="hidden" id="formationId">
+    <label>Logiciel</label>
+    <input id="formationLogiciel" placeholder="Ex. AutoCAD">
+    <label>Description courte</label>
+    <textarea id="formationDescription" rows="3" placeholder="Ex. Dessin technique 2D/3D pour l'architecture et le génie civil."></textarea>
+    <label>Prix (FCFA)</label>
+    <input id="formationPrix" type="number" placeholder="1000" value="1000">
+    <label>Lien ou ID de la vidéo d'aperçu YouTube</label>
+    <input id="formationYoutube" placeholder="https://youtube.com/shorts/xxxxxxxxxxx">
+    <div class="check-row">
+      <input type="checkbox" id="formationActif" checked>
+      <label style="margin:0;">Visible sur le site</label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" data-close-modal>Annuler</button>
+      <button class="btn-save" id="saveFormation">Enregistrer</button>
+    </div>
+    <div class="save-status" id="formationStatus"></div>
   </div>
 </div>
 
@@ -318,19 +364,23 @@
       document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
       activeTab = btn.dataset.tab;
       document.getElementById('panel-' + activeTab).classList.add('active');
-      document.getElementById('addBtn').style.visibility = (activeTab === 'realisations') ? 'visible' : 'hidden';
+      document.getElementById('addBtn').style.visibility = (activeTab === 'realisations' || activeTab === 'formations') ? 'visible' : 'hidden';
     }));
 
     document.querySelectorAll('[data-close-modal]').forEach(b => b.addEventListener('click', closeModals));
 
     document.getElementById('addBtn').addEventListener('click', () => {
       if (activeTab === 'realisations') openRealisationModal(null);
+      else if (activeTab === 'formations') openFormationModal(null);
     });
 
     listenRealisations();
     loadCoordonnees();
     loadGrille();
     listenDemandes();
+    listenFormations();
+    listenDemandesFormation();
+    document.getElementById('saveFormation').addEventListener('click', saveFormation);
 
     document.getElementById('saveCoord').addEventListener('click', saveCoordonnees);
     document.getElementById('saveRealisation').addEventListener('click', saveRealisation);
@@ -356,6 +406,7 @@
 
   function closeModals() {
     document.getElementById('modalRealisation').classList.add('hidden');
+    document.getElementById('modalFormation').classList.add('hidden');
   }
 
   const photoIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
@@ -449,6 +500,117 @@
     } catch (e) {
       statusEl.textContent = 'Erreur : ' + e.message;
     }
+  }
+
+  /* Formations */
+  function extractYoutubeId(input) {
+    input = (input || '').trim();
+    if (!input) return '';
+    const patterns = [
+      /shorts\/([a-zA-Z0-9_-]{11})/,
+      /[?&]v=([a-zA-Z0-9_-]{11})/,
+      /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+      /embed\/([a-zA-Z0-9_-]{11})/
+    ];
+    for (const re of patterns) { const m = input.match(re); if (m) return m[1]; }
+    if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
+    return input;
+  }
+
+  let formationsCache = [];
+  function listenFormations() {
+    onSnapshot(query(collection(db, 'formations'), orderBy('ordre', 'asc')), snap => {
+      formationsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      document.getElementById('countFormations').textContent = '(' + formationsCache.length + ')';
+      const el = document.getElementById('listFormations');
+      el.innerHTML = formationsCache.length ? '' : '<div class="empty-state">Aucune formation pour l’instant. Clique sur + pour en ajouter une.</div>';
+      formationsCache.forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'item-card';
+        const thumb = f.youtubeId ? `https://img.youtube.com/vi/${f.youtubeId}/hqdefault.jpg` : '';
+        div.innerHTML = `
+          <div class="item-media" style="${thumb ? `background-image:url('${thumb}')` : ''}">${thumb ? '' : photoIcon}</div>
+          <div class="item-body"><div class="t">${f.logiciel || ''}${f.actif === false ? ' (masqué)' : ''}</div><div class="s">${(f.prix || 1000).toLocaleString('fr-FR')} FCFA</div></div>
+          <div class="item-actions">
+            <button class="edit">${editIcon}</button>
+            <button class="del">${trashIcon}</button>
+          </div>`;
+        div.querySelector('.edit').addEventListener('click', () => openFormationModal(f));
+        div.querySelector('.del').addEventListener('click', () => { if (confirm('Supprimer « ' + f.logiciel + ' » ?')) deleteDoc(doc(db, 'formations', f.id)); });
+        el.appendChild(div);
+      });
+    });
+  }
+
+  function openFormationModal(f) {
+    document.getElementById('modalFormationTitle').textContent = f ? 'Modifier la formation' : 'Ajouter une formation';
+    document.getElementById('formationId').value = f ? f.id : '';
+    document.getElementById('formationLogiciel').value = f ? (f.logiciel || '') : '';
+    document.getElementById('formationDescription').value = f ? (f.description || '') : '';
+    document.getElementById('formationPrix').value = f ? (f.prix || 1000) : 1000;
+    document.getElementById('formationYoutube').value = f ? (f.youtubeId || '') : '';
+    document.getElementById('formationActif').checked = f ? (f.actif !== false) : true;
+    document.getElementById('formationStatus').textContent = '';
+    document.getElementById('modalFormation').classList.remove('hidden');
+  }
+  async function saveFormation() {
+    const id = document.getElementById('formationId').value;
+    const logiciel = document.getElementById('formationLogiciel').value.trim();
+    const description = document.getElementById('formationDescription').value.trim();
+    const prix = parseFloat(document.getElementById('formationPrix').value) || 1000;
+    const youtubeId = extractYoutubeId(document.getElementById('formationYoutube').value);
+    const actif = document.getElementById('formationActif').checked;
+    const statusEl = document.getElementById('formationStatus');
+    if (!logiciel) { statusEl.textContent = 'Le nom du logiciel est requis.'; return; }
+    if (!youtubeId) { statusEl.textContent = "Le lien de la vidéo d'aperçu est requis."; return; }
+    statusEl.textContent = 'Enregistrement...';
+    try {
+      const data = { logiciel, description, prix, youtubeId, actif };
+      if (id) {
+        await updateDoc(doc(db, 'formations', id), data);
+      } else {
+        await addDoc(collection(db, 'formations'), { ...data, ordre: Date.now() });
+      }
+      closeModals();
+    } catch (e) {
+      statusEl.textContent = 'Erreur : ' + e.message;
+    }
+  }
+
+  /* Demandes de formation */
+  function listenDemandesFormation() {
+    onSnapshot(query(collection(db, 'demandes_formation'), orderBy('date', 'desc')), snap => {
+      const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      document.getElementById('countDemandesFormation').textContent = '(' + items.length + ')';
+      const el = document.getElementById('listDemandesFormation');
+      el.innerHTML = items.length ? '' : '<div class="empty-state">Aucune demande de formation pour l’instant.</div>';
+      const statutLabels = { nouveau: 'Nouveau', paye: 'Payé — à partager', partage: 'Accès partagé' };
+      const statutColors = { nouveau: 'var(--muted)', paye: 'var(--orange)', partage: '#2a7d46' };
+      items.forEach(item => {
+        const statut = item.statut || 'nouveau';
+        const div = document.createElement('div');
+        div.className = 'demande-item' + (statut === 'partage' ? ' traite' : '');
+        const dateStr = item.date ? new Date(item.date).toLocaleString('fr-FR') : '';
+        const contactParts = [item.email, item.telephone].filter(Boolean).join(' · ');
+        let actionsHtml = '';
+        if (statut === 'nouveau') actionsHtml += '<button class="btn-small done mark-paye">Marquer payé</button>';
+        if (statut === 'paye') actionsHtml += '<button class="btn-small done mark-partage">Marquer accès partagé</button>';
+        actionsHtml += '<button class="btn-small del">Supprimer</button>';
+        div.innerHTML = `
+          <div class="demande-top">
+            <div class="demande-contact">${item.logiciel || ''} — ${(item.prix || 1000).toLocaleString('fr-FR')} FCFA</div>
+            <div class="demande-date">${dateStr}</div>
+          </div>
+          <div class="demande-message">${contactParts || 'Sans contact'}<br><span style="font-weight:500;color:${statutColors[statut]};">${statutLabels[statut]}</span></div>
+          <div class="demande-actions">${actionsHtml}</div>`;
+        const payeBtn = div.querySelector('.mark-paye');
+        if (payeBtn) payeBtn.addEventListener('click', () => updateDoc(doc(db, 'demandes_formation', item.id), { statut: 'paye' }));
+        const partageBtn = div.querySelector('.mark-partage');
+        if (partageBtn) partageBtn.addEventListener('click', () => updateDoc(doc(db, 'demandes_formation', item.id), { statut: 'partage' }));
+        div.querySelector('.del').addEventListener('click', () => { if (confirm('Supprimer cette demande ?')) deleteDoc(doc(db, 'demandes_formation', item.id)); });
+        el.appendChild(div);
+      });
+    });
   }
 
   /* Grille de prix */

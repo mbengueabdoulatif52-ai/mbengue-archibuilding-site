@@ -162,6 +162,27 @@
   .bm-result-rows>div span:first-child{font-size:13px;color:var(--ink-muted);}
   .bm-result-rows>div span:last-child{font-size:14.5px;color:var(--navy);font-weight:500;text-align:right;}
 
+  /* formations */
+  .formations-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;max-width:1100px;margin:0 auto;}
+  .formation-card{background:#fff;border:1px solid #ECE7DA;border-radius:14px;overflow:hidden;transition:box-shadow .15s,transform .15s;}
+  .formation-card:hover{box-shadow:0 8px 20px rgba(11,37,69,.08);transform:translateY(-2px);}
+  .formation-thumb{height:140px;background:#0B2545;background-size:cover;background-position:center;position:relative;cursor:pointer;}
+  .formation-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(11,37,69,.3);}
+  .formation-play svg{width:36px;height:36px;color:#fff;}
+  .formation-body{padding:18px 20px;}
+  .formation-body h3{font-family:var(--font-head);font-size:15px;font-weight:600;color:var(--navy);margin-bottom:5px;}
+  .formation-desc{font-size:12px;color:var(--ink-muted);line-height:1.5;margin-bottom:12px;min-height:34px;}
+  .formation-price{font-family:var(--font-mono);font-size:13px;color:var(--orange);font-weight:600;margin-bottom:14px;}
+  .formation-actions{display:flex;gap:8px;}
+  .formation-actions button{flex:1;font-size:12px;padding:9px 8px;border-radius:6px;font-family:var(--font-body);cursor:pointer;}
+  .formation-btn-preview{background:var(--navy);color:#fff;border:none;}
+  .formation-btn-preview:hover{background:var(--navy-dark);}
+  .formation-btn-interest{background:transparent;border:1px solid var(--orange);color:var(--orange);}
+  .formation-btn-interest:hover{background:#FBEFE3;}
+  .formation-video-wrap{position:relative;width:100%;max-width:220px;margin:0 auto;aspect-ratio:9/16;border-radius:10px;overflow:hidden;background:#000;}
+  .formation-video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  @media (max-width:560px){ .formations-grid{grid-template-columns:1fr;} }
+
   /* pourquoi nous choisir */
   .why-band{background:#F7F7F5;}
   .why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:800px;margin:0 auto;}
@@ -328,6 +349,7 @@
       <a href="#services">Services</a>
       <a href="#realisations">Réalisations</a>
       <a href="#outils">Outils</a>
+      <a href="#formations">Formations</a>
       <a href="#prix">Prix</a>
       <a href="#apropos">À propos</a>
       <a href="#contact">Contact</a>
@@ -340,6 +362,7 @@
     <a href="#services">Services</a>
     <a href="#realisations">Réalisations</a>
     <a href="#outils">Outils</a>
+    <a href="#formations">Formations</a>
     <a href="#prix">Prix</a>
     <a href="#apropos">À propos</a>
     <a href="#prix">Devis gratuit</a>
@@ -434,6 +457,14 @@
         <p>Ciment, sable, gravier et fer pour tes ouvrages.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<section id="formations">
+  <div class="wrap">
+    <h2 class="section-title">Formations logiciels</h2>
+    <p class="section-sub">Apprends les logiciels de génie civil et d'architecture à ton rythme, avec un aperçu gratuit avant de payer.</p>
+    <div class="formations-grid" id="formationsGrid"></div>
   </div>
 </section>
 
@@ -570,6 +601,34 @@
     <div id="devisError" class="modal-error hidden"></div>
     <button class="cta-btn" id="submitDevisBtn" type="button" style="width:100%;">Envoyer la demande</button>
     <div id="devisSuccess" class="modal-success hidden">Merci, ta demande a bien été envoyée. On te recontacte rapidement.</div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="formationPreviewModal">
+  <div class="modal-box" style="max-width:340px;">
+    <div class="modal-head">
+      <h3 id="fpTitle"></h3>
+      <button type="button" id="fpClose" aria-label="Fermer">&times;</button>
+    </div>
+    <div class="formation-video-wrap"><iframe id="fpIframe" src="" title="Aperçu formation" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
+    <button class="cta-btn" id="fpInteretBtn" type="button" style="width:100%;margin-top:16px;">Ça m'intéresse</button>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="formationInteretModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>Je suis intéressé</h3>
+      <button type="button" id="fiClose" aria-label="Fermer">&times;</button>
+    </div>
+    <p class="modal-lead" id="fiLead"></p>
+    <label>Adresse Gmail</label>
+    <input type="email" id="fiEmail" placeholder="toi@gmail.com">
+    <label>Téléphone (optionnel)</label>
+    <input type="tel" id="fiTel" placeholder="+221 XX XXX XX XX">
+    <div id="fiError" class="modal-error hidden"></div>
+    <button class="cta-btn" id="fiSubmitBtn" type="button" style="width:100%;">Envoyer ma demande</button>
+    <div id="fiSuccess" class="modal-success hidden">Merci ! On te recontacte pour le paiement (Wave / Orange Money), puis tu reçois l'accès au dossier complet sur Google Drive.</div>
   </div>
 </div>
 
@@ -734,6 +793,11 @@
     R3:  { archi:[98000,112000,147000,182000,217000,252000], beton:[112000,126000,161000,196000,231000,266000], devis:[105000,119000,154000,189000,224000,259000] },
     R4:  { archi:[112000,126000,161000,196000,231000,266000], beton:[126000,140000,175000,210000,245000,280000], devis:[119000,133000,168000,203000,238000,273000] }
   };
+  const fallbackFormations = [
+    { logiciel: 'AutoCAD', description: "Dessin technique 2D/3D pour l'architecture et le génie civil.", prix: 1000, youtubeId: 'y1rMKGD6CW4', actif: true },
+    { logiciel: 'ArchiCAD', description: 'Modélisation architecturale BIM, plans et rendus.', prix: 1000, youtubeId: 'Y7O4XZr-PUs', actif: true },
+    { logiciel: 'Robot Structural Analysis', description: 'Calcul et analyse de structures en béton armé.', prix: 1000, youtubeId: 'Mayda3QhAB4', actif: true }
+  ];
   let grilleActuelle = fallbackGrille;
   const prestationLabels = { archi: 'Plan architectural', beton: 'Plan béton armé', devis: 'Devis quantitatif', toutes: 'Toutes les prestations' };
   const prestationInclus = {
@@ -812,6 +876,101 @@
 
   renderRealisations(fallbackRealisations);
   observeReveals();
+
+  /* ===== Formations ===== */
+  const playIcon = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+  let formationsData = [];
+  let currentFormation = null;
+
+  function renderFormations(list) {
+    formationsData = list.filter(f => f.actif !== false);
+    const grid = document.getElementById('formationsGrid');
+    if (!formationsData.length) { grid.innerHTML = '<p class="calc-placeholder" style="text-align:center;">Aucune formation disponible pour l\'instant.</p>'; return; }
+    grid.innerHTML = formationsData.map((f, i) => `
+      <div class="formation-card reveal">
+        <div class="formation-thumb" data-i="${i}" style="background-image:url('https://img.youtube.com/vi/${f.youtubeId}/hqdefault.jpg')">
+          <div class="formation-play">${playIcon}</div>
+        </div>
+        <div class="formation-body">
+          <h3>${f.logiciel || ''}</h3>
+          <p class="formation-desc">${f.description || ''}</p>
+          <div class="formation-price">${(f.prix || 1000).toLocaleString('fr-FR')} FCFA</div>
+          <div class="formation-actions">
+            <button type="button" class="formation-btn-preview" data-i="${i}">Aperçu gratuit</button>
+            <button type="button" class="formation-btn-interest" data-i="${i}">Ça m'intéresse</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    grid.querySelectorAll('.formation-thumb, .formation-btn-preview').forEach(el => {
+      el.addEventListener('click', () => openFormationPreview(formationsData[parseInt(el.dataset.i)]));
+    });
+    grid.querySelectorAll('.formation-btn-interest').forEach(el => {
+      el.addEventListener('click', () => openFormationInteret(formationsData[parseInt(el.dataset.i)]));
+    });
+    observeReveals();
+  }
+  renderFormations(fallbackFormations);
+
+  const formationPreviewModal = document.getElementById('formationPreviewModal');
+  function openFormationPreview(f) {
+    currentFormation = f;
+    document.getElementById('fpTitle').textContent = f.logiciel || '';
+    document.getElementById('fpIframe').src = `https://www.youtube.com/embed/${f.youtubeId}?rel=0&autoplay=1`;
+    formationPreviewModal.classList.remove('hidden');
+  }
+  function closeFormationPreview() {
+    formationPreviewModal.classList.add('hidden');
+    document.getElementById('fpIframe').src = '';
+  }
+  document.getElementById('fpClose').addEventListener('click', closeFormationPreview);
+  formationPreviewModal.addEventListener('click', e => { if (e.target === formationPreviewModal) closeFormationPreview(); });
+  document.getElementById('fpInteretBtn').addEventListener('click', () => { closeFormationPreview(); openFormationInteret(currentFormation); });
+
+  const formationInteretModal = document.getElementById('formationInteretModal');
+  function openFormationInteret(f) {
+    currentFormation = f;
+    document.getElementById('fiLead').textContent = `Formation ${f.logiciel} — ${(f.prix || 1000).toLocaleString('fr-FR')} FCFA. Indique ton adresse Gmail (utilisée pour te partager le dossier) : on te recontacte pour le paiement (Wave / Orange Money), puis tu reçois l'accès.`;
+    document.getElementById('fiEmail').value = '';
+    document.getElementById('fiTel').value = '';
+    document.getElementById('fiError').classList.add('hidden');
+    document.getElementById('fiSuccess').classList.add('hidden');
+    formationInteretModal.classList.remove('hidden');
+  }
+  function closeFormationInteret() { formationInteretModal.classList.add('hidden'); }
+  document.getElementById('fiClose').addEventListener('click', closeFormationInteret);
+  formationInteretModal.addEventListener('click', e => { if (e.target === formationInteretModal) closeFormationInteret(); });
+
+  document.getElementById('fiSubmitBtn').addEventListener('click', async () => {
+    const email = document.getElementById('fiEmail').value.trim();
+    const tel = document.getElementById('fiTel').value.trim();
+    const errorEl = document.getElementById('fiError');
+    errorEl.classList.add('hidden');
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errorEl.textContent = 'Indique une adresse e-mail valide (idéalement Gmail).'; errorEl.classList.remove('hidden'); return; }
+    const btn = document.getElementById('fiSubmitBtn');
+    btn.textContent = 'Envoi...';
+    try {
+      await addDoc(collection(db, 'demandes_formation'), {
+        logiciel: currentFormation.logiciel || '',
+        prix: currentFormation.prix || 1000,
+        email, telephone: tel,
+        statut: 'nouveau',
+        date: Date.now()
+      });
+      document.getElementById('fiSuccess').classList.remove('hidden');
+      btn.textContent = 'Envoyer ma demande';
+      setTimeout(closeFormationInteret, 2200);
+    } catch (e) {
+      errorEl.textContent = "Erreur lors de l'envoi : " + e.message;
+      errorEl.classList.remove('hidden');
+      btn.textContent = 'Envoyer ma demande';
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (!formationPreviewModal.classList.contains('hidden')) closeFormationPreview();
+    if (!formationInteretModal.classList.contains('hidden')) closeFormationInteret();
+  });
 
   /* Fiche détail réalisation — page complète */
   const mainContent = document.getElementById('mainContent');
@@ -1327,6 +1486,9 @@
   try {
     onSnapshot(query(collection(db, 'realisations'), orderBy('ordre', 'asc')), snap => {
       if (!snap.empty) { renderRealisations(snap.docs.map(d => d.data())); observeReveals(); }
+    });
+    onSnapshot(query(collection(db, 'formations'), orderBy('ordre', 'asc')), snap => {
+      if (!snap.empty) renderFormations(snap.docs.map(d => d.data()));
     });
     onSnapshot(doc(db, 'site', 'grille_prix'), snap => {
       if (snap.exists() && snap.data() && snap.data().RDC) grilleActuelle = snap.data();
