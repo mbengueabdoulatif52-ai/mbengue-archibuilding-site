@@ -432,43 +432,9 @@
       <div class="card-skel"><div class="card-skel-img"></div><div class="card-skel-line" style="width:60%"></div><div class="card-skel-line" style="width:35%"></div></div>
       <div class="card-skel"><div class="card-skel-img"></div><div class="card-skel-line" style="width:60%"></div><div class="card-skel-line" style="width:35%"></div></div>
     </div>
-  </div>
-</section>
-
-<section id="outils">
-  <div class="wrap">
-    <h2 class="section-title">Calculatrices de chantier</h2>
-    <p class="section-sub">Estime rapidement les quantités nécessaires pour ton chantier.</p>
-    <div class="tools-grid">
-      <div class="tool-card reveal" data-tool="agglos">
-        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="9" height="6"/><rect x="13" y="4" width="9" height="6"/><rect x="2" y="14" width="4" height="6"/><rect x="8" y="14" width="9" height="6"/><rect x="19" y="14" width="3" height="6"/></svg></div>
-        <h3>Nombre d'agglos</h3>
-        <p>Calcule le nombre de blocs nécessaires pour un mur.</p>
-      </div>
-      <div class="tool-card reveal" data-tool="carrelage">
-        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
-        <h3>Quantité de carrelage</h3>
-        <p>Calcule le nombre de carreaux pour une pièce.</p>
-      </div>
-      <div class="tool-card reveal" data-tool="peinture">
-        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="14" height="6" rx="1"/><path d="M9 10v4a2 2 0 002 2 2 2 0 002-2"/><path d="M13 16v5"/></svg></div>
-        <h3>Quantité de peinture</h3>
-        <p>Calcule les litres et pots nécessaires.</p>
-      </div>
-      <div class="tool-card reveal" data-tool="beton_mortier">
-        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg></div>
-        <h3>Béton & Mortier</h3>
-        <p>Ciment, sable, gravier et fer pour tes ouvrages.</p>
-      </div>
+    <div style="text-align:center;margin-top:28px;" id="voirToutesWrap">
+      <button type="button" class="cta-ghost" id="voirToutesBtn">Voir toutes les réalisations</button>
     </div>
-  </div>
-</section>
-
-<section id="formations">
-  <div class="wrap">
-    <h2 class="section-title">Formations logiciels</h2>
-    <p class="section-sub">Apprends les logiciels de génie civil et d'architecture à ton rythme, avec un aperçu gratuit avant de payer.</p>
-    <div class="formations-grid" id="formationsGrid"></div>
   </div>
 </section>
 
@@ -703,6 +669,62 @@
   </div>
 </div>
 
+<div id="calculatricesPage" class="hidden">
+  <div class="wrap rd-page-inner">
+    <div class="rd-breadcrumb">
+      <a href="#top" id="calcPageBackLink">Accueil</a> › <span>Calculatrices</span>
+    </div>
+    <button type="button" class="rd-back" id="calcPageBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Retour à l'accueil</button>
+    <div class="rd-title">Calculatrices de chantier</div>
+    <p class="tool-subtitle">Estime rapidement les quantités nécessaires pour ton chantier.</p>
+    <div class="tools-grid">
+      <div class="tool-card reveal" data-tool="agglos">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="9" height="6"/><rect x="13" y="4" width="9" height="6"/><rect x="2" y="14" width="4" height="6"/><rect x="8" y="14" width="9" height="6"/><rect x="19" y="14" width="3" height="6"/></svg></div>
+        <h3>Nombre d'agglos</h3>
+        <p>Calcule le nombre de blocs nécessaires pour un mur.</p>
+      </div>
+      <div class="tool-card reveal" data-tool="carrelage">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
+        <h3>Quantité de carrelage</h3>
+        <p>Calcule le nombre de carreaux pour une pièce.</p>
+      </div>
+      <div class="tool-card reveal" data-tool="peinture">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="14" height="6" rx="1"/><path d="M9 10v4a2 2 0 002 2 2 2 0 002-2"/><path d="M13 16v5"/></svg></div>
+        <h3>Quantité de peinture</h3>
+        <p>Calcule les litres et pots nécessaires.</p>
+      </div>
+      <div class="tool-card reveal" data-tool="beton_mortier">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg></div>
+        <h3>Béton & Mortier</h3>
+        <p>Ciment, sable, gravier et fer pour tes ouvrages.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="formationsPage" class="hidden">
+  <div class="wrap rd-page-inner">
+    <div class="rd-breadcrumb">
+      <a href="#top" id="formPageBackLink">Accueil</a> › <span>Formations</span>
+    </div>
+    <button type="button" class="rd-back" id="formPageBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Retour à l'accueil</button>
+    <div class="rd-title">Formations logiciels</div>
+    <p class="tool-subtitle">Apprends les logiciels de génie civil et d'architecture à ton rythme, avec un aperçu gratuit avant de payer.</p>
+    <div class="formations-grid" id="formationsGrid"></div>
+  </div>
+</div>
+
+<div id="realisationsPage" class="hidden">
+  <div class="wrap rd-page-inner">
+    <div class="rd-breadcrumb">
+      <a href="#top" id="realPageBackLink">Accueil</a> › <span>Réalisations</span>
+    </div>
+    <button type="button" class="rd-back" id="realPageBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Retour à l'accueil</button>
+    <div class="rd-title">Toutes les réalisations</div>
+    <div class="cards" id="allCardsGrid"></div>
+  </div>
+</div>
+
 <div class="lightbox hidden" id="lightbox">
   <button type="button" class="lb-close" id="lbClose" aria-label="Fermer">&times;</button>
   <button type="button" class="lb-arrow lb-prev" id="lbPrev" aria-label="Photo précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
@@ -865,20 +887,19 @@
     { bg: '#3D5A73', icon: '#B9D0DE' }
   ];
   let realisationsData = [];
+  const REALISATIONS_PREVIEW_COUNT = 3;
 
   function photosOf(r) {
     return (r.photos && r.photos.length) ? r.photos : (r.photoUrl ? [r.photoUrl] : []);
   }
 
-  function renderRealisations(list) {
-    realisationsData = list;
-    document.getElementById('cardsGrid').innerHTML = list.map((r, i) => {
-      const c = cardPalette[i % cardPalette.length];
-      const photos = photosOf(r);
-      const mediaStyle = photos.length
-        ? `background-image:url('${photos[0]}');background-size:cover;background-position:center;`
-        : `background:${c.bg};color:${c.icon};`;
-      return `
+  function cardHtml(r, i) {
+    const c = cardPalette[i % cardPalette.length];
+    const photos = photosOf(r);
+    const mediaStyle = photos.length
+      ? `background-image:url('${photos[0]}');background-size:cover;background-position:center;`
+      : `background:${c.bg};color:${c.icon};`;
+    return `
       <div class="card reveal" data-i="${i}">
         <div class="card-media" style="${mediaStyle}">
           ${photos.length ? '' : buildingIcon}
@@ -890,10 +911,20 @@
         </div>
       </div>
     `;
-    }).join('');
+  }
+
+  function renderRealisations(list) {
+    realisationsData = list;
+    const preview = list.slice(0, REALISATIONS_PREVIEW_COUNT);
+    document.getElementById('cardsGrid').innerHTML = preview.map((r, i) => cardHtml(r, i)).join('');
     document.querySelectorAll('#cardsGrid .card').forEach(el => {
-      el.addEventListener('click', () => openRealisationDetail(realisationsData[parseInt(el.dataset.i)]));
+      el.addEventListener('click', () => openRealisationDetail(realisationsData[parseInt(el.dataset.i)], null));
     });
+    document.getElementById('allCardsGrid').innerHTML = list.map((r, i) => cardHtml(r, i)).join('');
+    document.querySelectorAll('#allCardsGrid .card').forEach(el => {
+      el.addEventListener('click', () => openRealisationDetail(realisationsData[parseInt(el.dataset.i)], realisationsPage));
+    });
+    document.getElementById('voirToutesWrap').classList.toggle('hidden', list.length <= REALISATIONS_PREVIEW_COUNT);
   }
 
   renderRealisations(fallbackRealisations);
@@ -1007,6 +1038,26 @@
   const mainContent = document.getElementById('mainContent');
   const realisationPage = document.getElementById('realisationPage');
   const toolPage = document.getElementById('toolPage');
+  const calculatricesPage = document.getElementById('calculatricesPage');
+  const formationsPage = document.getElementById('formationsPage');
+  const realisationsPage = document.getElementById('realisationsPage');
+  const allPages = [realisationPage, toolPage, calculatricesPage, formationsPage, realisationsPage];
+  function showPage(pageEl) {
+    mainContent.classList.add('hidden');
+    allPages.forEach(p => p.classList.add('hidden'));
+    if (pageEl) pageEl.classList.remove('hidden'); else mainContent.classList.remove('hidden');
+    window.scrollTo(0, 0);
+  }
+  function showHome() { showPage(null); }
+
+  document.getElementById('calcPageBack').addEventListener('click', showHome);
+  document.getElementById('calcPageBackLink').addEventListener('click', e => { e.preventDefault(); showHome(); });
+  document.getElementById('formPageBack').addEventListener('click', showHome);
+  document.getElementById('formPageBackLink').addEventListener('click', e => { e.preventDefault(); showHome(); });
+  document.getElementById('realPageBack').addEventListener('click', showHome);
+  document.getElementById('realPageBackLink').addEventListener('click', e => { e.preventDefault(); showHome(); });
+  document.getElementById('voirToutesBtn').addEventListener('click', () => showPage(realisationsPage));
+
   let rdPhotos = [];
   let rdIndex = 0;
 
@@ -1023,7 +1074,9 @@
     if (!lightbox.classList.contains('hidden')) renderLbImg();
   }
   document.getElementById('rdPhotoImg').addEventListener('click', () => openLightbox());
-  function openRealisationDetail(r) {
+  let rdReturnPage = null;
+  function openRealisationDetail(r, returnPage) {
+    rdReturnPage = returnPage || null;
     rdPhotos = photosOf(r);
     rdIndex = 0;
     document.getElementById('rdTitle').textContent = r.titre || '';
@@ -1037,20 +1090,17 @@
     document.getElementById('rdYearRow').style.display = year ? 'block' : 'none';
     document.getElementById('rdYear').textContent = year;
     renderRdPhoto();
-    mainContent.classList.add('hidden');
-    realisationPage.classList.remove('hidden');
-    window.scrollTo(0, 0);
+    showPage(realisationPage);
   }
   function closeRealisationDetail() {
-    realisationPage.classList.add('hidden');
-    mainContent.classList.remove('hidden');
+    showPage(rdReturnPage);
   }
   document.getElementById('rdBack').addEventListener('click', closeRealisationDetail);
-  document.getElementById('rdBackLink1').addEventListener('click', e => { e.preventDefault(); closeRealisationDetail(); window.scrollTo(0, 0); });
+  document.getElementById('rdBackLink1').addEventListener('click', e => { e.preventDefault(); showHome(); });
   document.getElementById('rdBackLink2').addEventListener('click', e => {
     e.preventDefault();
-    closeRealisationDetail();
-    document.getElementById('realisations').scrollIntoView();
+    if (rdReturnPage === realisationsPage) { showPage(realisationsPage); }
+    else { showHome(); document.getElementById('realisations').scrollIntoView(); }
   });
 
   /* Visionneuse plein écran */
@@ -1473,24 +1523,19 @@
       document.getElementById('toolSubtitle').textContent = tool.subtitle || '';
       renderToolFields();
     }
-    realisationPage.classList.add('hidden');
-    mainContent.classList.add('hidden');
-    toolPage.classList.remove('hidden');
-    window.scrollTo(0, 0);
+    showPage(toolPage);
   }
   function closeToolPage() {
-    toolPage.classList.add('hidden');
-    mainContent.classList.remove('hidden');
+    showPage(calculatricesPage);
   }
   document.querySelectorAll('.tool-card[data-tool]').forEach(el => {
     el.addEventListener('click', () => openToolPage(el.dataset.tool));
   });
   document.getElementById('toolBack').addEventListener('click', closeToolPage);
-  document.getElementById('toolBackLink1').addEventListener('click', e => { e.preventDefault(); closeToolPage(); window.scrollTo(0, 0); });
+  document.getElementById('toolBackLink1').addEventListener('click', e => { e.preventDefault(); showHome(); });
   document.getElementById('toolBackLink2').addEventListener('click', e => {
     e.preventDefault();
-    closeToolPage();
-    document.getElementById('outils').scrollIntoView();
+    showPage(calculatricesPage);
   });
   document.getElementById('toolCalcBtn').addEventListener('click', () => {
     if (currentToolId === 'beton_mortier') { computeBetonMortier(); return; }
@@ -1506,12 +1551,15 @@
     if (e.key === 'Escape') closeToolPage();
   });
 
-  /* Ferme toute sous-page ouverte (réalisation ou outil) avant de naviguer vers une ancre */
+  /* Nav : Calculatrices et Formations ouvrent leur page dédiée ; les autres liens
+     ferment toute page dédiée ouverte puis naviguent vers l'accueil */
+  const breadcrumbLinkIds = ['rdBackLink1', 'rdBackLink2', 'toolBackLink1', 'toolBackLink2', 'calcPageBackLink', 'formPageBackLink', 'realPageBackLink'];
   document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', () => {
-      if (!realisationPage.classList.contains('hidden')) closeRealisationDetail();
-      if (!toolPage.classList.contains('hidden')) closeToolPage();
-    });
+    if (breadcrumbLinkIds.includes(a.id)) return;
+    const href = a.getAttribute('href');
+    if (href === '#outils') { a.addEventListener('click', e => { e.preventDefault(); showPage(calculatricesPage); }); return; }
+    if (href === '#formations') { a.addEventListener('click', e => { e.preventDefault(); showPage(formationsPage); }); return; }
+    a.addEventListener('click', () => { showHome(); });
   });
 
   try {
