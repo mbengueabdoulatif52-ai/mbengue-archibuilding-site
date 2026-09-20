@@ -1601,7 +1601,7 @@
 
   try {
     onSnapshot(query(collection(db, 'realisations'), orderBy('ordre', 'asc')), snap => {
-      if (!snap.empty) { renderRealisations(snap.docs.map(d => d.data())); observeReveals(); }
+      if (!snap.empty) { renderRealisations(snap.docs.map(d => ({ id: d.id, ...d.data() }))); observeReveals(); }
     });
     onSnapshot(query(collection(db, 'formations'), orderBy('ordre', 'asc')), snap => {
       if (!snap.empty) renderFormations(snap.docs.map(d => d.data()));
