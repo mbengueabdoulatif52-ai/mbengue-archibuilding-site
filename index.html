@@ -755,7 +755,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, addDoc, onSnapshot, doc, query, orderBy, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, onSnapshot, doc, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCS4jMyT5aVq7fs1Dytj4e8zRNMDYg6W4o",
@@ -1114,7 +1114,7 @@
     if (r.id && !sessionStorage.getItem(seenKey)) {
       sessionStorage.setItem(seenKey, '1');
       vuesCount += 1;
-      updateDoc(doc(db, 'realisations', r.id), { vues: increment(1) }).catch(() => {});
+      updateDoc(doc(db, 'realisations', r.id), { vues: vuesCount }).catch(() => {});
     }
     document.getElementById('rdVues').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>${vuesCount} vue${vuesCount > 1 ? 's' : ''}`;
     showPage(realisationPage);
