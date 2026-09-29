@@ -1329,28 +1329,14 @@
         { label: "Fondations", elements: [
           { id: 'semelle_isolee', label: 'Semelle isolée', geo: 'box', dims: ['Longueur (m)', 'Largeur (m)', 'Hauteur (m)'], ciment: 300, sable: 0.400, gravier: 0.800, acier: 30 },
           { id: 'semelle_filante', label: 'Semelle filante', geo: 'box', dims: ['Longueur (m)', 'Largeur (m)', 'Hauteur (m)'], ciment: 300, sable: 0.400, gravier: 0.800, acier: 30 },
-          { id: 'massif', label: 'Massif / plot BA', geo: 'box', dims: ['Longueur (m)', 'Largeur (m)', 'Hauteur (m)'], ciment: 250, sable: 0.400, gravier: 0.800, acier: 140 },
           { id: 'longrine', label: 'Longrine', geo: 'box', dims: ['Longueur (m)', 'Largeur (m)', 'Hauteur (m)'], ciment: 300, sable: 0.400, gravier: 0.800, acier: 200 },
-          { id: 'radier', label: 'Radier', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 300, sable: 0.400, gravier: 0.800, acier: 50 },
-          { id: 'dalle_fondation', label: 'Dalle de fondation', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 300, sable: 0.400, gravier: 0.800, acier: 50 }
+          { id: 'radier', label: 'Radier', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 300, sable: 0.400, gravier: 0.800, acier: 50 }
         ] },
-        { label: "Élévation", elements: [
+        { label: "Superstructure", elements: [
           { id: 'poteau', label: 'Poteau', geo: 'box', dims: ['Section a (m)', 'Section b (m)', 'Hauteur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 80 },
           { id: 'poutre', label: 'Poutre', geo: 'box', dims: ['Longueur (m)', 'Base (m)', 'Hauteur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 70 },
-          { id: 'chainage', label: 'Chaînage', geo: 'box', dims: ['Longueur (m)', 'Base (m)', 'Hauteur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: null },
-          { id: 'linteau', label: 'Linteau', geo: 'box', dims: ['Longueur (m)', 'Base (m)', 'Hauteur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: null },
-          { id: 'acrotere', label: 'Acrotère', geo: 'box', dims: ['Longueur (m)', 'Hauteur (m)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 4 },
-          { id: 'voile_non_arme', label: 'Voile non armé', geo: 'box', dims: ['Longueur (m)', 'Hauteur (m)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 18 },
-          { id: 'voile_arme', label: 'Voile armé', geo: 'box', dims: ['Longueur (m)', 'Hauteur (m)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 50 },
-          { id: 'voile_fort_arme', label: 'Voile fortement armé', geo: 'box', dims: ['Longueur (m)', 'Hauteur (m)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 150 },
-          { id: 'escalier', label: 'Escalier', geo: 'direct', dims: ['Volume (m³)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: null }
-        ] },
-        { label: "Plancher", elements: [
-          { id: 'dalle_monolithe', label: 'Dalle monolithe / portée', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 19 },
-          { id: 'dalle_radier_etage', label: 'Dalle radier (étage)', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 50 },
-          { id: 'balcon', label: 'Balcon', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 25 },
-          { id: 'dallage_terre_plein', label: 'Dallage sur terre-plein', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 300, sable: 0.400, gravier: 0.800, acier: 2.5 },
-          { id: 'dallage_peu_ferraille', label: 'Dallage peu ferraillé', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 300, sable: 0.400, gravier: 0.800, acier: 30 }
+          { id: 'voile', label: 'Voile', geo: 'box', dims: ['Longueur (m)', 'Hauteur (m)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 50 },
+          { id: 'dalle', label: 'Dalle', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 350, sable: 0.400, gravier: 0.800, acier: 19 }
         ] }
       ]
     },
@@ -1361,19 +1347,14 @@
           { id: 'agglo7', label: 'Pose agglos 7×20×40', geo: 'area', dims: ['Surface de mur (m²)'], ciment: 5, sable: 0.016 },
           { id: 'agglo10', label: 'Pose agglos 10×20×40', geo: 'area', dims: ['Surface de mur (m²)'], ciment: 7, sable: 0.018 },
           { id: 'agglo15', label: 'Pose agglos 15×20×40', geo: 'area', dims: ['Surface de mur (m²)'], ciment: 10, sable: 0.022 },
-          { id: 'agglo20', label: 'Pose agglos 20×20×40', geo: 'area', dims: ['Surface de mur (m²)'], ciment: 13, sable: 0.025 },
-          { id: 'joint_plat', label: 'Joint plat / tiré', geo: 'area', dims: ['Surface (m²)'], ciment: 4, sable: 0.010 },
-          { id: 'joint_saillant', label: 'Joint saillant', geo: 'area', dims: ['Surface (m²)'], ciment: 8, sable: 0.020 }
+          { id: 'agglo20', label: 'Pose agglos 20×20×40', geo: 'area', dims: ['Surface de mur (m²)'], ciment: 13, sable: 0.025 }
         ] },
         { label: "Enduits", elements: [
-          { id: 'enduit_ordinaire', label: 'Enduit / crépi ordinaire 1,5cm', geo: 'area', dims: ['Surface (m²)'], ciment: 8, sable: 0.020 },
-          { id: 'enduit_etanche', label: 'Enduit étanche 2cm', geo: 'area', dims: ['Surface (m²)'], ciment: 18, sable: 0.030 }
+          { id: 'enduit_ordinaire', label: 'Enduit / crépi ordinaire', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 533, sable: 1.333 },
+          { id: 'enduit_etanche', label: 'Enduit étanche', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 900, sable: 1.500 }
         ] },
         { label: "Chapes et dallages", elements: [
-          { id: 'chape_15', label: 'Chape ordinaire 1,5cm', geo: 'area', dims: ['Surface (m²)'], ciment: 10, sable: 0.017 },
-          { id: 'chape_2', label: 'Chape ordinaire 2cm', geo: 'area', dims: ['Surface (m²)'], ciment: 13, sable: 0.022 },
-          { id: 'chape_3', label: 'Chape ordinaire 3cm', geo: 'area', dims: ['Surface (m²)'], ciment: 19, sable: 0.032 },
-          { id: 'chape_4', label: 'Chape ordinaire 4cm', geo: 'area', dims: ['Surface (m²)'], ciment: 26, sable: 0.043 }
+          { id: 'chape', label: 'Chape', geo: 'surface', dims: ['Surface (m²)', 'Épaisseur (m)'], ciment: 650, sable: 1.100 }
         ] }
       ]
     }
@@ -1445,8 +1426,8 @@
         <p class="bm-dosage-label">Unités de conversion (modifiables)</p>
         <div class="tool-fields-grid">
           <div><label>Sac de ciment (kg)</label><input type="number" step="any" id="bmSac" value="50"></div>
-          <div><label>Brouette (L)</label><input type="number" step="any" id="bmBrouette" value="65"></div>
-          <div><label>Seau (L)</label><input type="number" step="any" id="bmSeau" value="15"></div>
+          <div><label>Brouette (L)</label><input type="number" step="any" id="bmBrouette" value="60"></div>
+          <div><label>Seau (L)</label><input type="number" step="any" id="bmSeau" value="10"></div>
         </div>
       </div>
     `;
@@ -1480,8 +1461,8 @@
     const dosage = {};
     document.querySelectorAll('[data-bmdosage]').forEach(el => { dosage[el.dataset.bmdosage] = parseFloat(el.value) || 0; });
     const sac = parseFloat(document.getElementById('bmSac').value) || 50;
-    const brouette = parseFloat(document.getElementById('bmBrouette').value) || 65;
-    const seau = parseFloat(document.getElementById('bmSeau').value) || 15;
+    const brouette = parseFloat(document.getElementById('bmBrouette').value) || 60;
+    const seau = parseFloat(document.getElementById('bmSeau').value) || 10;
 
     const ciment = qty * dosage.ciment;
     const sable = qty * dosage.sable;
