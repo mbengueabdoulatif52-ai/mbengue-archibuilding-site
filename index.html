@@ -170,6 +170,9 @@
   .bm-type-btn{flex:1;padding:11px;border-radius:8px;border:1px solid #D8D2C2;background:#F7F7F5;color:var(--navy);font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:border-color .15s,background .15s,color .15s;}
   .bm-type-btn.active{background:var(--navy);border-color:var(--navy);color:#fff;}
   .bm-field-block{margin-bottom:18px;}
+  .bm-mode-toggle{display:flex;gap:6px;margin-bottom:16px;background:#F0EEE7;padding:4px;border-radius:9px;}
+  .bm-mode-btn{flex:1;padding:8px;border-radius:6px;border:none;background:transparent;color:var(--ink-muted);font-family:var(--font-body);font-size:12.5px;font-weight:500;cursor:pointer;transition:background .15s,color .15s,box-shadow .15s;}
+  .bm-mode-btn.active{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(11,37,69,.12);}
   .bm-dosage-box,.bm-conv-box{background:#F7F7F5;border:1px solid #ECE7DA;border-radius:12px;padding:16px;margin-bottom:18px;}
   .bm-dosage-box .tool-fields-grid,.bm-conv-box .tool-fields-grid{margin-bottom:0;}
   .bm-dosage-label{font-size:12px;color:var(--ink-muted);margin-bottom:12px;}
@@ -1361,6 +1364,7 @@
   };
   let bmType = 'beton';
   let bmElem = null;
+  let bmAltMode = false;
 
   function bmGetElement(id) {
     for (const g of BETON_MORTIER[bmType].groups) {
@@ -1370,10 +1374,55 @@
     return null;
   }
 
+  const BM_WALL_ELEM_IDS = ['agglo7', 'agglo10', 'agglo15', 'agglo20', 'enduit_ordinaire', 'enduit_etanche'];
+
+  function bmSupportsAlt() {
+    if (bmType === 'beton') return true;
+    return BM_WALL_ELEM_IDS.includes(bmElem.id);
+  }
+
+  function bmModeLabels() {
+    return bmType === 'beton'
+      ? { normal: 'Dimensions', alt: 'Volume direct' }
+      : { normal: 'Surface', alt: 'Mur (L × H)' };
+  }
+
   function bmRenderDims() {
-    document.getElementById('bmDimsGrid').innerHTML = bmElem.dims.map((label, i) =>
-      `<div><label>${label}</label><input type="number" step="any" data-bmdim="${i}" placeholder="Ex. 3"></div>`
-    ).join('');
+    const toggleEl = document.getElementById('bmModeToggle');
+    const supportsAlt = bmSupportsAlt();
+
+    if (!supportsAlt) {
+      bmAltMode = false;
+      toggleEl.innerHTML = '';
+    } else {
+      const labels = bmModeLabels();
+      toggleEl.innerHTML = `
+        <div class="bm-mode-toggle">
+          <button type="button" class="bm-mode-btn${!bmAltMode ? ' active' : ''}" data-bmmode="normal">${labels.normal}</button>
+          <button type="button" class="bm-mode-btn${bmAltMode ? ' active' : ''}" data-bmmode="alt">${labels.alt}</button>
+        </div>`;
+      toggleEl.querySelectorAll('.bm-mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          bmAltMode = btn.dataset.bmmode === 'alt';
+          bmRenderDims();
+        });
+      });
+    }
+
+    if (!bmAltMode || !supportsAlt) {
+      document.getElementById('bmDimsGrid').innerHTML = bmElem.dims.map((label, i) =>
+        `<div><label>${label}</label><input type="number" step="any" data-bmdim="${i}" placeholder="Ex. 3"></div>`
+      ).join('');
+    } else if (bmType === 'beton') {
+      document.getElementById('bmDimsGrid').innerHTML =
+        `<div><label>Volume (m³)</label><input type="number" step="any" data-bmdimalt="volume" placeholder="Ex. 2.5"></div>`;
+    } else {
+      const hasEpaisseur = bmElem.dims.length > 1;
+      document.getElementById('bmDimsGrid').innerHTML = `
+        <div><label>Longueur du mur (m)</label><input type="number" step="any" data-bmdimalt="longueur" placeholder="Ex. 8"></div>
+        <div><label>Hauteur du mur (m)</label><input type="number" step="any" data-bmdimalt="hauteur" placeholder="Ex. 2.5"></div>
+        ${hasEpaisseur ? `<div><label>Épaisseur (m)</label><input type="number" step="any" data-bmdimalt="epaisseur" placeholder="Ex. 0.02"></div>` : ''}`;
+    }
   }
 
   function bmRenderDosage() {
@@ -1398,6 +1447,7 @@
     ).join('');
     bmElem = BETON_MORTIER[bmType].groups[0].elements[0];
     sel.value = bmElem.id;
+    bmAltMode = false;
     bmRenderDims();
     bmRenderDosage();
   }
@@ -1417,6 +1467,7 @@
         <label>Type d'élément</label>
         <select id="bmElemSelect"></select>
       </div>
+      <div id="bmModeToggle"></div>
       <div class="tool-fields-grid" id="bmDimsGrid"></div>
       <div class="bm-dosage-box">
         <p class="bm-dosage-label">Dosage (prérempli selon le type, modifiable)</p>
@@ -1440,6 +1491,7 @@
     });
     document.getElementById('bmElemSelect').addEventListener('change', () => {
       bmElem = bmGetElement(document.getElementById('bmElemSelect').value);
+      bmAltMode = false;
       bmRenderDims();
       bmRenderDosage();
     });
@@ -1447,16 +1499,38 @@
   }
 
   function computeBetonMortier() {
-    const dims = Array.from(document.querySelectorAll('[data-bmdim]')).map(el => parseFloat(el.value));
     const resultEl = document.getElementById('toolResult');
-    if (dims.some(d => !d || d <= 0)) {
-      resultEl.innerHTML = '<span class="err">Renseigne toutes les dimensions.</span>';
-      return;
-    }
+    const usingAlt = bmAltMode && bmSupportsAlt();
     let qty;
-    if (bmElem.geo === 'box') qty = dims[0] * dims[1] * dims[2];
-    else if (bmElem.geo === 'surface') qty = dims[0] * dims[1];
-    else qty = dims[0];
+
+    if (!usingAlt) {
+      const dims = Array.from(document.querySelectorAll('[data-bmdim]')).map(el => parseFloat(el.value));
+      if (dims.some(d => !d || d <= 0)) {
+        resultEl.innerHTML = '<span class="err">Renseigne toutes les dimensions.</span>';
+        return;
+      }
+      if (bmElem.geo === 'box') qty = dims[0] * dims[1] * dims[2];
+      else if (bmElem.geo === 'surface') qty = dims[0] * dims[1];
+      else qty = dims[0];
+    } else if (bmType === 'beton') {
+      const volume = parseFloat(document.querySelector('[data-bmdimalt="volume"]').value);
+      if (!volume || volume <= 0) {
+        resultEl.innerHTML = '<span class="err">Renseigne le volume.</span>';
+        return;
+      }
+      qty = volume;
+    } else {
+      const longueur = parseFloat(document.querySelector('[data-bmdimalt="longueur"]').value);
+      const hauteur = parseFloat(document.querySelector('[data-bmdimalt="hauteur"]').value);
+      const epaisseurEl = document.querySelector('[data-bmdimalt="epaisseur"]');
+      const epaisseur = epaisseurEl ? parseFloat(epaisseurEl.value) : null;
+      if (!longueur || longueur <= 0 || !hauteur || hauteur <= 0 || (epaisseurEl && (!epaisseur || epaisseur <= 0))) {
+        resultEl.innerHTML = '<span class="err">Renseigne la longueur, la hauteur' + (epaisseurEl ? ' et l\'épaisseur' : '') + ' du mur.</span>';
+        return;
+      }
+      const surface = longueur * hauteur;
+      qty = bmElem.geo === 'surface' ? surface * epaisseur : surface;
+    }
 
     const dosage = {};
     document.querySelectorAll('[data-bmdosage]').forEach(el => { dosage[el.dataset.bmdosage] = parseFloat(el.value) || 0; });
