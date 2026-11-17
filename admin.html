@@ -122,6 +122,80 @@
   .btn-small.done{border-color:#2a7d46;color:#2a7d46;}
   .btn-small.del{border-color:#e0b3ae;color:#c94b3f;}
 
+  /* nouvelle structure : menu latéral + accueil */
+  .shell{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:100vh;}
+  .side{background:var(--navy-dark);color:#9FB3C6;padding:18px 12px;display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh;}
+  .side-brand{display:flex;align-items:center;gap:9px;color:#fff;font-family:var(--font-head);font-weight:600;font-size:15px;padding:2px 8px 18px;}
+  .side-brand img{width:26px;height:26px;border-radius:5px;background:#fff;}
+  .side .tab{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:none;color:#9FB3C6;padding:9px 10px;border-radius:8px;font-size:13.5px;}
+  .side .tab svg{width:18px;height:18px;flex-shrink:0;}
+  .side .tab:hover{background:rgba(255,255,255,.06);color:#fff;}
+  .side .tab.active{background:var(--navy);color:#fff;}
+  .side .tab .tab-badge{margin-left:auto;}
+  .side-foot{margin-top:auto;border-top:1px solid var(--navy);padding:12px 10px 0;font-size:12px;display:flex;flex-direction:column;gap:7px;}
+  .side-foot .who{display:flex;align-items:center;gap:8px;color:#C7D3E0;min-width:0;}
+  .side-foot .who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .side-foot .avatar{width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+  .side-foot a,.side-foot button{color:#9FB3C6;background:none;border:none;text-align:left;font-size:12px;text-decoration:underline;padding:0;}
+  .side-foot a:hover,.side-foot button:hover{color:#fff;}
+  .main{padding:28px 32px 60px;max-width:980px;width:100%;}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;min-height:38px;}
+  .topbar h1{font-size:20px;}
+  .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+  .btn-add{background:var(--orange);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+  .btn-add svg{width:15px;height:15px;}
+  .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px;}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;text-align:left;}
+  .kpi .l{font-size:12px;color:var(--muted);}
+  .kpi .v{font-family:var(--font-head);font-size:26px;font-weight:600;color:var(--navy);margin-top:2px;}
+  .kpi.alerte{border-color:#F2C49A;}
+  .kpi.alerte .v{color:#B4570C;}
+  .bloc{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:16px;overflow:hidden;}
+  .bloc-head{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;font-weight:500;font-size:14px;color:var(--navy);}
+  .bloc-head button{background:none;border:none;color:var(--navy);font-size:12.5px;text-decoration:underline;}
+  .ligne{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:14px;align-items:center;padding:10px 16px;border-top:1px solid #F0EBDF;font-size:13px;}
+  .ligne .q{color:var(--muted);}
+  .ligne .quand{font-size:12px;color:var(--muted);white-space:nowrap;}
+  .wa-link{color:#1F8A4C;font-size:12.5px;display:inline-flex;align-items:center;gap:4px;text-decoration:none;white-space:nowrap;}
+  .wa-link svg{width:14px;height:14px;}
+  .real-row{display:grid;grid-template-columns:64px minmax(0,1fr) auto auto;gap:14px;align-items:center;padding:10px 16px;border-top:1px solid #F0EBDF;}
+  .real-row:first-child{border-top:none;}
+  .real-thumb{width:64px;height:46px;border-radius:7px;background:#E9E4D8 center/cover no-repeat;display:flex;align-items:center;justify-content:center;}
+  .real-thumb svg{width:18px;height:18px;color:#B9B19C;}
+  .real-row .t{font-size:13.5px;font-weight:500;color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .real-row .s{font-size:12px;color:var(--muted);}
+  .real-row .vues{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px;white-space:nowrap;}
+  .real-row .vues svg{width:14px;height:14px;}
+  .real-row .acts{display:flex;gap:5px;}
+  .real-row .acts button{width:30px;height:30px;border-radius:7px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;}
+  .real-row .acts button:disabled{opacity:.3;cursor:default;}
+  .real-row .acts svg{width:14px;height:14px;}
+  .btn-danger{background:none;border:1px solid #e0b3ae;color:#c94b3f;border-radius:7px;padding:9px 14px;margin-right:auto;}
+  .bottom-nav{display:none;}
+  .main .panel-title{display:none;}
+  #panel-realisations .panel-card{padding:6px 0;}
+  .main .panel-card{box-shadow:none;}
+  .plus-list button,.plus-list a{display:flex;align-items:center;gap:12px;width:100%;padding:14px 4px;border:none;border-top:1px solid var(--line);background:none;font-size:14px;color:var(--navy);text-decoration:none;text-align:left;}
+  .plus-list svg{width:18px;height:18px;color:var(--muted);}
+  @media (max-width:760px){
+    .shell{grid-template-columns:1fr;}
+    .side{display:none;}
+    .main{padding:18px 14px 90px;}
+    .kpis{grid-template-columns:1fr 1fr;gap:8px;}
+    .kpi{padding:11px 12px;}
+    .kpi .v{font-size:22px;}
+    .ligne{grid-template-columns:minmax(0,1fr) auto;row-gap:4px;}
+    .ligne .quand{grid-column:2;grid-row:1;}
+    .ligne .wa-link{grid-column:1 / -1;}
+    .real-row{grid-template-columns:56px minmax(0,1fr) auto;padding:10px 12px;gap:10px;}
+    .real-row .vues{display:none;}
+    .real-thumb{width:56px;height:42px;}
+    .bottom-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;background:var(--navy-dark);z-index:50;padding:6px 0 calc(6px + env(safe-area-inset-bottom));}
+    .bottom-nav .tab{background:none;border:none;color:#9FB3C6;font-size:10.5px;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;padding:4px 0;}
+    .bottom-nav .tab svg{width:20px;height:20px;}
+    .bottom-nav .tab.active{color:#fff;}
+    .bottom-nav .tab-badge{position:absolute;top:0;left:calc(50% + 6px);margin:0;font-size:10px;padding:0 5px;}
+  }
   /* modal */
   .modal-overlay{position:fixed;inset:0;background:rgba(15,36,54,.5);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100;}
   .modal{background:#fff;border-radius:12px;padding:20px 22px;width:100%;max-width:380px;max-height:90vh;overflow:auto;}
@@ -176,57 +250,66 @@
 </div>
 
 <div id="appView" class="hidden">
-  <header class="app">
-    <div class="wrap">
-      <div class="brand">
-        <img src="assets/icon-192.png" alt="Logo">
-        <span>Administration du site</span>
-      </div>
-      <div class="user">
-        <div class="avatar" id="avatarInit">A</div>
-        <span id="userLabel"></span>
-        <button class="signout" id="signOutBtn">Déconnexion</button>
-      </div>
+  <div class="shell">
+  <aside class="side">
+    <div class="side-brand"><img src="assets/icon-192.png" alt="">Admin</div>
+    <button class="tab active" data-tab="accueil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Accueil</span></button>
+    <button class="tab" data-tab="demandes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>Devis</span><span class="tab-badge" id="badgeDemandes"></span></button>
+    <button class="tab" data-tab="demandes-formation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg><span>Formations</span><span class="tab-badge" id="badgeFormations"></span></button>
+    <button class="tab" data-tab="realisations"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Réalisations</span></button>
+    <button class="tab" data-tab="prix"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg><span>Prix</span></button>
+    <button class="tab" data-tab="formations"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4z"/></svg><span>Catalogue formations</span></button>
+    <button class="tab" data-tab="coordonnees"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg><span>Coordonnées</span></button>
+    <div class="side-foot">
+      <div class="who"><div class="avatar" id="avatarInit">A</div><span id="userLabel"></span></div>
+      <a href="/" target="_blank" rel="noopener">Voir le site</a>
+      <button id="signOutBtn">Déconnexion</button>
     </div>
-  </header>
-
-  <nav class="tabs">
-    <div class="wrap">
-      <button class="tab active" data-tab="realisations">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-        <span>Réalisations</span>
-      </button>
-      <button class="tab" data-tab="prix">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
-        <span>Prix</span>
-      </button>
-      <button class="tab" data-tab="formations">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4z"/></svg>
-        <span>Formations</span>
-      </button>
-      <button class="add-btn" id="addBtn" aria-label="Ajouter">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-      </button>
-      <button class="tab" data-tab="demandes">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-        <span>Demandes</span><span class="tab-badge" id="badgeDemandes"></span>
-      </button>
-      <button class="tab" data-tab="demandes-formation">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg>
-        <span>Dem. formations</span><span class="tab-badge" id="badgeFormations"></span>
-      </button>
-      <button class="tab" data-tab="coordonnees">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg>
-        <span>Coordonnées</span>
-      </button>
-    </div>
+  </aside>
+  <nav class="bottom-nav">
+    <button class="tab active" data-tab="accueil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Accueil</span></button>
+    <button class="tab" data-tab="demandes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>Devis</span><span class="tab-badge" id="badgeDemandesM"></span></button>
+    <button class="tab" data-tab="realisations"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Projets</span></button>
+    <button class="tab" data-tab="demandes-formation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg><span>Formations</span><span class="tab-badge" id="badgeFormationsM"></span></button>
+    <button class="tab" data-tab="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg><span>Plus</span></button>
   </nav>
+  <main class="main">
+    <div class="topbar">
+      <div><h1 id="pageTitle">Accueil</h1><div class="sub" id="pageSub"></div></div>
+      <button class="btn-add" id="addBtn" style="visibility:hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg><span id="addLabel">Ajouter</span></button>
+    </div>
 
-  <main class="wrap">
-    <div class="panel active" id="panel-realisations">
+    <div class="panel active" id="panel-accueil">
+      <div class="kpis">
+        <button class="kpi alerte" data-go="demandes"><div class="l">Devis à traiter</div><div class="v" id="kpiDevis">–</div></button>
+        <button class="kpi" data-go="demandes-formation"><div class="l">Formations à partager</div><div class="v" id="kpiForm">–</div></button>
+        <button class="kpi" data-go="realisations"><div class="l">Vues au total</div><div class="v" id="kpiVues">–</div></button>
+        <button class="kpi" data-go="realisations"><div class="l">Réalisations</div><div class="v" id="kpiReal">–</div></button>
+      </div>
+      <div class="bloc">
+        <div class="bloc-head"><span>Devis à traiter</span><button data-go="demandes">Tout voir</button></div>
+        <div id="dashDemandes"></div>
+      </div>
+      <div class="bloc">
+        <div class="bloc-head"><span>Réalisations les plus vues</span><button data-go="realisations">Gérer</button></div>
+        <div id="dashReal"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-plus">
+      <div class="panel-card plus-list" style="padding:6px 18px;">
+        <button data-go="prix"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>Grille de prix</button>
+        <button data-go="formations"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4z"/></svg>Catalogue formations</button>
+        <button data-go="coordonnees"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg>Coordonnées</button>
+        <a href="/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3h7v7"/><path d="M10 14L21 3"/><path d="M21 14v5a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h5"/></svg>Voir le site</a>
+        <button id="signOutBtnM"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>Déconnexion</button>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-realisations">
       <div class="panel-card">
         <div class="panel-title"><span>Réalisations</span><span class="count" id="countRealisations"></span></div>
-        <div class="list-grid" id="listRealisations"></div>
+        <div id="listRealisations"></div>
       </div>
     </div>
 
@@ -284,6 +367,7 @@
       </div>
     </div>
   </main>
+  </div>
 </div>
 
 <div class="modal-overlay hidden" id="modalRealisation">
@@ -308,6 +392,7 @@
     </div>
     <input type="file" id="realisationPhoto" accept="image/*" multiple class="hidden">
     <div class="modal-actions">
+      <button class="btn-danger hidden" id="deleteRealisation">Supprimer</button>
       <button class="btn-cancel" data-close-modal>Annuler</button>
       <button class="btn-save" id="saveRealisation">Enregistrer</button>
     </div>
@@ -382,6 +467,7 @@
   });
   document.getElementById('signOutDenied').addEventListener('click', () => signOut(auth));
   document.getElementById('signOutBtn').addEventListener('click', () => signOut(auth));
+  document.getElementById('signOutBtnM').addEventListener('click', () => signOut(auth));
 
   onAuthStateChanged(auth, user => {
     [loginView, deniedView, appView].forEach(v => v.classList.add('hidden'));
@@ -398,26 +484,35 @@
   });
 
   let adminStarted = false;
-  let activeTab = 'realisations';
+  let activeTab = 'accueil';
+  const TITRES = { accueil: 'Accueil', demandes: 'Demandes de devis', 'demandes-formation': 'Demandes de formation', realisations: 'Réalisations',
+    prix: 'Grille de prix', formations: 'Catalogue formations', coordonnees: 'Coordonnées', plus: 'Plus' };
+  function showTab(t) {
+    activeTab = t;
+    document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t || (t === 'prix' || t === 'formations' || t === 'coordonnees') && b.dataset.tab === 'plus' && b.closest('.bottom-nav')));
+    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + t));
+    document.getElementById('pageTitle').textContent = t === 'accueil' ? 'Bonjour Abdou' : TITRES[t];
+    const dateTxt = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+    document.getElementById('pageSub').textContent = t === 'accueil' ? dateTxt.charAt(0).toUpperCase() + dateTxt.slice(1) : '';
+    const add = t === 'realisations' || t === 'formations' || t === 'accueil';
+    document.getElementById('addBtn').style.visibility = add ? 'visible' : 'hidden';
+    document.getElementById('addLabel').textContent = t === 'formations' ? 'Nouvelle formation' : 'Nouvelle réalisation';
+    window.scrollTo(0, 0);
+  }
 
   function startAdmin() {
     if (adminStarted) return;
     adminStarted = true;
 
-    document.querySelectorAll('.tab').forEach(btn => btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      activeTab = btn.dataset.tab;
-      document.getElementById('panel-' + activeTab).classList.add('active');
-      document.getElementById('addBtn').style.visibility = (activeTab === 'realisations' || activeTab === 'formations') ? 'visible' : 'hidden';
-    }));
+    document.querySelectorAll('.tab').forEach(btn => btn.addEventListener('click', () => showTab(btn.dataset.tab)));
+    document.querySelectorAll('[data-go]').forEach(btn => btn.addEventListener('click', () => showTab(btn.dataset.go)));
+    showTab('accueil');
 
     document.querySelectorAll('[data-close-modal]').forEach(b => b.addEventListener('click', closeModals));
 
     document.getElementById('addBtn').addEventListener('click', () => {
-      if (activeTab === 'realisations') openRealisationModal(null);
-      else if (activeTab === 'formations') openFormationModal(null);
+      if (activeTab === 'formations') openFormationModal(null);
+      else openRealisationModal(null);
     });
 
     listenRealisations();
@@ -430,6 +525,13 @@
 
     unSeulClic('saveCoord', saveCoordonnees);
     unSeulClic('saveRealisation', saveRealisation);
+    document.getElementById('deleteRealisation').addEventListener('click', async () => {
+      const id = document.getElementById('realisationId').value;
+      const titre = document.getElementById('realisationTitre').value;
+      if (!id || !confirm('Supprimer définitivement « ' + titre + ' » ?')) return;
+      try { await deleteDoc(doc(db, 'realisations', id)); closeModals(); }
+      catch (e) { document.getElementById('realisationStatus').textContent = 'Erreur : ' + e.message; }
+    });
     document.getElementById('dropzoneRealisation').addEventListener('click', () => document.getElementById('realisationPhoto').click());
     document.getElementById('realisationPhoto').addEventListener('change', async e => {
       const files = [...e.target.files];
@@ -488,25 +590,27 @@
       realisationsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       document.getElementById('countRealisations').textContent = '(' + realisationsCache.length + ')';
       const el = document.getElementById('listRealisations');
-      el.innerHTML = realisationsCache.length ? '' : '<div class="empty-state">Aucune réalisation pour l’instant. Clique sur + pour en ajouter une.</div>';
+      el.innerHTML = realisationsCache.length ? '' : '<div class="empty-state">Aucune réalisation pour l’instant. Clique sur « Nouvelle réalisation » pour en ajouter une.</div>';
       realisationsCache.forEach((r, i) => {
         const div = document.createElement('div');
-        div.className = 'item-card';
+        div.className = 'real-row';
+        const photo = (Array.isArray(r.photos) && r.photos[0]) || r.photoUrl || '';
+        const vues = Number(r.vues) || 0;
         div.innerHTML = `
-          <div class="item-media" style="${r.photoUrl ? `background-image:url('${r.photoUrl}')` : ''}">${r.photoUrl ? '' : photoIcon}</div>
-          <div class="item-body"><div class="t">${esc(r.titre)}</div><div class="s">${esc(r.tag)}</div><div class="v"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>${r.vues || 0} vue${(r.vues || 0) > 1 ? 's' : ''}</div></div>
-          <div class="item-actions">
-            <button class="up" ${i === 0 ? 'disabled' : ''} title="Monter">${upIcon}</button>
-            <button class="down" ${i === realisationsCache.length - 1 ? 'disabled' : ''} title="Descendre">${downIcon}</button>
-            <button class="edit" title="Modifier">${editIcon}</button>
-            <button class="del" title="Supprimer">${trashIcon}</button>
+          <div class="real-thumb"${photo ? ` style="background-image:url('${esc(photo)}')"` : ''}>${photo ? '' : photoIcon}</div>
+          <div style="min-width:0"><div class="t">${esc(r.titre)}</div><div class="s">${esc(r.tag)}</div></div>
+          <div class="vues"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>${vues}</div>
+          <div class="acts">
+            <button class="up" ${i === 0 ? 'disabled' : ''} title="Monter" aria-label="Monter">${upIcon}</button>
+            <button class="down" ${i === realisationsCache.length - 1 ? 'disabled' : ''} title="Descendre" aria-label="Descendre">${downIcon}</button>
+            <button class="edit" title="Modifier" aria-label="Modifier">${editIcon}</button>
           </div>`;
         div.querySelector('.up').addEventListener('click', () => moveRealisation(i, -1));
         div.querySelector('.down').addEventListener('click', () => moveRealisation(i, 1));
         div.querySelector('.edit').addEventListener('click', () => openRealisationModal(r));
-        div.querySelector('.del').addEventListener('click', () => { if (confirm('Supprimer « ' + r.titre + ' » ?')) deleteDoc(doc(db, 'realisations', r.id)); });
         el.appendChild(div);
       });
+      renderAccueil();
     });
   }
   const CLOUDINARY_CLOUD_NAME = 'xkj88p97';
@@ -567,6 +671,7 @@
     document.getElementById('realisationPhoto').value = '';
     document.getElementById('dropzoneLabel').textContent = 'Cliquer pour ajouter des photos';
     document.getElementById('realisationStatus').textContent = '';
+    document.getElementById('deleteRealisation').classList.toggle('hidden', !r);
     document.getElementById('modalRealisation').classList.remove('hidden');
   }
   async function saveRealisation() {
@@ -675,12 +780,54 @@
     return ' · <a href="https://wa.me/' + intl + '?text=' + txt + '" target="_blank" rel="noopener">Répondre sur WhatsApp</a>';
   }
 
+  let demandesFormationCache = [];
+  function depuis(ts) {
+    const m = Math.round((Date.now() - ts) / 60000);
+    if (m < 60) return m <= 1 ? 'à l’instant' : 'il y a ' + m + ' min';
+    const h = Math.round(m / 60); if (h < 24) return 'il y a ' + h + ' h';
+    const j = Math.round(h / 24); return j === 1 ? 'hier' : 'il y a ' + j + ' j';
+  }
+  function lienWa(tel, texte) {
+    const n = String(tel || '').replace(/\D/g, ''); if (!n) return '';
+    return 'https://wa.me/' + (n.length === 9 ? '221' + n : n) + (texte ? '?text=' + encodeURIComponent(texte) : '');
+  }
+  function renderAccueil() {
+    const aTraiter = demandesCache.filter(i => !i.traite);
+    const aPartager = demandesFormationCache.filter(i => (i.statut || 'nouveau') !== 'partage');
+    document.getElementById('kpiDevis').textContent = aTraiter.length;
+    document.getElementById('kpiForm').textContent = aPartager.length;
+    document.getElementById('kpiVues').textContent = realisationsCache.reduce((s, r) => s + (Number(r.vues) || 0), 0).toLocaleString('fr-FR');
+    document.getElementById('kpiReal').textContent = realisationsCache.length;
+    const kd = document.querySelector('.kpi.alerte'); kd.style.borderColor = aTraiter.length ? '' : 'var(--line)';
+    document.getElementById('kpiDevis').style.color = aTraiter.length ? '' : 'var(--navy)';
+    const dd = document.getElementById('dashDemandes');
+    dd.innerHTML = aTraiter.length ? aTraiter.slice(0, 4).map(it => {
+      const projet = [(Array.isArray(it.prestations) ? it.prestations : []).join(', '), it.niveau, it.surface ? it.surface + ' m²' : '', it.lieu].filter(Boolean).map(esc).join(' · ');
+      const wa = lienWa(it.telephone, 'Bonjour ' + (it.nom || '') + ', je vous contacte suite à votre demande de devis sur le site MBENGUE ARCHIBUILDING.');
+      return `<div class="ligne"><div style="min-width:0"><b style="font-weight:500">${esc(it.nom || it.telephone || 'Sans nom')}</b> <span class="q">${projet ? '· ' + projet : ''}</span></div>
+        <span class="quand">${it.date ? depuis(it.date) : ''}</span>${wa ? `<a class="wa-link" href="${wa}" target="_blank" rel="noopener">${waIcon}Répondre</a>` : '<span></span>'}</div>`;
+    }).join('') : '<div class="empty-state" style="padding:22px 0;">Aucun devis en attente.</div>';
+    const top = [...realisationsCache].sort((a, b) => (Number(b.vues) || 0) - (Number(a.vues) || 0)).slice(0, 3);
+    document.getElementById('dashReal').innerHTML = top.length ? top.map(r => {
+      const photo = (Array.isArray(r.photos) && r.photos[0]) || r.photoUrl || '';
+      return `<div class="real-row" style="grid-template-columns:64px minmax(0,1fr) auto;"><div class="real-thumb"${photo ? ` style="background-image:url('${esc(photo)}')"` : ''}>${photo ? '' : photoIcon}</div>
+        <div style="min-width:0"><div class="t">${esc(r.titre)}</div><div class="s">${esc(r.tag)}</div></div>
+        <div class="vues" style="display:flex">${eyeIcon}${Number(r.vues) || 0}</div></div>`;
+    }).join('') : '<div class="empty-state" style="padding:22px 0;">Aucune réalisation.</div>';
+  }
+  const waIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-4.5A9 9 0 1112 21a9 9 0 01-4.5-1.2z"/></svg>';
+  const eyeIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+
   /* Demandes de formation */
   function listenDemandesFormation() {
     onSnapshot(query(collection(db, 'demandes_formation'), orderBy('date', 'desc')), snap => {
       const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      demandesFormationCache = items;
       document.getElementById('countDemandesFormation').textContent = '(' + items.length + ')';
-      document.getElementById('badgeFormations').textContent = items.filter(i => (i.statut || 'nouveau') !== 'partage').length || '';
+      const nF = items.filter(i => (i.statut || 'nouveau') !== 'partage').length || '';
+      document.getElementById('badgeFormations').textContent = nF;
+      document.getElementById('badgeFormationsM').textContent = nF;
+      renderAccueil();
       const el = document.getElementById('listDemandesFormation');
       el.innerHTML = items.length ? '' : '<div class="empty-state">Aucune demande de formation pour l’instant.</div>';
       const statutLabels = { nouveau: 'Nouveau', paye: 'Payé — à partager', partage: 'Accès partagé' };
@@ -806,6 +953,8 @@
       document.getElementById('nbATraiter').textContent = nA;
       document.getElementById('nbTraitees').textContent = all.length - nA;
       document.getElementById('badgeDemandes').textContent = nA || '';
+      document.getElementById('badgeDemandesM').textContent = nA || '';
+      renderAccueil();
       const items = all.filter(i => filtreDemandes === 'toutes' || (filtreDemandes === 'traitees' ? i.traite : !i.traite));
       const el = document.getElementById('listDemandes');
       el.innerHTML = items.length ? '' : '<div class="empty-state">' + (filtreDemandes === 'atraiter' ? 'Aucune demande à traiter.' : 'Aucune demande dans cette liste.') + '</div>';
