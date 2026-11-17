@@ -686,7 +686,7 @@
     </div>
     <div id="fiPaymentStep" class="hidden">
       <p class="modal-lead" id="fiPaymentLead"></p>
-      <div class="fi-step"><span class="fi-step-num">1</span><p>Envoyez <strong id="fiPrixSpan"></strong> par Wave au <strong>+221 70 562 32 06</strong></p></div>
+      <div class="fi-step"><span class="fi-step-num">1</span><p>Envoyez <strong id="fiPrixSpan"></strong> par Wave au <strong class="js-tel-affiche">+221 70 562 32 06</strong></p></div>
       <div class="fi-step"><span class="fi-step-num">2</span><p>Envoyez la capture d'écran du paiement sur WhatsApp, avec le nom de la formation</p></div>
       <a class="whatsapp-cta-btn" id="fiWhatsappBtn" href="#" target="_blank" rel="noopener" style="width:100%;justify-content:center;">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.02a7.95 7.95 0 0 0 5.53-13.58Z"/></svg>
@@ -1082,7 +1082,7 @@
   formationPreviewModal.addEventListener('click', e => { if (e.target === formationPreviewModal) closeFormationPreview(); });
   document.getElementById('fpInteretBtn').addEventListener('click', () => { closeFormationPreview(); openFormationInteret(currentFormation); });
 
-  const WHATSAPP_NUMBER = '221705623206';
+  let WHATSAPP_NUMBER = '221705623206';
   const formationInteretModal = document.getElementById('formationInteretModal');
   function openFormationInteret(f) {
     currentFormation = f;
@@ -1751,6 +1751,13 @@
         const telLink = document.querySelector('footer a[href^="tel:"]');
         if (d.email && mailLink) { mailLink.href = 'mailto:' + d.email; mailLink.lastChild.textContent = d.email; }
         if (d.telephone && telLink) { telLink.href = 'tel:' + d.telephone.replace(/\s/g, ''); telLink.lastChild.textContent = d.telephone; }
+        const chiffres = String(d.telephone || '').replace(/\D/g, '');
+        if (chiffres.length >= 9) {
+          const intl = chiffres.length === 9 ? '221' + chiffres : chiffres;
+          WHATSAPP_NUMBER = intl;
+          document.querySelectorAll('a[href^="https://wa.me/"]').forEach(a => { a.href = a.href.replace(/wa\.me\/\d+/, 'wa.me/' + intl); });
+          document.querySelectorAll('.js-tel-affiche').forEach(el => { el.textContent = d.telephone; });
+        }
         if (d.bio) { document.getElementById('aproposBio').textContent = d.bio; }
       }
     });
