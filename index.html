@@ -22,6 +22,41 @@
 <meta name="twitter:title" content="MBENGUE ARCHIBUILDING — Plans architecturaux et étude de structure à Dakar">
 <meta name="twitter:description" content="Plans architecturaux, étude de structure béton, devis et suivi de chantier à Dakar, Sénégal.">
 <meta name="twitter:image" content="https://www.mbenguearchibuilding.sn/assets/hero.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "MBENGUE ARCHIBUILDING",
+  "url": "https://www.mbenguearchibuilding.sn/",
+  "logo": "https://www.mbenguearchibuilding.sn/assets/logo.png",
+  "image": "https://www.mbenguearchibuilding.sn/assets/hero.jpg",
+  "description": "Plans architecturaux, étude de structure béton armé, devis quantitatifs et suivi de chantier à Dakar, Sénégal.",
+  "telephone": "+221705623206",
+  "email": "mbenguearchibuilding@gmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Dakar",
+    "addressCountry": "SN"
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "Sénégal"
+  },
+  "priceRange": "FCFA",
+  "knowsAbout": [
+    "Plans architecturaux",
+    "Béton armé",
+    "Étude de structure",
+    "Devis quantitatif",
+    "Suivi de chantier"
+  ],
+  "sameAs": [
+    "https://www.facebook.com/share/1Deg1CRtbd/",
+    "https://www.tiktok.com/@mbengarchb",
+    "https://youtube.com/@mbenguearchibuilding"
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -398,7 +433,7 @@
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-inner">
-    <div class="hero-logo-panel"><img src="assets/logo-chatgpt.png" alt="MBENGUE ARCHIBUILDING"></div>
+    <div class="hero-logo-panel"><img src="assets/logo.png" alt="MBENGUE ARCHIBUILDING"></div>
     <div class="hero-content">
       <h1>Vos plans et votre structure, pensés ensemble</h1>
       <p class="lead">Plans architecturaux, étude de structure béton, devis et suivi de chantier : un service complet pour vos projets à Dakar.</p>
@@ -489,7 +524,7 @@
       </div>
       <button class="cta-btn" id="calcBtn" type="button">Calculer le prix</button>
       <div class="calc-result" id="calcResult">
-        <p class="calc-placeholder">Renseigne la surface, puis clique sur « Calculer le prix ».</p>
+        <p class="calc-placeholder">Renseignez la surface, puis cliquez sur « Calculer le prix ».</p>
       </div>
     </div>
     <p class="price-note">Tarifs indicatifs, calculés à partir de notre grille par niveau et surface.</p>
@@ -533,7 +568,7 @@
       </div>
       <div>
         <div class="apropos-title">Ingénieur de Conception en Génie Civil</div>
-        <p id="aproposBio" class="apropos-text">Diplômé de l'École Polytechnique de Thiès (2021). Spécialisé en conception architecturale (ArchiCAD, AutoCAD) et étude de structure béton armé, à Dakar.</p>
+        <p id="aproposBio" class="apropos-text">Ingénieur de conception en génie civil, spécialisé en conception architecturale (ArchiCAD, AutoCAD) et en étude de structure béton armé, à Dakar.</p>
       </div>
     </div>
   </div>
@@ -557,7 +592,7 @@
 
 <footer id="contact">
   <div class="wrap foot-row">
-    <span>MBENGUE ARCHIBUILDING — Dakar, Sénégal</span>
+    <span>© <span id="anneeCopy">2026</span> MBENGUE ARCHIBUILDING — Dakar, Sénégal</span>
     <div style="display:flex;gap:22px;flex-wrap:wrap;align-items:center;">
       <a href="mailto:mbenguearchibuilding@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg>mbenguearchibuilding@gmail.com</a>
       <a href="tel:+221705623206"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>+221 70 562 32 06</a>
@@ -581,16 +616,16 @@
       <h3>Demander un devis</h3>
       <button type="button" id="closeDevisBtn" aria-label="Fermer">&times;</button>
     </div>
-    <p class="modal-lead">Laisse-nous tes coordonnées et quelques détails sur ton projet, on te recontacte rapidement.</p>
+    <p class="modal-lead">Laissez-nous vos coordonnées et quelques détails sur votre projet, nous vous recontactons rapidement.</p>
     <label>Téléphone</label>
     <input type="tel" id="devisTel" placeholder="+221 XX XXX XX XX">
     <label>Adresse e-mail</label>
-    <input type="email" id="devisEmail" placeholder="toi@exemple.com">
+    <input type="email" id="devisEmail" placeholder="vous@exemple.com">
     <label>Détails du projet</label>
     <textarea id="devisMessage" rows="4" placeholder="Type de projet, niveau, surface, localisation..."></textarea>
     <div id="devisError" class="modal-error hidden"></div>
     <button class="cta-btn" id="submitDevisBtn" type="button" style="width:100%;">Envoyer la demande</button>
-    <div id="devisSuccess" class="modal-success hidden">Merci, ta demande a bien été envoyée. On te recontacte rapidement.</div>
+    <div id="devisSuccess" class="modal-success hidden">Merci, votre demande a bien été envoyée. Nous vous recontactons rapidement.</div>
   </div>
 </div>
 
@@ -613,8 +648,8 @@
     </div>
     <div id="fiFormStep">
       <p class="modal-lead" id="fiLead"></p>
-      <label>Adresse Gmail</label>
-      <input type="email" id="fiEmail" placeholder="toi@gmail.com">
+      <label>Adresse Gmail (pour l'accès au dossier Drive)</label>
+      <input type="email" id="fiEmail" placeholder="vous@gmail.com">
       <label>Téléphone (optionnel)</label>
       <input type="tel" id="fiTel" placeholder="+221 XX XXX XX XX">
       <div id="fiError" class="modal-error hidden"></div>
@@ -622,13 +657,13 @@
     </div>
     <div id="fiPaymentStep" class="hidden">
       <p class="modal-lead" id="fiPaymentLead"></p>
-      <div class="fi-step"><span class="fi-step-num">1</span><p>Envoie <strong id="fiPrixSpan"></strong> par Wave au <strong>+221 70 562 32 06</strong></p></div>
-      <div class="fi-step"><span class="fi-step-num">2</span><p>Envoie la capture d'écran du paiement sur WhatsApp, avec le nom de la formation</p></div>
+      <div class="fi-step"><span class="fi-step-num">1</span><p>Envoyez <strong id="fiPrixSpan"></strong> par Wave au <strong>+221 70 562 32 06</strong></p></div>
+      <div class="fi-step"><span class="fi-step-num">2</span><p>Envoyez la capture d'écran du paiement sur WhatsApp, avec le nom de la formation</p></div>
       <a class="whatsapp-cta-btn" id="fiWhatsappBtn" href="#" target="_blank" rel="noopener" style="width:100%;justify-content:center;">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.02a7.95 7.95 0 0 0 5.53-13.58Z"/></svg>
         Envoyer la capture sur WhatsApp
       </a>
-      <p class="fi-note">Tu reçois l'accès au dossier complet sur Google Drive dès réception du paiement.</p>
+      <p class="fi-note">Vous recevez l'accès au dossier complet sur Google Drive dès réception du paiement.</p>
     </div>
   </div>
 </div>
@@ -684,7 +719,7 @@
       <div class="tool-fields-grid" id="toolFields"></div>
       <button class="cta-btn" id="toolCalcBtn" type="button">Calculer</button>
       <div class="calc-result" id="toolResult">
-        <p class="calc-placeholder">Renseigne les champs, puis clique sur « Calculer ».</p>
+        <p class="calc-placeholder">Renseignez les champs, puis cliquez sur « Calculer ».</p>
       </div>
     </div>
     <p class="price-note">Ces outils donnent une estimation de quantité pour l'approvisionnement — ils ne remplacent pas une étude technique.</p>
@@ -698,7 +733,7 @@
     </div>
     <button type="button" class="rd-back" id="calcPageBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Retour à l'accueil</button>
     <div class="rd-title">Calculatrices de chantier</div>
-    <p class="tool-subtitle">Estime rapidement les quantités nécessaires pour ton chantier.</p>
+    <p class="tool-subtitle">Estimez rapidement les quantités nécessaires pour votre chantier.</p>
     <div class="tools-grid">
       <div class="tool-card reveal" data-tool="agglos">
         <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="9" height="6"/><rect x="13" y="4" width="9" height="6"/><rect x="2" y="14" width="4" height="6"/><rect x="8" y="14" width="9" height="6"/><rect x="19" y="14" width="3" height="6"/></svg></div>
@@ -718,7 +753,7 @@
       <div class="tool-card reveal" data-tool="beton_mortier">
         <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg></div>
         <h3>Béton & Mortier</h3>
-        <p>Ciment, sable, gravier et fer pour tes ouvrages.</p>
+        <p>Ciment, sable, gravier et fer pour vos ouvrages.</p>
       </div>
     </div>
   </div>
@@ -731,7 +766,7 @@
     </div>
     <button type="button" class="rd-back" id="formPageBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Retour à l'accueil</button>
     <div class="rd-title">Formations logiciels</div>
-    <p class="tool-subtitle">Apprends les logiciels de génie civil et d'architecture à ton rythme, avec un aperçu gratuit avant de payer.</p>
+    <p class="tool-subtitle">Apprenez les logiciels de génie civil et d'architecture à votre rythme, avec un aperçu gratuit avant de payer.</p>
     <div class="formations-grid" id="formationsGrid"></div>
   </div>
 </div>
@@ -817,8 +852,8 @@
     const message = document.getElementById('devisMessage').value.trim();
     const errorEl = document.getElementById('devisError');
     errorEl.classList.add('hidden');
-    if (!message) { errorEl.textContent = 'Décris un peu ton projet avant d\'envoyer.'; errorEl.classList.remove('hidden'); return; }
-    if (!tel && !email) { errorEl.textContent = 'Indique au moins un téléphone ou un e-mail pour qu\'on puisse te recontacter.'; errorEl.classList.remove('hidden'); return; }
+    if (!message) { errorEl.textContent = 'Décrivez brièvement votre projet avant d\'envoyer.'; errorEl.classList.remove('hidden'); return; }
+    if (!tel && !email) { errorEl.textContent = 'Indiquez au moins un téléphone ou un e-mail pour que nous puissions vous recontacter.'; errorEl.classList.remove('hidden'); return; }
     const btn = document.getElementById('submitDevisBtn');
     btn.textContent = 'Envoi...';
     try {
@@ -887,7 +922,7 @@
     const surfaceVal = parseFloat(document.getElementById('calcSurface').value);
     const resultEl = document.getElementById('calcResult');
     if (!surfaceVal || surfaceVal <= 0) {
-      resultEl.innerHTML = '<span class="err">Indique une surface en m² pour calculer le prix.</span>';
+      resultEl.innerHTML = '<span class="err">Indiquez une surface en m² pour calculer le prix.</span>';
       return;
     }
     const niveauData = grilleActuelle[niveau];
@@ -1009,7 +1044,7 @@
     document.getElementById('fiModalTitle').textContent = 'Je suis intéressé';
     document.getElementById('fiFormStep').classList.remove('hidden');
     document.getElementById('fiPaymentStep').classList.add('hidden');
-    document.getElementById('fiLead').textContent = `Formation ${f.logiciel} — ${(f.prix || 1000).toLocaleString('fr-FR')} FCFA. Indique ton adresse Gmail (utilisée pour te partager le dossier) : à l'étape suivante, tu sauras comment payer.`;
+    document.getElementById('fiLead').textContent = `Formation ${f.logiciel} — ${(f.prix || 1000).toLocaleString('fr-FR')} FCFA. Indiquez votre adresse Gmail (utilisée pour vous partager le dossier Google Drive) : l'étape suivante vous explique comment payer.`;
     document.getElementById('fiEmail').value = '';
     document.getElementById('fiTel').value = '';
     document.getElementById('fiError').classList.add('hidden');
@@ -1024,7 +1059,7 @@
     const tel = document.getElementById('fiTel').value.trim();
     const errorEl = document.getElementById('fiError');
     errorEl.classList.add('hidden');
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errorEl.textContent = 'Indique une adresse e-mail valide (idéalement Gmail).'; errorEl.classList.remove('hidden'); return; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errorEl.textContent = 'Indiquez une adresse e-mail valide (idéalement Gmail).'; errorEl.classList.remove('hidden'); return; }
     const btn = document.getElementById('fiSubmitBtn');
     btn.textContent = 'Envoi...';
     try {
@@ -1189,7 +1224,7 @@
       ],
       compute(v) {
         const L = parseFloat(v.longueur), H = parseFloat(v.hauteur);
-        if (!L || L <= 0 || !H || H <= 0) return { error: "Indique la longueur et la hauteur du mur." };
+        if (!L || L <= 0 || !H || H <= 0) return { error: "Indiquez la longueur et la hauteur du mur." };
         const ouvertures = parseFloat(v.ouvertures) || 0;
         const perte = (v.perte === '' || v.perte == null) ? 5 : parseFloat(v.perte);
         const Sb = L * H;
@@ -1238,14 +1273,14 @@
       ],
       compute(v) {
         const L = parseFloat(v.longueur), l = parseFloat(v.largeur);
-        if (!L || L <= 0 || !l || l <= 0) return { error: 'Indique la longueur et la largeur de la pièce.' };
+        if (!L || L <= 0 || !l || l <= 0) return { error: 'Indiquez la longueur et la largeur de la pièce.' };
         const exclusions = parseFloat(v.exclusions) || 0;
         const S = L * l;
         const Sn = Math.max(S - exclusions, 0);
         let Scarreau, formatLabel;
         if (v.format === 'custom') {
           const cl = parseFloat(v.formatL), cw = parseFloat(v.formatl);
-          if (!cl || cl <= 0 || !cw || cw <= 0) return { error: 'Indique les dimensions du carreau personnalisé.' };
+          if (!cl || cl <= 0 || !cw || cw <= 0) return { error: 'Indiquez les dimensions du carreau personnalisé.' };
           Scarreau = (cl / 100) * (cw / 100);
           formatLabel = cl + '×' + cw + ' cm';
         } else {
@@ -1289,11 +1324,11 @@
       ],
       compute(v) {
         const L = parseFloat(v.longueur), l = parseFloat(v.largeur);
-        if (!L || L <= 0 || !l || l <= 0) return { error: 'Indique les dimensions de la pièce.' };
+        if (!L || L <= 0 || !l || l <= 0) return { error: 'Indiquez les dimensions de la pièce.' };
         let H = 0;
         if (v.zone !== 'plafond') {
           H = parseFloat(v.hauteur);
-          if (!H || H <= 0) return { error: 'Indique la hauteur sous plafond.' };
+          if (!H || H <= 0) return { error: 'Indiquez la hauteur sous plafond.' };
         }
         let Sb;
         if (v.zone === 'murs') Sb = 2 * (L + l) * H;
@@ -1437,7 +1472,7 @@
     document.getElementById('bmDosageGrid').innerHTML = fields.map(f =>
       `<div><label>${f.label}</label><input type="number" step="any" data-bmdosage="${f.id}" value="${f.val}"></div>`
     ).join('');
-    document.getElementById('toolResult').innerHTML = '<p class="calc-placeholder">Renseigne les champs, puis clique sur « Calculer ».</p>';
+    document.getElementById('toolResult').innerHTML = '<p class="calc-placeholder">Renseignez les champs, puis cliquez sur « Calculer ».</p>';
   }
 
   function bmPopulateElemSelect() {
@@ -1506,7 +1541,7 @@
     if (!usingAlt) {
       const dims = Array.from(document.querySelectorAll('[data-bmdim]')).map(el => parseFloat(el.value));
       if (dims.some(d => !d || d <= 0)) {
-        resultEl.innerHTML = '<span class="err">Renseigne toutes les dimensions.</span>';
+        resultEl.innerHTML = '<span class="err">Renseignez toutes les dimensions.</span>';
         return;
       }
       if (bmElem.geo === 'box') qty = dims[0] * dims[1] * dims[2];
@@ -1515,7 +1550,7 @@
     } else if (bmType === 'beton') {
       const volume = parseFloat(document.querySelector('[data-bmdimalt="volume"]').value);
       if (!volume || volume <= 0) {
-        resultEl.innerHTML = '<span class="err">Renseigne le volume.</span>';
+        resultEl.innerHTML = '<span class="err">Renseignez le volume.</span>';
         return;
       }
       qty = volume;
@@ -1525,7 +1560,7 @@
       const epaisseurEl = document.querySelector('[data-bmdimalt="epaisseur"]');
       const epaisseur = epaisseurEl ? parseFloat(epaisseurEl.value) : null;
       if (!longueur || longueur <= 0 || !hauteur || hauteur <= 0 || (epaisseurEl && (!epaisseur || epaisseur <= 0))) {
-        resultEl.innerHTML = '<span class="err">Renseigne la longueur, la hauteur' + (epaisseurEl ? ' et l\'épaisseur' : '') + ' du mur.</span>';
+        resultEl.innerHTML = '<span class="err">Renseignez la longueur, la hauteur' + (epaisseurEl ? ' et l\'épaisseur' : '') + ' du mur.</span>';
         return;
       }
       const surface = longueur * hauteur;
@@ -1589,7 +1624,7 @@
         if (f.triggersRerender) renderToolFields();
       });
     });
-    document.getElementById('toolResult').innerHTML = '<p class="calc-placeholder">Renseigne les champs, puis clique sur « Calculer ».</p>';
+    document.getElementById('toolResult').innerHTML = '<p class="calc-placeholder">Renseignez les champs, puis cliquez sur « Calculer ».</p>';
   }
 
   function openToolPage(id) {
@@ -1680,6 +1715,7 @@
 </script>
 
 <script defer src="/_vercel/insights/script.js"></script>
+<script>document.getElementById('anneeCopy').textContent = new Date().getFullYear();</script>
 
 </body>
 </html>
