@@ -95,6 +95,29 @@
   .demande-date{font-size:11px;color:var(--muted);white-space:nowrap;}
   .demande-message{font-size:13px;color:var(--navy-dark);line-height:1.6;margin-bottom:12px;white-space:pre-wrap;}
   .demande-actions{display:flex;gap:8px;}
+  .seg-row{display:flex;flex-wrap:wrap;margin-bottom:16px;}
+  .seg{padding:7px 14px;font-size:13px;border:1px solid var(--line);background:#fff;color:var(--muted);margin-left:-1px;}
+  .seg:first-child{border-radius:8px 0 0 8px;margin-left:0;}
+  .seg:last-child{border-radius:0 8px 8px 0;}
+  .seg.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .grille{width:100%;border-collapse:collapse;table-layout:fixed;margin-bottom:10px;}
+  .grille th,.grille td{padding:7px 6px;border-bottom:1px solid var(--line);font-size:13px;text-align:right;}
+  .grille th{font-weight:500;color:var(--muted);}
+  .grille th:first-child,.grille td:first-child{text-align:left;width:34%;}
+  .grille td small{display:block;font-size:11px;color:var(--muted);}
+  .grille input{width:100%;max-width:110px;text-align:right;padding:6px 6px;border:1px solid var(--line);border-radius:6px;font-size:13px;font-family:var(--font-body);font-variant-numeric:tabular-nums;}
+  @media (max-width:520px){
+    .grille th,.grille td{padding:6px 2px;font-size:12px;}
+    .grille th:first-child,.grille td:first-child{width:27%;}
+    .grille input{padding:6px 3px;font-size:12.5px;}
+    #panel-prix .panel-card{padding:20px 14px;}
+  }
+  .grille input.err{border-color:#c94b3f;}
+  .filtres{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
+  .pill{padding:6px 13px;border-radius:999px;font-size:12.5px;border:1px solid var(--line);background:#fff;color:var(--navy-dark);margin-right:6px;}
+  .pill.on{background:var(--orange);border-color:var(--orange);color:#fff;}
+  .tab-badge{background:var(--orange);color:#fff;border-radius:999px;font-size:11px;padding:1px 7px;margin-left:4px;}
+  .tab-badge:empty{display:none;}
   .btn-small{font-size:12px;padding:6px 12px;border-radius:6px;border:1px solid var(--line);background:#fff;}
   .btn-small.done{border-color:#2a7d46;color:#2a7d46;}
   .btn-small.del{border-color:#e0b3ae;color:#c94b3f;}
@@ -186,11 +209,11 @@
       </button>
       <button class="tab" data-tab="demandes">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-        <span>Demandes</span>
+        <span>Demandes</span><span class="tab-badge" id="badgeDemandes"></span>
       </button>
       <button class="tab" data-tab="demandes-formation">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg>
-        <span>Dem. formations</span>
+        <span>Dem. formations</span><span class="tab-badge" id="badgeFormations"></span>
       </button>
       <button class="tab" data-tab="coordonnees">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg>
@@ -210,8 +233,11 @@
     <div class="panel" id="panel-prix">
       <div class="panel-card">
         <div class="panel-title"><span>Grille de prix</span></div>
-        <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">Grille complète (niveau × surface × prestation) au format JSON. Modifie les montants directement dans le texte, sans casser la structure, puis enregistre.</p>
-        <textarea id="grilleJson" rows="18" style="font-family:var(--font-mono);font-size:12px;white-space:pre;"></textarea>
+        <div class="seg-row" id="grilleNiveaux">
+          <button type="button" class="seg on" data-n="RDC">RDC</button><button type="button" class="seg" data-n="R1">R+1</button><button type="button" class="seg" data-n="R2">R+2</button><button type="button" class="seg" data-n="R3">R+3</button><button type="button" class="seg" data-n="R4">R+4</button>
+        </div>
+        <table class="grille"><thead><tr><th>Surface</th><th>Plan archi</th><th>Plan béton</th><th>Devis</th></tr></thead><tbody id="grilleBody"></tbody></table>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">Entre deux paliers, le prix est calculé proportionnellement. Montants en FCFA. Les modifications des 5 niveaux sont enregistrées ensemble.</p>
         <button class="btn-save" id="saveGrille">Enregistrer la grille</button>
         <div class="save-status" id="grilleStatus"></div>
       </div>
@@ -220,6 +246,12 @@
     <div class="panel" id="panel-demandes">
       <div class="panel-card">
         <div class="panel-title"><span>Demandes de devis</span><span class="count" id="countDemandes"></span></div>
+        <div class="filtres">
+          <div id="filtresDemandes">
+            <button type="button" class="pill on" data-f="atraiter">À traiter · <span id="nbATraiter">0</span></button><button type="button" class="pill" data-f="traitees">Traitées · <span id="nbTraitees">0</span></button><button type="button" class="pill" data-f="toutes">Toutes</button>
+          </div>
+          <button type="button" class="btn-small" id="exportDemandes">Exporter (Excel)</button>
+        </div>
         <div id="listDemandes"></div>
       </div>
     </div>
@@ -648,6 +680,7 @@
     onSnapshot(query(collection(db, 'demandes_formation'), orderBy('date', 'desc')), snap => {
       const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       document.getElementById('countDemandesFormation').textContent = '(' + items.length + ')';
+      document.getElementById('badgeFormations').textContent = items.filter(i => (i.statut || 'nouveau') !== 'partage').length || '';
       const el = document.getElementById('listDemandesFormation');
       el.innerHTML = items.length ? '' : '<div class="empty-state">Aucune demande de formation pour l’instant.</div>';
       const statutLabels = { nouveau: 'Nouveau', paye: 'Payé — à partager', partage: 'Accès partagé' };
@@ -687,33 +720,48 @@
     R3:  { archi:[98000,112000,147000,182000,217000,252000], beton:[112000,126000,161000,196000,231000,266000], devis:[105000,119000,154000,189000,224000,259000] },
     R4:  { archi:[112000,126000,161000,196000,231000,266000], beton:[126000,140000,175000,210000,245000,280000], devis:[119000,133000,168000,203000,238000,273000] }
   };
+  /* Paliers affichés : l'index 0 (100 m²) n'est pas utilisé par le calcul (prix minimum = palier 150 m²), il est conservé tel quel */
+  const PALIERS = [[1, 'Jusqu\'à 150 m²', 'prix minimum'], [2, '200 m²', ''], [3, '300 m²', ''], [4, '400 m²', ''], [5, '500 m²', 'au-delà : même progression']];
+  const PRESTS = ['archi', 'beton', 'devis'];
+  let grilleEdit = null, niveauGrille = 'RDC';
+  const fmtF = n => Number(n).toLocaleString('fr-FR').replace(/\u202f|\u00a0/g, ' ');
+  function renderGrille() {
+    const g = grilleEdit[niveauGrille];
+    document.getElementById('grilleBody').innerHTML = PALIERS.map(([i, lib, note]) =>
+      `<tr><td>${lib}${note ? `<small>${note}</small>` : ''}</td>` +
+      PRESTS.map(p => `<td><input inputmode="numeric" data-p="${p}" data-i="${i}" value="${fmtF(g[p][i])}"></td>`).join('') + '</tr>').join('');
+    document.querySelectorAll('#grilleBody input').forEach(inp => inp.addEventListener('input', () => {
+      const v = parseInt(inp.value.replace(/\D/g, ''), 10);
+      inp.classList.toggle('err', !(v > 0));
+      grilleEdit[niveauGrille][inp.dataset.p][+inp.dataset.i] = v > 0 ? v : 0;
+    }));
+  }
+  document.querySelectorAll('#grilleNiveaux .seg').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('#grilleNiveaux .seg').forEach(b => b.classList.toggle('on', b === btn));
+    niveauGrille = btn.dataset.n;
+    if (grilleEdit) renderGrille();
+  }));
   async function loadGrille() {
     let snap; try { snap = await getDoc(doc(db, 'site', 'grille_prix')); } catch (e) { document.getElementById('grilleStatus').textContent = 'Chargement impossible : rechargez la page.'; return; }
     const data = (snap.exists() && snap.data().RDC) ? snap.data() : fallbackGrille;
-    document.getElementById('grilleJson').value = JSON.stringify(data, null, 2);
+    grilleEdit = JSON.parse(JSON.stringify(data));
+    renderGrille();
   }
   async function saveGrille() {
     const status = document.getElementById('grilleStatus');
-    let parsed;
-    try {
-      parsed = JSON.parse(document.getElementById('grilleJson').value);
-    } catch (e) {
-      status.textContent = 'JSON invalide : ' + e.message;
-      return;
-    }
-    const NIV = ['RDC', 'R1', 'R2', 'R3', 'R4'], PREST = { archi: 'Plan archi', beton: 'Plan béton', devis: 'Devis' };
-    for (const n of NIV) {
-      if (!parsed[n]) { status.textContent = 'Il manque le niveau « ' + n + ' » dans la grille.'; return; }
+    if (!grilleEdit) return;
+    const NIV = { RDC: 'RDC', R1: 'R+1', R2: 'R+2', R3: 'R+3', R4: 'R+4' }, PREST = { archi: 'Plan archi', beton: 'Plan béton', devis: 'Devis' };
+    for (const n in NIV) {
       for (const p in PREST) {
-        const arr = parsed[n][p];
+        const arr = grilleEdit[n] && grilleEdit[n][p];
         if (!Array.isArray(arr) || arr.length !== 6 || !arr.every(x => typeof x === 'number' && x > 0)) {
-          status.textContent = n + ' · ' + PREST[p] + ' : il faut exactement 6 montants positifs, sans guillemets.'; return;
+          status.textContent = NIV[n] + ' · ' + PREST[p] + ' : un montant est vide ou invalide.'; return;
         }
       }
     }
     status.textContent = 'Enregistrement...';
     try {
-      await setDoc(doc(db, 'site', 'grille_prix'), parsed);
+      await setDoc(doc(db, 'site', 'grille_prix'), grilleEdit);
       status.textContent = 'Grille enregistrée. Le site public se met à jour automatiquement.';
     } catch (e) {
       status.textContent = 'Erreur : ' + e.message;
@@ -721,12 +769,46 @@
   }
 
   /* Demandes de devis */
+  let demandesCache = [], filtreDemandes = 'atraiter';
+  document.querySelectorAll('#filtresDemandes .pill').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('#filtresDemandes .pill').forEach(b => b.classList.toggle('on', b === btn));
+    filtreDemandes = btn.dataset.f;
+    renderDemandes();
+  }));
+  document.getElementById('exportDemandes').addEventListener('click', () => {
+    const cell = v => {
+      let t = String(v ?? '');
+      if (/^[=+\-@]/.test(t)) t = "'" + t;
+      return '"' + t.replace(/"/g, '""') + '"';
+    };
+    const lignes = [['Date', 'Nom', 'Téléphone', 'E-mail', 'Prestations', 'Niveau', 'Surface (m²)', 'Localisation', 'Précisions', 'Statut']];
+    demandesCache.forEach(it => lignes.push([
+      it.date ? new Date(it.date).toLocaleString('fr-FR') : '', it.nom, it.telephone, it.email,
+      Array.isArray(it.prestations) ? it.prestations.join(', ') : '', it.niveau, it.surface || '', it.lieu, it.message,
+      it.traite ? 'Traitée' : 'À traiter']));
+    const csv = '\ufeff' + lignes.map(l => l.map(cell).join(';')).join('\r\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = 'demandes-devis-' + new Date().toISOString().slice(0, 10) + '.csv';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
   function listenDemandes() {
     onSnapshot(query(collection(db, 'demandes'), orderBy('date', 'desc')), snap => {
-      const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      document.getElementById('countDemandes').textContent = '(' + items.length + ')';
+      demandesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderDemandes();
+    });
+  }
+  function renderDemandes() {
+    {
+      const all = demandesCache, nA = all.filter(i => !i.traite).length;
+      document.getElementById('countDemandes').textContent = '(' + all.length + ')';
+      document.getElementById('nbATraiter').textContent = nA;
+      document.getElementById('nbTraitees').textContent = all.length - nA;
+      document.getElementById('badgeDemandes').textContent = nA || '';
+      const items = all.filter(i => filtreDemandes === 'toutes' || (filtreDemandes === 'traitees' ? i.traite : !i.traite));
       const el = document.getElementById('listDemandes');
-      el.innerHTML = items.length ? '' : '<div class="empty-state">Aucune demande reçue pour l’instant.</div>';
+      el.innerHTML = items.length ? '' : '<div class="empty-state">' + (filtreDemandes === 'atraiter' ? 'Aucune demande à traiter.' : 'Aucune demande dans cette liste.') + '</div>';
       items.forEach(item => {
         const div = document.createElement('div');
         div.className = 'demande-item' + (item.traite ? ' traite' : '');
@@ -751,7 +833,7 @@
         div.querySelector('.del').addEventListener('click', () => { if (confirm('Supprimer cette demande ?')) deleteDoc(doc(db, 'demandes', item.id)); });
         el.appendChild(div);
       });
-    });
+    }
   }
 
   /* Coordonnées */
