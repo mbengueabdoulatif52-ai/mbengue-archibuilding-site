@@ -374,6 +374,13 @@
     .rd-main-grid{grid-template-columns:1fr;gap:20px;}
     .rd-title{font-size:19px;}
   }
+  .modal-box .req{color:var(--orange);}
+  .dv-chips{display:flex;flex-wrap:wrap;gap:6px;}
+  .dv-chip{padding:7px 12px;border:1px solid #D8D2C2;border-radius:999px;background:#fff;font-family:var(--font-body);font-size:13px;color:var(--ink);cursor:pointer;}
+  .dv-chip.on{background:var(--orange);border-color:var(--orange);color:#fff;}
+  .dv-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;}
+  @media (max-width:420px){.dv-row{grid-template-columns:1fr;gap:0;}}
+  .dv-wa{display:block;text-align:center;font-size:12.5px;color:var(--ink-muted);margin-top:12px;text-decoration:underline;}
   .modal-error{font-size:12.5px;color:#b23;margin-top:10px;}
   .modal-success{font-size:13px;color:#2a7d46;margin-top:14px;text-align:center;}
 
@@ -616,16 +623,38 @@
       <h3>Demander un devis</h3>
       <button type="button" id="closeDevisBtn" aria-label="Fermer">&times;</button>
     </div>
-    <p class="modal-lead">Laissez-nous vos coordonnées et quelques détails sur votre projet, nous vous recontactons rapidement.</p>
-    <label>Téléphone</label>
-    <input type="tel" id="devisTel" placeholder="+221 XX XXX XX XX">
-    <label>Adresse e-mail</label>
-    <input type="email" id="devisEmail" placeholder="vous@exemple.com">
-    <label>Détails du projet</label>
-    <textarea id="devisMessage" rows="4" placeholder="Type de projet, niveau, surface, localisation..."></textarea>
+    <p class="modal-lead">Devis gratuit · réponse sous 24 h</p>
+    <label>Prestations souhaitées <span class="req">*</span></label>
+    <div class="dv-chips" id="devisPrestations">
+      <button type="button" class="dv-chip" data-v="Plan architectural">Plan architectural</button>
+      <button type="button" class="dv-chip" data-v="Plan béton armé">Plan béton armé</button>
+      <button type="button" class="dv-chip" data-v="Devis quantitatif">Devis quantitatif</button>
+      <button type="button" class="dv-chip" data-v="Suivi de chantier">Suivi de chantier</button>
+    </div>
+    <label>Niveau du bâtiment</label>
+    <div class="dv-chips" id="devisNiveau" data-single="1">
+      <button type="button" class="dv-chip" data-v="RDC">RDC</button>
+      <button type="button" class="dv-chip" data-v="R+1">R+1</button>
+      <button type="button" class="dv-chip" data-v="R+2">R+2</button>
+      <button type="button" class="dv-chip" data-v="R+3">R+3</button>
+      <button type="button" class="dv-chip" data-v="R+4 et plus">R+4 et plus</button>
+    </div>
+    <div class="dv-row">
+      <div><label>Surface (m²)</label><input type="number" id="devisSurface" min="1" max="100000" inputmode="numeric" placeholder="150"></div>
+      <div><label>Localisation</label><input type="text" id="devisLieu" maxlength="80" placeholder="Keur Massar, Thiès…"></div>
+    </div>
+    <div class="dv-row">
+      <div><label>Nom <span class="req">*</span></label><input type="text" id="devisNom" maxlength="80" placeholder="Awa Diop" autocomplete="name"></div>
+      <div><label>Téléphone / WhatsApp <span class="req">*</span></label><input type="tel" id="devisTel" maxlength="30" placeholder="77 123 45 67" autocomplete="tel"></div>
+    </div>
+    <label>E-mail (facultatif)</label>
+    <input type="email" id="devisEmail" maxlength="120" placeholder="vous@exemple.com" autocomplete="email">
+    <label>Précisions (facultatif)</label>
+    <textarea id="devisMessage" rows="2" maxlength="2000" placeholder="Terrain déjà acheté, plan existant à modifier…"></textarea>
     <div id="devisError" class="modal-error hidden"></div>
     <button class="cta-btn" id="submitDevisBtn" type="button" style="width:100%;">Envoyer la demande</button>
     <div id="devisSuccess" class="modal-success hidden">Merci, votre demande a bien été envoyée. Nous vous recontactons rapidement.</div>
+    <a class="dv-wa" href="https://wa.me/221705623206" target="_blank" rel="noopener">ou écrivez-nous directement sur WhatsApp</a>
   </div>
 </div>
 
@@ -846,28 +875,44 @@
   document.getElementById('closeDevisBtn').addEventListener('click', () => devisModal.classList.add('hidden'));
   devisModal.addEventListener('click', e => { if (e.target === devisModal) devisModal.classList.add('hidden'); });
 
+  document.querySelectorAll('.dv-chips').forEach(group => {
+    group.addEventListener('click', e => {
+      const chip = e.target.closest('.dv-chip'); if (!chip) return;
+      if (group.dataset.single) group.querySelectorAll('.dv-chip').forEach(c => { if (c !== chip) c.classList.remove('on'); });
+      chip.classList.toggle('on');
+    });
+  });
+  const chipsOn = id => [...document.querySelectorAll('#' + id + ' .dv-chip.on')].map(c => c.dataset.v);
+  let devisEnvoi = false;
   document.getElementById('submitDevisBtn').addEventListener('click', async () => {
-    const tel = document.getElementById('devisTel').value.trim();
-    const email = document.getElementById('devisEmail').value.trim();
-    const message = document.getElementById('devisMessage').value.trim();
+    if (devisEnvoi) return;
+    const v = id => document.getElementById(id).value.trim();
+    const nom = v('devisNom'), tel = v('devisTel'), email = v('devisEmail'), message = v('devisMessage'), lieu = v('devisLieu');
+    const surface = parseInt(v('devisSurface'), 10) || 0;
+    const prestations = chipsOn('devisPrestations'), niveau = chipsOn('devisNiveau')[0] || '';
     const errorEl = document.getElementById('devisError');
+    const err = m => { errorEl.textContent = m; errorEl.classList.remove('hidden'); };
     errorEl.classList.add('hidden');
-    if (!message) { errorEl.textContent = 'Décrivez brièvement votre projet avant d\'envoyer.'; errorEl.classList.remove('hidden'); return; }
-    if (!tel && !email) { errorEl.textContent = 'Indiquez au moins un téléphone ou un e-mail pour que nous puissions vous recontacter.'; errorEl.classList.remove('hidden'); return; }
+    if (!prestations.length) return err('Choisissez au moins une prestation.');
+    if (nom.length < 2) return err('Indiquez votre nom.');
+    if (tel.replace(/\D/g, '').length < 9) return err('Indiquez un numéro de téléphone valide (9 chiffres minimum).');
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return err('Cette adresse e-mail n\'est pas valide.');
+    if (surface < 0 || surface > 100000) return err('Indiquez une surface réaliste en m².');
     const btn = document.getElementById('submitDevisBtn');
-    btn.textContent = 'Envoi...';
+    devisEnvoi = true; btn.textContent = 'Envoi…';
     try {
-      await addDoc(collection(db, 'demandes'), { telephone: tel, email, message, traite: false, date: Date.now() });
-      document.getElementById('devisTel').value = '';
-      document.getElementById('devisEmail').value = '';
-      document.getElementById('devisMessage').value = '';
+      await addDoc(collection(db, 'demandes'), { nom, telephone: tel, email, prestations, niveau, surface, lieu, message, traite: false, date: Date.now() });
+      ['devisNom', 'devisTel', 'devisEmail', 'devisMessage', 'devisLieu', 'devisSurface'].forEach(id => document.getElementById(id).value = '');
+      document.querySelectorAll('#devisModal .dv-chip.on').forEach(c => c.classList.remove('on'));
       document.getElementById('devisSuccess').classList.remove('hidden');
       btn.textContent = 'Envoyer la demande';
-      setTimeout(() => devisModal.classList.add('hidden'), 2000);
+      setTimeout(() => devisModal.classList.add('hidden'), 2500);
     } catch (e) {
-      errorEl.textContent = 'Erreur lors de l\'envoi : ' + e.message;
+      errorEl.textContent = 'L\'envoi a échoué. Vérifiez votre connexion et réessayez, ou écrivez-nous sur WhatsApp.';
       errorEl.classList.remove('hidden');
       btn.textContent = 'Envoyer la demande';
+    } finally {
+      devisEnvoi = false;
     }
   });
 
